@@ -550,6 +550,14 @@ function generateBubbleChartScript(brokerData, stockInfo) {
             font: { size: 10 },
             callback: function(value) { return value <= ${closePrice} ? value : ''; }
           },
+          afterBuildTicks: function(axis) {
+            const cp = ${closePrice};
+            const ticks = axis.ticks;
+            if (!ticks.find(t => t.value === cp)) {
+              ticks.push({ value: cp });
+              ticks.sort((a, b) => a.value - b.value);
+            }
+          },
           border: { color: '#30363d' },
           min: ${yAxisMin},
           max: ${yAxisMax}

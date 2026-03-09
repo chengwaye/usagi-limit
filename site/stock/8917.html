@@ -535,6 +535,14 @@ footer a { color: #58a6ff; text-decoration: none; }
             font: { size: 10 },
             callback: function(value) { return value <= 69.3 ? value : ''; }
           },
+          afterBuildTicks: function(axis) {
+            const cp = 69.3;
+            const ticks = axis.ticks;
+            if (!ticks.find(t => t.value === cp)) {
+              ticks.push({ value: cp });
+              ticks.sort((a, b) => a.value - b.value);
+            }
+          },
           border: { color: '#30363d' },
           min: 63,
           max: 70.24
