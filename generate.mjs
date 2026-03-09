@@ -440,6 +440,16 @@ function generateBubbleChartScript(brokerData, stockInfo) {
             r = rect();
           }
           placed.push(r);
+          // Leader line: label bottom → bubble center
+          ctx.strokeStyle = 'rgba(230,237,243,0.35)';
+          ctx.lineWidth = 0.8;
+          ctx.setLineDash([2, 2]);
+          ctx.beginPath();
+          ctx.moveTo(tx, r.y + r.h);
+          ctx.lineTo(el.x, el.y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          // Label pill
           ctx.fillStyle = 'rgba(13,17,23,0.8)';
           ctx.beginPath();
           ctx.roundRect(r.x, r.y, r.w, r.h, 3);
