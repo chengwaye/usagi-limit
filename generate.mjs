@@ -486,10 +486,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
         easing: 'easeOutQuart'
       },
       plugins: {
-        legend: {
-          display: false,
-          }
-        },
+        legend: { display: false },
         tooltip: {
           backgroundColor: 'rgba(13,17,23,0.95)',
           titleColor: '#e6edf3',
