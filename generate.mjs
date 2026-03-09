@@ -308,14 +308,16 @@ function generateBubbleChart(brokerData, stockInfo) {
 function generateBubbleChartScript(brokerData, stockInfo) {
   const closePrice = parseFloat(stockInfo.close) || 0;
 
-  // Log-based radius: prevents one mega-broker from eating the whole chart
-  // r = clamp(log2(totalVol) * scale, min, max)
+  // Normalized sqrt: biggest = 14px, smallest proportionally shrinks
+  const toZhang = (v) => Math.round(v / 1000);
+  const allBrokers = [...(brokerData.top_buyers || []), ...(brokerData.top_sellers || [])];
+  const maxVol = Math.max(...allBrokers.map(b => (b.buy_volume + b.sell_volume) / 1000), 1);
+  const MAX_R = 14, MIN_R = 2;
   const calcR = (buyVol, sellVol) => {
-    const total = (buyVol + sellVol) / 1000; // 張
-    if (total <= 0) return 3;
-    return Math.min(20, Math.max(3, Math.log2(total + 1) * 2));
+    const total = (buyVol + sellVol) / 1000;
+    if (total <= 0) return MIN_R;
+    return MIN_R + (MAX_R - MIN_R) * Math.sqrt(total / maxVol);
   };
-  const toZhang = (v) => Math.round(v / 1000); // 取整數張
 
   const buyers = (brokerData.top_buyers || []).map(b => ({
     x: toZhang(b.net_volume),
