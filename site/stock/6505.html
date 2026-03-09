@@ -9,6 +9,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; }
 .container { max-width: 800px; margin: 0 auto; padding: 16px; }
+.container.wide { max-width: 1200px; }
 header { text-align: center; padding: 24px 0 16px; border-bottom: 1px solid #30363d; margin-bottom: 20px; }
 header h1 { font-size: 24px; margin-bottom: 4px; }
 header h1 span.rabbit { font-size: 28px; }
@@ -16,7 +17,6 @@ header .subtitle { color: #8b949e; font-size: 14px; }
 header .date { color: #58a6ff; font-size: 16px; margin-top: 8px; }
 
 .section-title { font-size: 18px; margin: 24px 0 12px; padding-left: 8px; border-left: 3px solid #f85149; }
-.section-title.down { border-left-color: #3fb950; }
 
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 14px 16px; }
@@ -44,32 +44,38 @@ header .date { color: #58a6ff; font-size: 16px; margin-top: 8px; }
 .badge.up { background: rgba(248,81,73,0.2); }
 .badge.down { background: rgba(63,185,80,0.2); }
 
-.tab-bar { display: flex; margin-bottom: 16px; }
-.tab { flex: 1; text-align: center; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid #30363d; }
-.tab.active-buy { border-bottom-color: #f85149; color: #f85149; }
-.tab.active-sell { border-bottom-color: #3fb950; color: #3fb950; }
+/* Side-by-side tables */
+.dual-panel { display: flex; gap: 16px; }
+.panel { flex: 1; min-width: 0; }
+.panel-title { text-align: center; padding: 8px; font-size: 13px; font-weight: 600; border-bottom: 2px solid #30363d; margin-bottom: 8px; }
+.panel-title.buy { border-bottom-color: #f85149; color: #f85149; }
+.panel-title.sell { border-bottom-color: #3fb950; color: #3fb950; }
 
 table { width: 100%; border-collapse: collapse; }
-th { text-align: left; padding: 8px 12px; font-size: 12px; color: #8b949e; border-bottom: 1px solid #30363d; }
-th:nth-child(n+2) { text-align: right; }
-td { padding: 10px 12px; font-size: 14px; border-bottom: 1px solid #21262d; }
-td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
+th { text-align: right; padding: 4px 6px; font-size: 11px; color: #8b949e; border-bottom: 1px solid #30363d; white-space: nowrap; }
+th:first-child { text-align: left; }
+td { padding: 5px 6px; font-size: 12px; border-bottom: 1px solid #21262d; text-align: right; font-variant-numeric: tabular-nums; }
+td:first-child { text-align: left; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
 tr:hover { background: #1c2129; }
-.rank { color: #8b949e; width: 30px; }
+.net { font-weight: 600; }
 
 footer { text-align: center; padding: 32px 0 24px; color: #484f58; font-size: 12px; border-top: 1px solid #30363d; margin-top: 32px; }
 footer a { color: #58a6ff; text-decoration: none; }
 
-@media (max-width: 600px) {
-  .container { padding: 12px; }
+@media (max-width: 700px) {
+  .container { padding: 8px; }
   .info-bar { flex-direction: column; text-align: center; gap: 12px; }
   .info-right { text-align: center; }
+  .dual-panel { gap: 8px; }
+  th { padding: 3px 4px; font-size: 10px; }
+  td { padding: 4px 4px; font-size: 11px; }
+  td:first-child { max-width: 60px; font-size: 11px; }
 }
 </style>
 </head>
 <body>
-<div class="container">
-  <a href="../index.html" class="back">← 返回漲跌停總覽</a>
+<div class="container wide">
+  <a href="../index.html" class="back">← 返回漲停總覽</a>
 
   <div class="info-bar">
     <div class="info-left">
@@ -85,239 +91,228 @@ footer a { color: #58a6ff; text-decoration: none; }
     </div>
   </div>
 
-  <p style="color:#8b949e;font-size:13px;margin-bottom:20px;">共 397 家券商交易</p>
+  <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 397 家券商交易</p>
 
-  <!-- Buy Top 15 -->
-  <div class="tab-bar">
-    <div class="tab active-buy">買方 Top15</div>
-  </div>
-  <table>
-    <thead>
-      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>買超(張)</th></tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="rank">1</td>
+  <div class="dual-panel">
+    <div class="panel">
+      <div class="panel-title buy">買超 Top15</div>
+      <table><thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead><tbody><tr>
       <td>台新</td>
+      <td class="up net">1394</td>
+      <td>68.19</td>
       <td class="up">2473</td>
       <td class="down">1079</td>
-      <td class="up" style="font-weight:600">1394</td>
-    </tr>
-    <tr>
-      <td class="rank">2</td>
+      <td>68.18</td>
+    </tr><tr>
       <td>元大松江</td>
+      <td class="up net">1199</td>
+      <td>68.20</td>
       <td class="up">1214</td>
       <td class="down">15</td>
-      <td class="up" style="font-weight:600">1199</td>
-    </tr>
-    <tr>
-      <td class="rank">3</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>國泰敦南</td>
+      <td class="up net">1055</td>
+      <td>68.11</td>
       <td class="up">1532</td>
       <td class="down">477</td>
-      <td class="up" style="font-weight:600">1055</td>
-    </tr>
-    <tr>
-      <td class="rank">4</td>
+      <td>67.96</td>
+    </tr><tr>
       <td>凱基台北</td>
+      <td class="up net">815</td>
+      <td>67.85</td>
       <td class="up">2780</td>
       <td class="down">1965</td>
-      <td class="up" style="font-weight:600">815</td>
-    </tr>
-    <tr>
-      <td class="rank">5</td>
+      <td>67.85</td>
+    </tr><tr>
       <td>元大</td>
+      <td class="up net">811</td>
+      <td>67.98</td>
       <td class="up">4380</td>
       <td class="down">3569</td>
-      <td class="up" style="font-weight:600">811</td>
-    </tr>
-    <tr>
-      <td class="rank">6</td>
+      <td>68.12</td>
+    </tr><tr>
       <td>港商野村</td>
+      <td class="up net">632</td>
+      <td>68.20</td>
       <td class="up">632</td>
       <td class="down">0</td>
-      <td class="up" style="font-weight:600">632</td>
-    </tr>
-    <tr>
-      <td class="rank">7</td>
+      <td>-</td>
+    </tr><tr>
       <td>美林</td>
+      <td class="up net">544</td>
+      <td>67.99</td>
       <td class="up">730</td>
       <td class="down">186</td>
-      <td class="up" style="font-weight:600">544</td>
-    </tr>
-    <tr>
-      <td class="rank">8</td>
+      <td>67.79</td>
+    </tr><tr>
       <td>台灣摩根</td>
+      <td class="up net">292</td>
+      <td>67.90</td>
       <td class="up">1068</td>
       <td class="down">776</td>
-      <td class="up" style="font-weight:600">292</td>
-    </tr>
-    <tr>
-      <td class="rank">9</td>
+      <td>68.18</td>
+    </tr><tr>
       <td>凱基新豐</td>
+      <td class="up net">275</td>
+      <td>68.20</td>
       <td class="up">280</td>
       <td class="down">4</td>
-      <td class="up" style="font-weight:600">275</td>
-    </tr>
-    <tr>
-      <td class="rank">10</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>兆豐</td>
+      <td class="up net">274</td>
+      <td>67.94</td>
       <td class="up">591</td>
       <td class="down">317</td>
-      <td class="up" style="font-weight:600">274</td>
-    </tr>
-    <tr>
-      <td class="rank">11</td>
+      <td>68.06</td>
+    </tr><tr>
       <td>美好楊梅</td>
+      <td class="up net">224</td>
+      <td>68.14</td>
       <td class="up">280</td>
       <td class="down">56</td>
-      <td class="up" style="font-weight:600">224</td>
-    </tr>
-    <tr>
-      <td class="rank">12</td>
+      <td>68.13</td>
+    </tr><tr>
       <td>凱基竹科</td>
+      <td class="up net">218</td>
+      <td>68.08</td>
       <td class="up">237</td>
       <td class="down">19</td>
-      <td class="up" style="font-weight:600">218</td>
-    </tr>
-    <tr>
-      <td class="rank">13</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>富邦嘉義</td>
+      <td class="up net">192</td>
+      <td>68.18</td>
       <td class="up">364</td>
       <td class="down">172</td>
-      <td class="up" style="font-weight:600">192</td>
-    </tr>
-    <tr>
-      <td class="rank">14</td>
+      <td>68.13</td>
+    </tr><tr>
       <td>國泰台中</td>
+      <td class="up net">179</td>
+      <td>68.07</td>
       <td class="up">273</td>
       <td class="down">94</td>
-      <td class="up" style="font-weight:600">179</td>
-    </tr>
-    <tr>
-      <td class="rank">15</td>
+      <td>68.15</td>
+    </tr><tr>
       <td>凱基城中</td>
+      <td class="up net">162</td>
+      <td>68.20</td>
       <td class="up">1218</td>
       <td class="down">1056</td>
-      <td class="up" style="font-weight:600">162</td>
-    </tr></tbody>
-  </table>
-
-  <!-- Sell Top 15 -->
-  <div class="tab-bar" style="margin-top:32px;">
-    <div class="tab active-sell">賣方 Top15</div>
-  </div>
-  <table>
-    <thead>
-      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>賣超(張)</th></tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="rank">1</td>
+      <td>68.20</td>
+    </tr></tbody></table>
+    </div>
+    <div class="panel">
+      <div class="panel-title sell">賣超 Top15</div>
+      <table><thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead><tbody><tr>
       <td>富邦</td>
+      <td class="down net">-2643</td>
+      <td>68.16</td>
       <td class="up">855</td>
       <td class="down">3498</td>
-      <td class="down" style="font-weight:600">-2643</td>
-    </tr>
-    <tr>
-      <td class="rank">2</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>瑞銀</td>
+      <td class="down net">-1965</td>
+      <td>68.05</td>
       <td class="up">1743</td>
       <td class="down">3708</td>
-      <td class="down" style="font-weight:600">-1965</td>
-    </tr>
-    <tr>
-      <td class="rank">3</td>
+      <td>68.16</td>
+    </tr><tr>
       <td>摩根大通</td>
+      <td class="down net">-1495</td>
+      <td>67.78</td>
       <td class="up">944</td>
       <td class="down">2439</td>
-      <td class="down" style="font-weight:600">-1495</td>
-    </tr>
-    <tr>
-      <td class="rank">4</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>美商高盛</td>
+      <td class="down net">-1207</td>
+      <td>67.96</td>
       <td class="up">1921</td>
       <td class="down">3128</td>
-      <td class="down" style="font-weight:600">-1207</td>
-    </tr>
-    <tr>
-      <td class="rank">5</td>
+      <td>67.83</td>
+    </tr><tr>
       <td>統一</td>
+      <td class="down net">-843</td>
+      <td>68.06</td>
       <td class="up">297</td>
       <td class="down">1140</td>
-      <td class="down" style="font-weight:600">-843</td>
-    </tr>
-    <tr>
-      <td class="rank">6</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>國泰綜合</td>
+      <td class="down net">-734</td>
+      <td>68.19</td>
       <td class="up">9</td>
       <td class="down">743</td>
-      <td class="down" style="font-weight:600">-734</td>
-    </tr>
-    <tr>
-      <td class="rank">7</td>
+      <td>68.19</td>
+    </tr><tr>
       <td>美好蘆洲</td>
+      <td class="down net">-730</td>
+      <td>68.20</td>
       <td class="up">46</td>
       <td class="down">776</td>
-      <td class="down" style="font-weight:600">-730</td>
-    </tr>
-    <tr>
-      <td class="rank">8</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>兆豐竹北</td>
+      <td class="down net">-695</td>
+      <td>67.68</td>
       <td class="up">12</td>
       <td class="down">707</td>
-      <td class="down" style="font-weight:600">-695</td>
-    </tr>
-    <tr>
-      <td class="rank">9</td>
+      <td>67.97</td>
+    </tr><tr>
       <td>富邦南屯</td>
+      <td class="down net">-686</td>
+      <td>68.18</td>
       <td class="up">106</td>
       <td class="down">793</td>
-      <td class="down" style="font-weight:600">-686</td>
-    </tr>
-    <tr>
-      <td class="rank">10</td>
+      <td>68.11</td>
+    </tr><tr>
       <td>第一中山</td>
+      <td class="down net">-619</td>
+      <td>68.20</td>
       <td class="up">1</td>
       <td class="down">620</td>
-      <td class="down" style="font-weight:600">-619</td>
-    </tr>
-    <tr>
-      <td class="rank">11</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>富邦板橋</td>
+      <td class="down net">-456</td>
+      <td>68.15</td>
       <td class="up">127</td>
       <td class="down">583</td>
-      <td class="down" style="font-weight:600">-456</td>
-    </tr>
-    <tr>
-      <td class="rank">12</td>
+      <td>68.15</td>
+    </tr><tr>
       <td>華南永昌</td>
+      <td class="down net">-354</td>
+      <td>68.16</td>
       <td class="up">611</td>
       <td class="down">964</td>
-      <td class="down" style="font-weight:600">-354</td>
-    </tr>
-    <tr>
-      <td class="rank">13</td>
+      <td>67.64</td>
+    </tr><tr>
       <td>宏遠</td>
+      <td class="down net">-344</td>
+      <td>68.20</td>
       <td class="up">1</td>
       <td class="down">345</td>
-      <td class="down" style="font-weight:600">-344</td>
-    </tr>
-    <tr>
-      <td class="rank">14</td>
+      <td>68.20</td>
+    </tr><tr>
       <td>花旗環球</td>
+      <td class="down net">-315</td>
+      <td>-</td>
       <td class="up">0</td>
       <td class="down">315</td>
-      <td class="down" style="font-weight:600">-315</td>
-    </tr>
-    <tr>
-      <td class="rank">15</td>
+      <td>68.18</td>
+    </tr><tr>
       <td>凱基</td>
+      <td class="down net">-276</td>
+      <td>68.03</td>
       <td class="up">151</td>
       <td class="down">427</td>
-      <td class="down" style="font-weight:600">-276</td>
-    </tr></tbody>
-  </table>
+      <td>67.84</td>
+    </tr></tbody></table>
+    </div>
+  </div>
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>

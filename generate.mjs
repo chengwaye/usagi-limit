@@ -113,14 +113,29 @@ async function getLimitStocks() {
 // Step 2: Load cached broker data
 // ============================================================
 function loadBrokerData(stockCode, date) {
-  // date format: YYYYMMDD
+  // date format: YYYYMMDD — try exact match first, then nearby dates (±1 day)
   const file = path.join(CACHE_DIR, `${stockCode}_${date}.json`);
-  if (!fs.existsSync(file)) return null;
-  try {
-    return JSON.parse(fs.readFileSync(file, "utf-8"));
-  } catch {
-    return null;
+  if (fs.existsSync(file)) {
+    try { return JSON.parse(fs.readFileSync(file, "utf-8")); } catch {}
   }
+  // Fallback: find any cache for this stock with nearby date
+  try {
+    const files = fs.readdirSync(CACHE_DIR).filter(f => f.startsWith(stockCode + "_") && f.endsWith(".json"));
+    if (files.length > 0) {
+      // Pick the one closest to target date
+      files.sort((a, b) => {
+        const da = a.match(/_(\d{8})\.json$/)?.[1] || "";
+        const db = b.match(/_(\d{8})\.json$/)?.[1] || "";
+        return Math.abs(parseInt(da) - parseInt(date)) - Math.abs(parseInt(db) - parseInt(date));
+      });
+      const best = files[0];
+      const bestDate = best.match(/_(\d{8})\.json$/)?.[1] || "";
+      if (Math.abs(parseInt(bestDate) - parseInt(date)) <= 1) {
+        return JSON.parse(fs.readFileSync(path.join(CACHE_DIR, best), "utf-8"));
+      }
+    }
+  } catch {}
+  return null;
 }
 
 // ============================================================
@@ -131,6 +146,7 @@ function css() {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; }
 .container { max-width: 800px; margin: 0 auto; padding: 16px; }
+.container.wide { max-width: 1200px; }
 header { text-align: center; padding: 24px 0 16px; border-bottom: 1px solid #30363d; margin-bottom: 20px; }
 header h1 { font-size: 24px; margin-bottom: 4px; }
 header h1 span.rabbit { font-size: 28px; }
@@ -138,7 +154,6 @@ header .subtitle { color: #8b949e; font-size: 14px; }
 header .date { color: #58a6ff; font-size: 16px; margin-top: 8px; }
 
 .section-title { font-size: 18px; margin: 24px 0 12px; padding-left: 8px; border-left: 3px solid #f85149; }
-.section-title.down { border-left-color: #3fb950; }
 
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 14px 16px; }
@@ -166,26 +181,32 @@ header .date { color: #58a6ff; font-size: 16px; margin-top: 8px; }
 .badge.up { background: rgba(248,81,73,0.2); }
 .badge.down { background: rgba(63,185,80,0.2); }
 
-.tab-bar { display: flex; margin-bottom: 16px; }
-.tab { flex: 1; text-align: center; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid #30363d; }
-.tab.active-buy { border-bottom-color: #f85149; color: #f85149; }
-.tab.active-sell { border-bottom-color: #3fb950; color: #3fb950; }
+/* Side-by-side tables */
+.dual-panel { display: flex; gap: 16px; }
+.panel { flex: 1; min-width: 0; }
+.panel-title { text-align: center; padding: 8px; font-size: 13px; font-weight: 600; border-bottom: 2px solid #30363d; margin-bottom: 8px; }
+.panel-title.buy { border-bottom-color: #f85149; color: #f85149; }
+.panel-title.sell { border-bottom-color: #3fb950; color: #3fb950; }
 
 table { width: 100%; border-collapse: collapse; }
-th { text-align: left; padding: 8px 12px; font-size: 12px; color: #8b949e; border-bottom: 1px solid #30363d; }
-th:nth-child(n+2) { text-align: right; }
-td { padding: 10px 12px; font-size: 14px; border-bottom: 1px solid #21262d; }
-td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
+th { text-align: right; padding: 4px 6px; font-size: 11px; color: #8b949e; border-bottom: 1px solid #30363d; white-space: nowrap; }
+th:first-child { text-align: left; }
+td { padding: 5px 6px; font-size: 12px; border-bottom: 1px solid #21262d; text-align: right; font-variant-numeric: tabular-nums; }
+td:first-child { text-align: left; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
 tr:hover { background: #1c2129; }
-.rank { color: #8b949e; width: 30px; }
+.net { font-weight: 600; }
 
 footer { text-align: center; padding: 32px 0 24px; color: #484f58; font-size: 12px; border-top: 1px solid #30363d; margin-top: 32px; }
 footer a { color: #58a6ff; text-decoration: none; }
 
-@media (max-width: 600px) {
-  .container { padding: 12px; }
+@media (max-width: 700px) {
+  .container { padding: 8px; }
   .info-bar { flex-direction: column; text-align: center; gap: 12px; }
   .info-right { text-align: center; }
+  .dual-panel { gap: 8px; }
+  th { padding: 3px 4px; font-size: 10px; }
+  td { padding: 4px 4px; font-size: 11px; }
+  td:first-child { max-width: 60px; font-size: 11px; }
 }
 `;
 }
@@ -258,27 +279,37 @@ function generateIndexPage(limitStocks, date) {
 </html>`;
 }
 
+function fmtVol(v) {
+  // volume in shares → 張 (lots of 1000)
+  return (v / 1000).toFixed(0);
+}
+
+function fmtPrice(p) {
+  if (!p) return "-";
+  return p.toFixed(2);
+}
+
 function generateStockPage(stockInfo, brokerData, date) {
   const adDate = formatDate(date);
   const typeClass = stockInfo.type === "漲停" ? "up" : "down";
 
-  const buyerRows = (brokerData.top_buyers || []).map((b, i) => `
-    <tr>
-      <td class="rank">${i + 1}</td>
+  // 欄位: 券商 | 買超 | 買均 | 買張 | 賣張 | 賣均
+  const brokerRow = (b, isBuy) => {
+    const netClass = b.net_volume >= 0 ? "up" : "down";
+    return `<tr>
       <td>${b.broker_name}</td>
-      <td class="up">${(b.buy_volume / 1000).toFixed(0)}</td>
-      <td class="down">${(b.sell_volume / 1000).toFixed(0)}</td>
-      <td class="up" style="font-weight:600">${(b.net_volume / 1000).toFixed(0)}</td>
-    </tr>`).join("");
+      <td class="${netClass} net">${fmtVol(b.net_volume)}</td>
+      <td>${fmtPrice(b.buy_avg_price)}</td>
+      <td class="up">${fmtVol(b.buy_volume)}</td>
+      <td class="down">${fmtVol(b.sell_volume)}</td>
+      <td>${fmtPrice(b.sell_avg_price)}</td>
+    </tr>`;
+  };
 
-  const sellerRows = (brokerData.top_sellers || []).map((b, i) => `
-    <tr>
-      <td class="rank">${i + 1}</td>
-      <td>${b.broker_name}</td>
-      <td class="up">${(b.buy_volume / 1000).toFixed(0)}</td>
-      <td class="down">${(b.sell_volume / 1000).toFixed(0)}</td>
-      <td class="down" style="font-weight:600">${(b.net_volume / 1000).toFixed(0)}</td>
-    </tr>`).join("");
+  const buyerRows = (brokerData.top_buyers || []).map(b => brokerRow(b, true)).join("");
+  const sellerRows = (brokerData.top_sellers || []).map(b => brokerRow(b, false)).join("");
+
+  const tableHead = `<thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead>`;
 
   return `<!DOCTYPE html>
 <html lang="zh-TW">
@@ -290,8 +321,8 @@ function generateStockPage(stockInfo, brokerData, date) {
 <style>${css()}</style>
 </head>
 <body>
-<div class="container">
-  <a href="../index.html" class="back">← 返回漲跌停總覽</a>
+<div class="container wide">
+  <a href="../index.html" class="back">← 返回漲停總覽</a>
 
   <div class="info-bar">
     <div class="info-left">
@@ -307,29 +338,18 @@ function generateStockPage(stockInfo, brokerData, date) {
     </div>
   </div>
 
-  <p style="color:#8b949e;font-size:13px;margin-bottom:20px;">共 ${brokerData.total_brokers} 家券商交易</p>
+  <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 ${brokerData.total_brokers} 家券商交易</p>
 
-  <!-- Buy Top 15 -->
-  <div class="tab-bar">
-    <div class="tab active-buy">買方 Top15</div>
+  <div class="dual-panel">
+    <div class="panel">
+      <div class="panel-title buy">買超 Top15</div>
+      <table>${tableHead}<tbody>${buyerRows}</tbody></table>
+    </div>
+    <div class="panel">
+      <div class="panel-title sell">賣超 Top15</div>
+      <table>${tableHead}<tbody>${sellerRows}</tbody></table>
+    </div>
   </div>
-  <table>
-    <thead>
-      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>買超(張)</th></tr>
-    </thead>
-    <tbody>${buyerRows}</tbody>
-  </table>
-
-  <!-- Sell Top 15 -->
-  <div class="tab-bar" style="margin-top:32px;">
-    <div class="tab active-sell">賣方 Top15</div>
-  </div>
-  <table>
-    <thead>
-      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>賣超(張)</th></tr>
-    </thead>
-    <tbody>${sellerRows}</tbody>
-  </table>
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
