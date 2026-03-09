@@ -350,6 +350,13 @@ function generateBubbleChartScript(brokerData, stockInfo) {
     sellAvg: b.sell_avg_price,
   }));
 
+  // X-axis symmetric: 0 always in center
+  const allX = [...buyers.map(b => b.x), ...sellers.map(s => s.x)];
+  const xAbsMax = Math.max(...allX.map(v => Math.abs(v)), 1);
+  const xPad = Math.ceil(xAbsMax * 1.15); // 15% padding
+  const xAxisMin = -xPad;
+  const xAxisMax = xPad;
+
   return `
 (function() {
   const ctx = document.getElementById('bubbleChart').getContext('2d');
@@ -435,10 +442,14 @@ function generateBubbleChartScript(brokerData, stockInfo) {
             r.x < p.x + p.w && r.x + r.w > p.x && r.y < p.y + p.h && r.y + r.h > p.y
           );
           let r = rect();
-          for (let nudge = 0; nudge < 5 && overlaps(r); nudge++) {
+          // Try pushing up first, then sideways
+          for (let nudge = 0; nudge < 4 && overlaps(r); nudge++) {
             ty -= 13;
             r = rect();
           }
+          if (overlaps(r)) { tx += 40; r = rect(); }
+          if (overlaps(r)) { tx -= 80; r = rect(); }
+          if (overlaps(r)) { ty -= 13; r = rect(); }
           placed.push(r);
           // Leader line: label bottom → bubble center
           ctx.strokeStyle = 'rgba(230,237,243,0.35)';
@@ -538,7 +549,9 @@ function generateBubbleChartScript(brokerData, stockInfo) {
           title: { display: true, text: '買賣超（張）', color: '#8b949e', font: { size: 11 } },
           grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
           ticks: { color: '#8b949e', font: { size: 10 } },
-          border: { color: '#30363d' }
+          border: { color: '#30363d' },
+          min: ${xAxisMin},
+          max: ${xAxisMax}
         },
         y: {
           title: { display: true, text: '成交均價', color: '#8b949e', font: { size: 11 } },
