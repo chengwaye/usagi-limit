@@ -323,8 +323,9 @@ function generateBubbleChartScript(brokerData, stockInfo) {
   // Y-axis: 平盤 → 漲停（close - change → close）
   const change = parseFloat(stockInfo.change) || 0;
   const flatPrice = +(closePrice - change).toFixed(2); // 平盤價 = 昨收
+  const yRange = closePrice - flatPrice || 0.5;
   const yAxisMin = flatPrice;
-  const yAxisMax = closePrice;
+  const yAxisMax = +(closePrice + yRange * 0.15).toFixed(2); // 上方留 15% 給標籤
 
   const buyers = (brokerData.top_buyers || []).map(b => ({
     x: toZhang(b.net_volume),
