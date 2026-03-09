@@ -402,31 +402,40 @@ function generateBubbleChartScript(brokerData, stockInfo) {
         }
       }
 
-      // Only label top 5 buyers + top 5 sellers (by absolute net volume)
+      // Only label top 3 buyers + top 3 sellers, with collision avoidance
+      const placed = []; // track placed label rects
       chart.data.datasets.forEach((ds, di) => {
         const meta = chart.getDatasetMeta(di);
-        // data is already sorted by net volume, so just take first 5
-        const limit = Math.min(5, ds.data.length);
+        const limit = Math.min(3, ds.data.length);
         for (let i = 0; i < limit; i++) {
           const el = meta.data[i];
           const raw = ds.data[i];
           if (!el) continue;
           ctx.save();
-          // Text with dark outline for readability
-          const name = raw.label.length > 5 ? raw.label.substring(0, 5) : raw.label;
-          ctx.font = 'bold 10px sans-serif';
+          const name = raw.label.length > 4 ? raw.label.substring(0, 4) : raw.label;
+          ctx.font = 'bold 9px sans-serif';
+          const tw = ctx.measureText(name).width;
+          let tx = el.x;
+          let ty = el.y - raw.r - 4;
+          // Nudge if overlapping previous labels
+          const rect = () => ({ x: tx - tw/2 - 3, y: ty - 11, w: tw + 6, h: 13 });
+          const overlaps = (r) => placed.some(p =>
+            r.x < p.x + p.w && r.x + r.w > p.x && r.y < p.y + p.h && r.y + r.h > p.y
+          );
+          let r = rect();
+          for (let nudge = 0; nudge < 4 && overlaps(r); nudge++) {
+            ty -= 14; // push up
+            r = rect();
+          }
+          placed.push(r);
+          // Dark pill bg
+          ctx.fillStyle = 'rgba(13,17,23,0.8)';
+          ctx.beginPath();
+          ctx.roundRect(r.x, r.y, r.w, r.h, 3);
+          ctx.fill();
+          ctx.fillStyle = '#e6edf3';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'bottom';
-          const tx = el.x;
-          const ty = el.y - raw.r - 3; // above the bubble
-          // Dark background pill
-          const tw = ctx.measureText(name).width;
-          ctx.fillStyle = 'rgba(13,17,23,0.75)';
-          ctx.beginPath();
-          ctx.roundRect(tx - tw/2 - 3, ty - 12, tw + 6, 14, 3);
-          ctx.fill();
-          // Text
-          ctx.fillStyle = '#e6edf3';
           ctx.fillText(name, tx, ty);
           ctx.restore();
         }
