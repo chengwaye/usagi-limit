@@ -320,12 +320,11 @@ function generateBubbleChartScript(brokerData, stockInfo) {
     return Math.max(2, Math.sqrt(total / maxVol) * MAX_R);
   };
 
-  // Y-axis: max = close price (漲停價), no higher
-  const allPrices = allBrokers.map(b => b.buy_avg_price || b.sell_avg_price || 0).filter(p => p > 0);
-  const yMin = allPrices.length ? Math.min(...allPrices) : closePrice;
-  const yRange = (closePrice - yMin) || 0.5;
-  const yAxisMin = +(yMin - yRange * 0.15).toFixed(2);
-  const yAxisMax = closePrice > 0 ? closePrice : +(yMin + yRange * 1.1).toFixed(2);
+  // Y-axis: 平盤 → 漲停（close - change → close）
+  const change = parseFloat(stockInfo.change) || 0;
+  const flatPrice = +(closePrice - change).toFixed(2); // 平盤價 = 昨收
+  const yAxisMin = flatPrice;
+  const yAxisMax = closePrice;
 
   const buyers = (brokerData.top_buyers || []).map(b => ({
     x: toZhang(b.net_volume),
