@@ -308,25 +308,24 @@ function generateBubbleChart(brokerData, stockInfo) {
 function generateBubbleChartScript(brokerData, stockInfo) {
   const closePrice = parseFloat(stockInfo.close) || 0;
 
-  // Linear normalized: biggest = 18px, directly proportional so size difference is obvious
+  // Area-proportional: area ∝ volume, so 5000張 area = 2.5x of 2000張
+  // r = sqrt(vol/maxVol) * MAX_R → area ratio = vol ratio
   const toZhang = (v) => Math.round(v / 1000);
   const allBrokers = [...(brokerData.top_buyers || []), ...(brokerData.top_sellers || [])];
   const maxVol = Math.max(...allBrokers.map(b => (b.buy_volume + b.sell_volume) / 1000), 1);
-  const MAX_R = 18, MIN_R = 3;
+  const MAX_R = 22;
   const calcR = (buyVol, sellVol) => {
     const total = (buyVol + sellVol) / 1000;
-    if (total <= 0) return MIN_R;
-    // Linear: 5000張 vs 500張 = 10x size difference, very visible
-    return MIN_R + (MAX_R - MIN_R) * (total / maxVol);
+    if (total <= 0) return 2;
+    return Math.max(2, Math.sqrt(total / maxVol) * MAX_R);
   };
 
-  // Compute Y-axis bounds: tight around actual data, max = close price + tiny margin
+  // Y-axis: max = close price (漲停價), no higher
   const allPrices = allBrokers.map(b => b.buy_avg_price || b.sell_avg_price || 0).filter(p => p > 0);
   const yMin = allPrices.length ? Math.min(...allPrices) : closePrice;
-  const yMax = closePrice > 0 ? closePrice : (allPrices.length ? Math.max(...allPrices) : 0);
-  const yRange = yMax - yMin || 0.5;
+  const yRange = (closePrice - yMin) || 0.5;
   const yAxisMin = +(yMin - yRange * 0.15).toFixed(2);
-  const yAxisMax = +(yMax + yRange * 0.25).toFixed(2); // small headroom above close price
+  const yAxisMax = closePrice > 0 ? closePrice : +(yMin + yRange * 1.1).toFixed(2);
 
   const buyers = (brokerData.top_buyers || []).map(b => ({
     x: toZhang(b.net_volume),
