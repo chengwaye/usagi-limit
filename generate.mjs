@@ -290,6 +290,121 @@ function fmtPrice(p) {
   return p.toFixed(2);
 }
 
+function generateBubbleChart(brokerData, stockInfo) {
+  return `
+  <div style="margin-top:24px;">
+    <div class="panel-title" style="border-bottom-color:#58a6ff;color:#58a6ff;">籌碼泡泡圖</div>
+    <div style="position:relative;width:100%;max-width:700px;margin:0 auto;">
+      <canvas id="bubbleChart"></canvas>
+    </div>
+    <p style="color:#484f58;font-size:10px;text-align:center;margin-top:6px;">X軸＝買賣超張數（右買左賣）｜Y軸＝成交均價｜泡泡大小＝總成交量</p>
+  </div>`;
+}
+
+function generateBubbleChartScript(brokerData, stockInfo) {
+  // Combine buyers and sellers into one dataset
+  const buyers = (brokerData.top_buyers || []).map(b => ({
+    x: b.net_volume / 1000, // 張
+    y: b.buy_avg_price || 0,
+    r: Math.max(4, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.5),
+    label: b.broker_name,
+    net: b.net_volume / 1000,
+    buyVol: b.buy_volume / 1000,
+    sellVol: b.sell_volume / 1000,
+    buyAvg: b.buy_avg_price,
+    sellAvg: b.sell_avg_price,
+  }));
+  const sellers = (brokerData.top_sellers || []).map(b => ({
+    x: b.net_volume / 1000, // negative
+    y: b.sell_avg_price || 0,
+    r: Math.max(4, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.5),
+    label: b.broker_name,
+    net: b.net_volume / 1000,
+    buyVol: b.buy_volume / 1000,
+    sellVol: b.sell_volume / 1000,
+    buyAvg: b.buy_avg_price,
+    sellAvg: b.sell_avg_price,
+  }));
+
+  return `
+(function() {
+  const ctx = document.getElementById('bubbleChart').getContext('2d');
+  const buyData = ${JSON.stringify(buyers)};
+  const sellData = ${JSON.stringify(sellers)};
+
+  new Chart(ctx, {
+    type: 'bubble',
+    data: {
+      datasets: [
+        {
+          label: '買超',
+          data: buyData,
+          backgroundColor: 'rgba(248,81,73,0.55)',
+          borderColor: 'rgba(248,81,73,0.9)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(248,81,73,0.8)',
+        },
+        {
+          label: '賣超',
+          data: sellData,
+          backgroundColor: 'rgba(63,185,80,0.55)',
+          borderColor: 'rgba(63,185,80,0.9)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(63,185,80,0.8)',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1.6,
+      plugins: {
+        legend: {
+          labels: { color: '#8b949e', font: { size: 11 } }
+        },
+        tooltip: {
+          backgroundColor: '#1c2129',
+          titleColor: '#e6edf3',
+          bodyColor: '#8b949e',
+          borderColor: '#30363d',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            title: function(items) {
+              return items[0].raw.label;
+            },
+            label: function(item) {
+              const d = item.raw;
+              const lines = [];
+              lines.push('買超：' + d.net + ' 張');
+              lines.push('買張：' + d.buyVol + '　賣張：' + d.sellVol);
+              if (d.buyAvg) lines.push('買均：' + d.buyAvg.toFixed(2));
+              if (d.sellAvg) lines.push('賣均：' + d.sellAvg.toFixed(2));
+              return lines;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: '← 賣超（張）　　買超（張）→', color: '#8b949e', font: { size: 11 } },
+          grid: { color: '#21262d' },
+          ticks: { color: '#8b949e', font: { size: 10 } },
+          border: { color: '#30363d' }
+        },
+        y: {
+          title: { display: true, text: '成交均價', color: '#8b949e', font: { size: 11 } },
+          grid: { color: '#21262d' },
+          ticks: { color: '#8b949e', font: { size: 10 } },
+          border: { color: '#30363d' }
+        }
+      }
+    }
+  });
+})();
+`;
+}
+
 function generateStockPage(stockInfo, brokerData, date) {
   const adDate = formatDate(date);
   const typeClass = stockInfo.type === "漲停" ? "up" : "down";
@@ -352,11 +467,17 @@ function generateStockPage(stockInfo, brokerData, date) {
     </div>
   </div>
 
+  ${generateBubbleChart(brokerData, stockInfo)}
+
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
     <p><a href="../index.html">烏薩奇漲停版</a> &copy; 2026 | 每日盤後更新</p>
   </footer>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+${generateBubbleChartScript(brokerData, stockInfo)}
+</script>
 </body>
 </html>`;
 }
