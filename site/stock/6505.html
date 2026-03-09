@@ -342,31 +342,31 @@ footer a { color: #58a6ff; text-decoration: none; }
   const sellData = [{"x":-2643,"y":68.2,"r":35,"label":"富邦","net":-2643,"buyVol":855,"sellVol":3498,"buyAvg":68.16,"sellAvg":68.2},{"x":-1965,"y":68.16,"r":35,"label":"瑞銀","net":-1965,"buyVol":1743,"sellVol":3708,"buyAvg":68.05,"sellAvg":68.16},{"x":-1495,"y":68.2,"r":35,"label":"摩根大通","net":-1495,"buyVol":944,"sellVol":2439,"buyAvg":67.78,"sellAvg":68.2},{"x":-1207,"y":67.83,"r":35,"label":"美商高盛","net":-1207,"buyVol":1921,"sellVol":3128,"buyAvg":67.96,"sellAvg":67.83},{"x":-843,"y":68.2,"r":35,"label":"統一","net":-843,"buyVol":297,"sellVol":1140,"buyAvg":68.06,"sellAvg":68.2},{"x":-734,"y":68.19,"r":35,"label":"國泰綜合","net":-734,"buyVol":9,"sellVol":743,"buyAvg":68.19,"sellAvg":68.19},{"x":-730,"y":68.2,"r":35,"label":"美好蘆洲","net":-730,"buyVol":46,"sellVol":776,"buyAvg":68.2,"sellAvg":68.2},{"x":-695,"y":67.97,"r":35,"label":"兆豐竹北","net":-695,"buyVol":12,"sellVol":707,"buyAvg":67.68,"sellAvg":67.97},{"x":-686,"y":68.11,"r":35,"label":"富邦南屯","net":-686,"buyVol":106,"sellVol":793,"buyAvg":68.18,"sellAvg":68.11},{"x":-618,"y":68.2,"r":35,"label":"第一中山","net":-618,"buyVol":1,"sellVol":620,"buyAvg":68.2,"sellAvg":68.2},{"x":-456,"y":68.15,"r":35,"label":"富邦板橋","net":-456,"buyVol":127,"sellVol":583,"buyAvg":68.15,"sellAvg":68.15},{"x":-354,"y":67.64,"r":35,"label":"華南永昌","net":-354,"buyVol":611,"sellVol":964,"buyAvg":68.16,"sellAvg":67.64},{"x":-344,"y":68.2,"r":33.75516741031304,"label":"宏遠","net":-344,"buyVol":1,"sellVol":345,"buyAvg":68.2,"sellAvg":68.2},{"x":-315,"y":68.18,"r":33.21512299270841,"label":"花旗環球","net":-315,"buyVol":0,"sellVol":315,"buyAvg":0,"sellAvg":68.18},{"x":-276,"y":67.84,"r":35,"label":"凱基","net":-276,"buyVol":151,"sellVol":427,"buyAvg":68.03,"sellAvg":67.84}];
   const closePrice = 68.2;
 
-  // Plugin: draw center line (x=0) + close price line
+  // Plugin: reference lines + top broker labels (drawn ABOVE bubbles)
   const refLinePlugin = {
     id: 'refLines',
-    afterDraw(chart) {
+    afterDatasetsDraw(chart) {
       const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
 
       // Vertical dashed line at x=0 (buy/sell divider)
       const x0 = x.getPixelForValue(0);
       if (x0 >= left && x0 <= right) {
         ctx.save();
-        ctx.strokeStyle = 'rgba(88,166,255,0.3)';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = 'rgba(88,166,255,0.5)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 4]);
         ctx.beginPath();
         ctx.moveTo(x0, top);
         ctx.lineTo(x0, bottom);
         ctx.stroke();
-        // Labels
-        ctx.fillStyle = 'rgba(248,81,73,0.5)';
-        ctx.font = '10px sans-serif';
+        // Labels at top
+        ctx.font = 'bold 11px sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('買 →', x0 + 6, top + 14);
-        ctx.fillStyle = 'rgba(63,185,80,0.5)';
+        ctx.fillStyle = 'rgba(248,81,73,0.7)';
+        ctx.fillText('買 →', x0 + 8, top + 16);
         ctx.textAlign = 'right';
-        ctx.fillText('← 賣', x0 - 6, top + 14);
+        ctx.fillStyle = 'rgba(63,185,80,0.7)';
+        ctx.fillText('← 賣', x0 - 8, top + 16);
         ctx.restore();
       }
 
@@ -375,38 +375,54 @@ footer a { color: #58a6ff; text-decoration: none; }
         const yClose = y.getPixelForValue(closePrice);
         if (yClose >= top && yClose <= bottom) {
           ctx.save();
-          ctx.strokeStyle = 'rgba(255,200,55,0.4)';
-          ctx.lineWidth = 1;
-          ctx.setLineDash([4, 3]);
+          ctx.strokeStyle = 'rgba(255,200,55,0.6)';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([6, 3]);
           ctx.beginPath();
           ctx.moveTo(left, yClose);
           ctx.lineTo(right, yClose);
           ctx.stroke();
-          ctx.fillStyle = 'rgba(255,200,55,0.6)';
-          ctx.font = '9px sans-serif';
+          // Label with background
+          const label = '收盤 $' + closePrice;
+          ctx.font = 'bold 10px sans-serif';
+          const tw = ctx.measureText(label).width;
+          ctx.fillStyle = 'rgba(13,17,23,0.8)';
+          ctx.fillRect(right - tw - 8, yClose - 14, tw + 6, 16);
+          ctx.fillStyle = 'rgba(255,200,55,0.9)';
           ctx.textAlign = 'right';
-          ctx.fillText('收盤 $' + closePrice, right - 2, yClose - 4);
+          ctx.fillText(label, right - 4, yClose - 2);
           ctx.restore();
         }
       }
 
-      // Draw broker name on top of large bubbles (r >= 12)
+      // Only label top 5 buyers + top 5 sellers (by absolute net volume)
       chart.data.datasets.forEach((ds, di) => {
         const meta = chart.getDatasetMeta(di);
-        meta.data.forEach((el, i) => {
+        // data is already sorted by net volume, so just take first 5
+        const limit = Math.min(5, ds.data.length);
+        for (let i = 0; i < limit; i++) {
+          const el = meta.data[i];
           const raw = ds.data[i];
-          if (raw.r >= 12) {
-            ctx.save();
-            ctx.fillStyle = 'rgba(230,237,243,0.85)';
-            ctx.font = 'bold 9px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            // Truncate long names
-            let name = raw.label.length > 4 ? raw.label.substring(0, 4) : raw.label;
-            ctx.fillText(name, el.x, el.y);
-            ctx.restore();
-          }
-        });
+          if (!el) continue;
+          ctx.save();
+          // Text with dark outline for readability
+          const name = raw.label.length > 5 ? raw.label.substring(0, 5) : raw.label;
+          ctx.font = 'bold 10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          const tx = el.x;
+          const ty = el.y - raw.r - 3; // above the bubble
+          // Dark background pill
+          const tw = ctx.measureText(name).width;
+          ctx.fillStyle = 'rgba(13,17,23,0.75)';
+          ctx.beginPath();
+          ctx.roundRect(tx - tw/2 - 3, ty - 12, tw + 6, 14, 3);
+          ctx.fill();
+          // Text
+          ctx.fillStyle = '#e6edf3';
+          ctx.fillText(name, tx, ty);
+          ctx.restore();
+        }
       });
     }
   };
