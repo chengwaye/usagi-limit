@@ -297,16 +297,22 @@ function generateBubbleChart(brokerData, stockInfo) {
     <div style="position:relative;width:100%;max-width:700px;margin:0 auto;">
       <canvas id="bubbleChart"></canvas>
     </div>
-    <p style="color:#484f58;font-size:10px;text-align:center;margin-top:6px;">X軸＝買賣超張數（右買左賣）｜Y軸＝成交均價｜泡泡大小＝總成交量</p>
+    <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;flex-wrap:wrap;">
+      <span style="color:#484f58;font-size:10px;">⬤ 大泡泡＝成交量大</span>
+      <span style="color:#484f58;font-size:10px;">── 收盤價 $${stockInfo.close}</span>
+      <span style="color:#484f58;font-size:10px;">┆ 買賣分界</span>
+    </div>
   </div>`;
 }
 
 function generateBubbleChartScript(brokerData, stockInfo) {
-  // Combine buyers and sellers into one dataset
+  const closePrice = parseFloat(stockInfo.close) || 0;
+
+  // Build data points — buyers use buy_avg, sellers use sell_avg for Y
   const buyers = (brokerData.top_buyers || []).map(b => ({
-    x: b.net_volume / 1000, // 張
+    x: b.net_volume / 1000,
     y: b.buy_avg_price || 0,
-    r: Math.max(4, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.5),
+    r: Math.max(5, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.8),
     label: b.broker_name,
     net: b.net_volume / 1000,
     buyVol: b.buy_volume / 1000,
@@ -315,9 +321,9 @@ function generateBubbleChartScript(brokerData, stockInfo) {
     sellAvg: b.sell_avg_price,
   }));
   const sellers = (brokerData.top_sellers || []).map(b => ({
-    x: b.net_volume / 1000, // negative
+    x: b.net_volume / 1000,
     y: b.sell_avg_price || 0,
-    r: Math.max(4, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.5),
+    r: Math.max(5, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.8),
     label: b.broker_name,
     net: b.net_volume / 1000,
     buyVol: b.buy_volume / 1000,
@@ -331,55 +337,151 @@ function generateBubbleChartScript(brokerData, stockInfo) {
   const ctx = document.getElementById('bubbleChart').getContext('2d');
   const buyData = ${JSON.stringify(buyers)};
   const sellData = ${JSON.stringify(sellers)};
+  const closePrice = ${closePrice};
+
+  // Plugin: draw center line (x=0) + close price line
+  const refLinePlugin = {
+    id: 'refLines',
+    afterDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+
+      // Vertical dashed line at x=0 (buy/sell divider)
+      const x0 = x.getPixelForValue(0);
+      if (x0 >= left && x0 <= right) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(88,166,255,0.3)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(x0, top);
+        ctx.lineTo(x0, bottom);
+        ctx.stroke();
+        // Labels
+        ctx.fillStyle = 'rgba(248,81,73,0.5)';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('買 →', x0 + 6, top + 14);
+        ctx.fillStyle = 'rgba(63,185,80,0.5)';
+        ctx.textAlign = 'right';
+        ctx.fillText('← 賣', x0 - 6, top + 14);
+        ctx.restore();
+      }
+
+      // Horizontal dashed line at close price
+      if (closePrice > 0) {
+        const yClose = y.getPixelForValue(closePrice);
+        if (yClose >= top && yClose <= bottom) {
+          ctx.save();
+          ctx.strokeStyle = 'rgba(255,200,55,0.4)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 3]);
+          ctx.beginPath();
+          ctx.moveTo(left, yClose);
+          ctx.lineTo(right, yClose);
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(255,200,55,0.6)';
+          ctx.font = '9px sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText('收盤 $' + closePrice, right - 2, yClose - 4);
+          ctx.restore();
+        }
+      }
+
+      // Draw broker name on top of large bubbles (r >= 12)
+      chart.data.datasets.forEach((ds, di) => {
+        const meta = chart.getDatasetMeta(di);
+        meta.data.forEach((el, i) => {
+          const raw = ds.data[i];
+          if (raw.r >= 12) {
+            ctx.save();
+            ctx.fillStyle = 'rgba(230,237,243,0.85)';
+            ctx.font = 'bold 9px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            // Truncate long names
+            let name = raw.label.length > 4 ? raw.label.substring(0, 4) : raw.label;
+            ctx.fillText(name, el.x, el.y);
+            ctx.restore();
+          }
+        });
+      });
+    }
+  };
 
   new Chart(ctx, {
     type: 'bubble',
     data: {
       datasets: [
         {
-          label: '買超',
+          label: '買超券商',
           data: buyData,
-          backgroundColor: 'rgba(248,81,73,0.55)',
-          borderColor: 'rgba(248,81,73,0.9)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(248,81,73,0.8)',
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.75, 0.3 + r / 30);
+            return 'rgba(248,81,73,' + alpha + ')';
+          },
+          borderColor: 'rgba(248,81,73,0.8)',
+          borderWidth: 1.5,
+          hoverBackgroundColor: 'rgba(248,81,73,0.9)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 2,
         },
         {
-          label: '賣超',
+          label: '賣超券商',
           data: sellData,
-          backgroundColor: 'rgba(63,185,80,0.55)',
-          borderColor: 'rgba(63,185,80,0.9)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(63,185,80,0.8)',
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.75, 0.3 + r / 30);
+            return 'rgba(63,185,80,' + alpha + ')';
+          },
+          borderColor: 'rgba(63,185,80,0.8)',
+          borderWidth: 1.5,
+          hoverBackgroundColor: 'rgba(63,185,80,0.9)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 2,
         }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: true,
-      aspectRatio: 1.6,
+      aspectRatio: 1.5,
+      animation: {
+        duration: 800,
+        easing: 'easeOutQuart'
+      },
       plugins: {
         legend: {
-          labels: { color: '#8b949e', font: { size: 11 } }
+          labels: {
+            color: '#8b949e',
+            font: { size: 11 },
+            usePointStyle: true,
+            pointStyle: 'circle',
+          }
         },
         tooltip: {
-          backgroundColor: '#1c2129',
+          backgroundColor: 'rgba(13,17,23,0.95)',
           titleColor: '#e6edf3',
-          bodyColor: '#8b949e',
-          borderColor: '#30363d',
+          bodyColor: '#c9d1d9',
+          borderColor: '#58a6ff',
           borderWidth: 1,
-          padding: 10,
+          cornerRadius: 8,
+          padding: 12,
+          titleFont: { size: 13, weight: 'bold' },
+          bodyFont: { size: 11 },
+          displayColors: false,
           callbacks: {
             title: function(items) {
-              return items[0].raw.label;
+              const d = items[0].raw;
+              const arrow = d.net >= 0 ? '🔴' : '🟢';
+              return arrow + ' ' + d.label;
             },
             label: function(item) {
               const d = item.raw;
               const lines = [];
-              lines.push('買超：' + d.net + ' 張');
-              lines.push('買張：' + d.buyVol + '　賣張：' + d.sellVol);
-              if (d.buyAvg) lines.push('買均：' + d.buyAvg.toFixed(2));
-              if (d.sellAvg) lines.push('賣均：' + d.sellAvg.toFixed(2));
+              lines.push('淨買超：' + (d.net > 0 ? '+' : '') + d.net + ' 張');
+              lines.push('買進：' + d.buyVol + ' 張' + (d.buyAvg ? ' @ $' + d.buyAvg.toFixed(2) : ''));
+              lines.push('賣出：' + d.sellVol + ' 張' + (d.sellAvg ? ' @ $' + d.sellAvg.toFixed(2) : ''));
               return lines;
             }
           }
@@ -387,19 +489,20 @@ function generateBubbleChartScript(brokerData, stockInfo) {
       },
       scales: {
         x: {
-          title: { display: true, text: '← 賣超（張）　　買超（張）→', color: '#8b949e', font: { size: 11 } },
-          grid: { color: '#21262d' },
+          title: { display: true, text: '買賣超（張）', color: '#8b949e', font: { size: 11 } },
+          grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
           ticks: { color: '#8b949e', font: { size: 10 } },
           border: { color: '#30363d' }
         },
         y: {
           title: { display: true, text: '成交均價', color: '#8b949e', font: { size: 11 } },
-          grid: { color: '#21262d' },
+          grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
           ticks: { color: '#8b949e', font: { size: 10 } },
           border: { color: '#30363d' }
         }
       }
-    }
+    },
+    plugins: [refLinePlugin]
   });
 })();
 `;
