@@ -19,38 +19,58 @@ if (!fs.existsSync(STOCK_DIR)) fs.mkdirSync(STOCK_DIR, { recursive: true });
 // Step 1: Get today's market data for limit up/down detection
 // ============================================================
 async function getLimitStocks() {
-  const resp = await axios.get("https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL");
-  const data = resp.data;
-  const stocks = {};
+  // 優先用 TWSE 正式 API（更新較快），fallback 到 OpenAPI
+  let data, dateStr;
+  try {
+    const resp = await axios.get("https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL?response=json");
+    const json = resp.data;
+    dateStr = json.date; // "20260309"
+    // 欄位: [代號, 名稱, 成交股數, 成交金額, 開盤價, 最高價, 最低價, 收盤價, 漲跌, 成交筆數]
+    data = (json.data || []).map(r => ({
+      Code: r[0], Name: r[1].replace(/\s+/g, ''),
+      TradeVolume: r[2].replace(/,/g, ''),
+      HighestPrice: r[5], LowestPrice: r[6],
+      ClosingPrice: r[7], Change: r[8],
+    }));
+    console.log(`Using TWSE API, date: ${dateStr}, ${data.length} stocks`);
+  } catch (e) {
+    console.log(`TWSE API failed (${e.message}), falling back to OpenAPI`);
+    const resp = await axios.get("https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL");
+    data = resp.data;
+    // OpenAPI date is ROC: "1150306"
+    const rocDate = data[0]?.Date;
+    const y = parseInt(rocDate.substring(0, 3)) + 1911;
+    dateStr = `${y}${rocDate.substring(3, 7)}`;
+  }
 
+  const stocks = {};
   for (const s of data) {
     const close = parseFloat(s.ClosingPrice);
     const high = parseFloat(s.HighestPrice);
-    const low = parseFloat(s.LowestPrice);
     const change = parseFloat(s.Change);
-    if (!close || !high || !low || isNaN(change)) continue;
+    if (!close || !high || isNaN(change)) continue;
     const prevClose = close - change;
     if (prevClose <= 0) continue;
     const pct = (change / prevClose) * 100;
 
-    let type = null;
-    if (close === high && pct >= 9.5) type = "漲停";
-    if (close === low && pct <= -9.5) type = "跌停";
+    // 只追蹤漲停（跌停暫不處理）
+    if (!(close === high && pct >= 9.5)) continue;
 
-    if (type) {
+    {
+      const type = "漲停";
       stocks[s.Code] = {
         code: s.Code,
         name: s.Name,
         close,
         change,
         changePct: pct.toFixed(2),
-        volume: parseInt(s.TradeVolume),
+        volume: parseInt(String(s.TradeVolume).replace(/,/g, '')),
         type,
       };
     }
   }
 
-  return { stocks, date: data[0]?.Date };
+  return { stocks, date: dateStr };
 }
 
 // ============================================================
@@ -134,11 +154,15 @@ footer a { color: #58a6ff; text-decoration: none; }
 `;
 }
 
-function rocToAD(rocDate) {
-  // "1150306" → "2026/03/06"
-  const y = parseInt(rocDate.substring(0, 3)) + 1911;
-  const m = rocDate.substring(3, 5);
-  const d = rocDate.substring(5, 7);
+function formatDate(dateStr) {
+  // 支援兩種格式：YYYYMMDD "20260309" 或 ROC "1150306"
+  if (dateStr.length === 8) {
+    return `${dateStr.substring(0, 4)}/${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}`;
+  }
+  // ROC format
+  const y = parseInt(dateStr.substring(0, 3)) + 1911;
+  const m = dateStr.substring(3, 5);
+  const d = dateStr.substring(5, 7);
   return `${y}/${m}/${d}`;
 }
 
@@ -149,9 +173,8 @@ function formatVolume(v) {
 }
 
 function generateIndexPage(limitStocks, date) {
-  const adDate = rocToAD(date);
-  const upStocks = Object.values(limitStocks).filter(s => s.type === "漲停");
-  const downStocks = Object.values(limitStocks).filter(s => s.type === "跌停");
+  const adDate = formatDate(date);
+  const upStocks = Object.values(limitStocks);
 
   const stockCard = (s) => `
     <div class="stock-card">
@@ -159,13 +182,13 @@ function generateIndexPage(limitStocks, date) {
         <div class="stock-header">
           <div><span class="stock-name">${s.name}</span><span class="stock-code">${s.code}</span></div>
           <div class="stock-price">
-            <div class="stock-close ${s.type === '漲停' ? 'up' : 'down'}">$${s.close}</div>
-            <div class="stock-change ${s.type === '漲停' ? 'up' : 'down'}">${s.change > 0 ? '+' : ''}${s.change} (${s.changePct}%)</div>
+            <div class="stock-close up">$${s.close}</div>
+            <div class="stock-change up">+${s.change} (${s.changePct}%)</div>
           </div>
         </div>
         <div class="stock-meta">
           <span>成交量 ${formatVolume(s.volume)}</span>
-          <span class="badge ${s.type === '漲停' ? 'up' : 'down'}">${s.type}</span>
+          <span class="badge up">漲停</span>
         </div>
       </a>
     </div>`;
@@ -175,25 +198,20 @@ function generateIndexPage(limitStocks, date) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>烏薩奇漲停版 — ${adDate} 漲跌停分點追蹤</title>
-<meta name="description" content="${adDate} 台股漲停跌停股票券商分點買賣超排行，追蹤主力動向">
+<title>烏薩奇漲停版 — ${adDate} 漲停分點追蹤</title>
+<meta name="description" content="${adDate} 台股漲停股票券商分點買賣超排行，追蹤主力動向">
 <style>${css()}</style>
 </head>
 <body>
 <div class="container">
   <header>
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
-    <div class="subtitle">漲跌停分點追蹤 — 看誰在買、誰在賣</div>
+    <div class="subtitle">漲停分點追蹤 — 看誰在買、誰在賣</div>
     <div class="date">${adDate}</div>
   </header>
 
   <div class="section-title">🔴 漲停 (${upStocks.length})</div>
   ${upStocks.map(stockCard).join("\n")}
-
-  ${downStocks.length > 0 ? `
-  <div class="section-title down">🟢 跌停 (${downStocks.length})</div>
-  ${downStocks.map(stockCard).join("\n")}
-  ` : ""}
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
@@ -205,7 +223,7 @@ function generateIndexPage(limitStocks, date) {
 }
 
 function generateStockPage(stockInfo, brokerData, date) {
-  const adDate = rocToAD(date);
+  const adDate = formatDate(date);
   const typeClass = stockInfo.type === "漲停" ? "up" : "down";
 
   const buyerRows = (brokerData.top_buyers || []).map((b, i) => `
@@ -296,17 +314,9 @@ async function main() {
   // Get limit stocks
   console.log("Fetching market data...");
   const { stocks: limitStocks, date } = await getLimitStocks();
-  const adDate = rocToAD(date);
-  // Convert ROC date to YYYYMMDD for cache lookup
-  const y = parseInt(date.substring(0, 3)) + 1911;
-  const openApiDate = `${y}${date.substring(3, 7)}`;
-
-  // Find the actual date in cache (TWSE broker data may have a different date than OpenAPI)
-  const cacheFiles = fs.readdirSync(CACHE_DIR).filter(f => f.endsWith(".json") && !f.startsWith("debug"));
-  const cacheDates = [...new Set(cacheFiles.map(f => f.match(/_(\d{8})\.json$/)?.[1]).filter(Boolean))];
-  // Use the most recent cache date, or fallback to OpenAPI date
-  const cacheDate = cacheDates.sort().reverse()[0] || openApiDate;
-  console.log(`OpenAPI date: ${openApiDate}, Cache date: ${cacheDate}`);
+  // date is now YYYYMMDD from TWSE API (or converted from ROC)
+  const cacheDate = date; // direct match
+  const adDate = formatDate(date);
 
   console.log(`Date: ${adDate} (cache key: ${cacheDate})`);
   console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
