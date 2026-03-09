@@ -70,6 +70,42 @@ async function getLimitStocks() {
     }
   }
 
+  // 也加入 TPEX 上櫃漲停股
+  try {
+    const tpexResp = await axios.get("https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes", {
+      responseType: 'arraybuffer'
+    });
+    const tpexText = Buffer.from(tpexResp.data).toString('utf-8');
+    const tpexData = JSON.parse(tpexText);
+    let otcCount = 0;
+    for (const s of tpexData) {
+      const close = parseFloat(s.Close);
+      const high = parseFloat(s.High);
+      const change = parseFloat(s.Change);
+      if (!close || !high || isNaN(change)) continue;
+      const prevClose = close - change;
+      if (prevClose <= 0) continue;
+      const pct = (change / prevClose) * 100;
+
+      if (!(close === high && pct >= 9.5)) continue;
+
+      otcCount++;
+      stocks[s.SecuritiesCompanyCode] = {
+        code: s.SecuritiesCompanyCode,
+        name: s.CompanyName,
+        close,
+        change,
+        changePct: pct.toFixed(2),
+        volume: parseInt(String(s.TradingShares).replace(/,/g, '')),
+        type: "漲停",
+        market: "OTC",
+      };
+    }
+    console.log(`TPEX: ${otcCount} OTC limit up stocks`);
+  } catch (e) {
+    console.log(`TPEX API failed: ${e.message}`);
+  }
+
   return { stocks, date: dateStr };
 }
 
@@ -188,7 +224,7 @@ function generateIndexPage(limitStocks, date) {
         </div>
         <div class="stock-meta">
           <span>成交量 ${formatVolume(s.volume)}</span>
-          <span class="badge up">漲停</span>
+          <span class="badge up">漲停${s.market === 'OTC' ? '(櫃)' : ''}</span>
         </div>
       </a>
     </div>`;
