@@ -342,64 +342,81 @@ footer a { color: #58a6ff; text-decoration: none; }
   const sellData = [{"x":-64,"y":37.7,"r":14,"label":"富邦建國","net":-64,"buyVol":0,"sellVol":64,"buyAvg":0,"sellAvg":37.7},{"x":-17,"y":37.11,"r":8.18465843842649,"label":"元大台南","net":-17,"buyVol":0,"sellVol":17,"buyAvg":0,"sellAvg":37.11},{"x":-14,"y":37.69,"r":7.612486080160912,"label":"新光台中","net":-14,"buyVol":0,"sellVol":14,"buyAvg":0,"sellAvg":37.69},{"x":-7,"y":37.63,"r":5.9686269665968865,"label":"新光","net":-7,"buyVol":0,"sellVol":7,"buyAvg":0,"sellAvg":37.63},{"x":-7,"y":37.12,"r":5.902018708309841,"label":"永昌小港","net":-7,"buyVol":0,"sellVol":7,"buyAvg":37.5,"sellAvg":37.12},{"x":-6,"y":37.44,"r":5.674234614174766,"label":"永豐金","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":37.44},{"x":-6,"y":37.7,"r":5.639471115423229,"label":"元大永康","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":37.7},{"x":-5,"y":37.62,"r":5.354101966249685,"label":"元大府城","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":37.62},{"x":-5,"y":37.58,"r":5.364149223800871,"label":"富邦台北","net":-5,"buyVol":0,"sellVol":5,"buyAvg":37.63,"sellAvg":37.58},{"x":-4,"y":37.58,"r":5,"label":"富邦中壢","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":37.58},{"x":-3,"y":37.67,"r":4.598076211353316,"label":"第一金桃園","net":-3,"buyVol":0,"sellVol":3,"buyAvg":0,"sellAvg":37.67},{"x":-3,"y":37.48,"r":5.354101966249685,"label":"永昌中正","net":-3,"buyVol":1,"sellVol":4,"buyAvg":35.5,"sellAvg":37.48},{"x":-3,"y":37.65,"r":5.354101966249685,"label":"富邦竹北","net":-3,"buyVol":1,"sellVol":4,"buyAvg":35.45,"sellAvg":37.65},{"x":-3,"y":37.67,"r":4.598076211353316,"label":"元大龍潭","net":-3,"buyVol":0,"sellVol":3,"buyAvg":0,"sellAvg":37.67},{"x":-3,"y":37.7,"r":4.598076211353316,"label":"群益東門","net":-3,"buyVol":0,"sellVol":3,"buyAvg":0,"sellAvg":37.7}];
   const closePrice = 37.7;
 
-  // Plugin: reference lines + top broker labels (drawn ABOVE bubbles)
+  // Plugin: lines BEHIND bubbles, labels ABOVE bubbles
   const refLinePlugin = {
     id: 'refLines',
-    afterDatasetsDraw(chart) {
+    beforeDatasetsDraw(chart) {
       const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
 
-      // Vertical dashed line at x=0 (buy/sell divider)
+      // Vertical dashed line at x=0
       const x0 = x.getPixelForValue(0);
       if (x0 >= left && x0 <= right) {
         ctx.save();
-        ctx.strokeStyle = 'rgba(88,166,255,0.5)';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([8, 4]);
+        ctx.strokeStyle = 'rgba(88,166,255,0.35)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([6, 4]);
         ctx.beginPath();
         ctx.moveTo(x0, top);
         ctx.lineTo(x0, bottom);
         ctx.stroke();
-        // Labels at top
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillStyle = 'rgba(248,81,73,0.7)';
-        ctx.fillText('買 →', x0 + 8, top + 16);
-        ctx.textAlign = 'right';
-        ctx.fillStyle = 'rgba(63,185,80,0.7)';
-        ctx.fillText('← 賣', x0 - 8, top + 16);
         ctx.restore();
       }
 
-      // Horizontal dashed line at close price
+      // Horizontal dashed line at close price (thin, behind bubbles)
       if (closePrice > 0) {
         const yClose = y.getPixelForValue(closePrice);
         if (yClose >= top && yClose <= bottom) {
           ctx.save();
-          ctx.strokeStyle = 'rgba(255,200,55,0.6)';
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([6, 3]);
+          ctx.strokeStyle = 'rgba(255,200,55,0.25)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
           ctx.beginPath();
           ctx.moveTo(left, yClose);
           ctx.lineTo(right, yClose);
           ctx.stroke();
-          // Label with background
+          ctx.restore();
+        }
+      }
+    },
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+
+      // Close price label (right edge, above bubbles)
+      if (closePrice > 0) {
+        const yClose = y.getPixelForValue(closePrice);
+        if (yClose >= top && yClose <= bottom) {
+          ctx.save();
           const label = '收盤 $' + closePrice;
-          ctx.font = 'bold 10px sans-serif';
+          ctx.font = '9px sans-serif';
           const tw = ctx.measureText(label).width;
           ctx.fillStyle = 'rgba(13,17,23,0.8)';
-          ctx.fillRect(right - tw - 8, yClose - 14, tw + 6, 16);
-          ctx.fillStyle = 'rgba(255,200,55,0.9)';
+          ctx.fillRect(right - tw - 6, yClose - 12, tw + 4, 13);
+          ctx.fillStyle = 'rgba(255,200,55,0.8)';
           ctx.textAlign = 'right';
-          ctx.fillText(label, right - 4, yClose - 2);
+          ctx.fillText(label, right - 3, yClose - 1);
           ctx.restore();
         }
       }
 
-      // Only label top 3 buyers + top 3 sellers, with collision avoidance
-      const placed = []; // track placed label rects
+      // Buy/sell direction labels
+      const x0 = x.getPixelForValue(0);
+      if (x0 >= left && x0 <= right) {
+        ctx.save();
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(248,81,73,0.6)';
+        ctx.fillText('買→', x0 + 6, top + 14);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = 'rgba(63,185,80,0.6)';
+        ctx.fillText('←賣', x0 - 6, top + 14);
+        ctx.restore();
+      }
+
+      // Top 5 broker labels with collision avoidance
+      const placed = [];
       chart.data.datasets.forEach((ds, di) => {
         const meta = chart.getDatasetMeta(di);
-        const limit = Math.min(3, ds.data.length);
+        const limit = Math.min(5, ds.data.length);
         for (let i = 0; i < limit; i++) {
           const el = meta.data[i];
           const raw = ds.data[i];
@@ -410,18 +427,16 @@ footer a { color: #58a6ff; text-decoration: none; }
           const tw = ctx.measureText(name).width;
           let tx = el.x;
           let ty = el.y - raw.r - 4;
-          // Nudge if overlapping previous labels
           const rect = () => ({ x: tx - tw/2 - 3, y: ty - 11, w: tw + 6, h: 13 });
           const overlaps = (r) => placed.some(p =>
             r.x < p.x + p.w && r.x + r.w > p.x && r.y < p.y + p.h && r.y + r.h > p.y
           );
           let r = rect();
-          for (let nudge = 0; nudge < 4 && overlaps(r); nudge++) {
-            ty -= 14; // push up
+          for (let nudge = 0; nudge < 5 && overlaps(r); nudge++) {
+            ty -= 13;
             r = rect();
           }
           placed.push(r);
-          // Dark pill bg
           ctx.fillStyle = 'rgba(13,17,23,0.8)';
           ctx.beginPath();
           ctx.roundRect(r.x, r.y, r.w, r.h, 3);
@@ -519,7 +534,8 @@ footer a { color: #58a6ff; text-decoration: none; }
           title: { display: true, text: '成交均價', color: '#8b949e', font: { size: 11 } },
           grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
           ticks: { color: '#8b949e', font: { size: 10 } },
-          border: { color: '#30363d' }
+          border: { color: '#30363d' },
+          grace: '15%'
         }
       }
     },
