@@ -312,8 +312,8 @@ function generateBubbleChartScript(brokerData, stockInfo) {
   // r = clamp(log2(totalVol) * scale, min, max)
   const calcR = (buyVol, sellVol) => {
     const total = (buyVol + sellVol) / 1000; // 張
-    if (total <= 0) return 5;
-    return Math.min(35, Math.max(5, Math.log2(total + 1) * 4));
+    if (total <= 0) return 3;
+    return Math.min(20, Math.max(3, Math.log2(total + 1) * 2));
   };
   const toZhang = (v) => Math.round(v / 1000); // 取整數張
 
