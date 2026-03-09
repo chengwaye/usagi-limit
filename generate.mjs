@@ -308,26 +308,34 @@ function generateBubbleChart(brokerData, stockInfo) {
 function generateBubbleChartScript(brokerData, stockInfo) {
   const closePrice = parseFloat(stockInfo.close) || 0;
 
-  // Build data points — buyers use buy_avg, sellers use sell_avg for Y
+  // Log-based radius: prevents one mega-broker from eating the whole chart
+  // r = clamp(log2(totalVol) * scale, min, max)
+  const calcR = (buyVol, sellVol) => {
+    const total = (buyVol + sellVol) / 1000; // 張
+    if (total <= 0) return 5;
+    return Math.min(35, Math.max(5, Math.log2(total + 1) * 4));
+  };
+  const toZhang = (v) => Math.round(v / 1000); // 取整數張
+
   const buyers = (brokerData.top_buyers || []).map(b => ({
-    x: b.net_volume / 1000,
+    x: toZhang(b.net_volume),
     y: b.buy_avg_price || 0,
-    r: Math.max(5, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.8),
+    r: calcR(b.buy_volume, b.sell_volume),
     label: b.broker_name,
-    net: b.net_volume / 1000,
-    buyVol: b.buy_volume / 1000,
-    sellVol: b.sell_volume / 1000,
+    net: toZhang(b.net_volume),
+    buyVol: toZhang(b.buy_volume),
+    sellVol: toZhang(b.sell_volume),
     buyAvg: b.buy_avg_price,
     sellAvg: b.sell_avg_price,
   }));
   const sellers = (brokerData.top_sellers || []).map(b => ({
-    x: b.net_volume / 1000,
+    x: toZhang(b.net_volume),
     y: b.sell_avg_price || 0,
-    r: Math.max(5, Math.sqrt((b.buy_volume + b.sell_volume) / 1000) * 2.8),
+    r: calcR(b.buy_volume, b.sell_volume),
     label: b.broker_name,
-    net: b.net_volume / 1000,
-    buyVol: b.buy_volume / 1000,
-    sellVol: b.sell_volume / 1000,
+    net: toZhang(b.net_volume),
+    buyVol: toZhang(b.buy_volume),
+    sellVol: toZhang(b.sell_volume),
     buyAvg: b.buy_avg_price,
     sellAvg: b.sell_avg_price,
   }));
