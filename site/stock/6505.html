@@ -398,19 +398,7 @@ footer a { color: #58a6ff; text-decoration: none; }
         }
       }
 
-      // Buy/sell direction labels
-      const x0 = x.getPixelForValue(0);
-      if (x0 >= left && x0 <= right) {
-        ctx.save();
-        ctx.font = 'bold 10px sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillStyle = 'rgba(248,81,73,0.6)';
-        ctx.fillText('買→', x0 + 6, top + 14);
-        ctx.textAlign = 'right';
-        ctx.fillStyle = 'rgba(63,185,80,0.6)';
-        ctx.fillText('←賣', x0 - 6, top + 14);
-        ctx.restore();
-      }
+      // (buy/sell direction labels removed — red/green already obvious)
 
       // Top 5 broker labels with collision avoidance
       const placed = [];
