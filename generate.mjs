@@ -545,7 +545,11 @@ function generateBubbleChartScript(brokerData, stockInfo) {
         y: {
           title: { display: true, text: '成交均價', color: '#8b949e', font: { size: 11 } },
           grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
-          ticks: { color: '#8b949e', font: { size: 10 } },
+          ticks: {
+            color: '#8b949e',
+            font: { size: 10 },
+            callback: function(value) { return value <= ${closePrice} ? value : ''; }
+          },
           border: { color: '#30363d' },
           min: ${yAxisMin},
           max: ${yAxisMax}
