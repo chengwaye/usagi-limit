@@ -504,10 +504,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
       responsive: true,
       maintainAspectRatio: true,
       aspectRatio: 1.5,
-      animation: {
-        duration: 800,
-        easing: 'easeOutQuart'
-      },
+      animation: false,
       plugins: {
         legend: { display: false },
         tooltip: {
