@@ -420,21 +420,36 @@ footer a { color: #58a6ff; text-decoration: none; }
             r.x < p.x + p.w && r.x + r.w > p.x && r.y < p.y + p.h && r.y + r.h > p.y
           );
           let r = rect();
-          // Try pushing up first, then sideways
+          // Try pushing up
           for (let nudge = 0; nudge < 4 && overlaps(r); nudge++) {
             ty -= 13;
             r = rect();
           }
-          if (overlaps(r)) { tx += 40; r = rect(); }
-          if (overlaps(r)) { tx -= 80; r = rect(); }
-          if (overlaps(r)) { ty -= 13; r = rect(); }
+          // Try sideways
+          if (overlaps(r)) { tx += 45; r = rect(); }
+          if (overlaps(r)) { tx -= 90; r = rect(); }
+          // If still overlapping or clipped above chart, try below bubble
+          if (overlaps(r) || r.y < top) {
+            tx = el.x;
+            ty = el.y + raw.r + 14;
+            r = rect();
+            for (let nudge = 0; nudge < 3 && overlaps(r); nudge++) {
+              ty += 13;
+              r = rect();
+            }
+          }
+          // Final clip guard: ensure within chart area
+          if (r.y < top) { ty += (top - r.y + 2); r = rect(); }
+          if (r.x < left) { tx += (left - r.x + 2); r = rect(); }
+          if (r.x + r.w > right) { tx -= (r.x + r.w - right + 2); r = rect(); }
           placed.push(r);
-          // Leader line: label bottom → bubble center
+          // Leader line: label → bubble center
           ctx.strokeStyle = 'rgba(230,237,243,0.35)';
           ctx.lineWidth = 0.8;
           ctx.setLineDash([2, 2]);
           ctx.beginPath();
-          ctx.moveTo(tx, r.y + r.h);
+          const lineStartY = (r.y + r.h/2 < el.y) ? r.y + r.h : r.y; // connect from closest edge
+          ctx.moveTo(tx, lineStartY);
           ctx.lineTo(el.x, el.y);
           ctx.stroke();
           ctx.setLineDash([]);
