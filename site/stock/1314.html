@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中石化(1314) 漲停分點買賣超 — 烏薩奇漲停版</title>
+<meta name="description" content="2026/03/06 中石化(1314) 漲停，券商分點買賣超前15大排行，追蹤主力動向">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; }
+.container { max-width: 800px; margin: 0 auto; padding: 16px; }
+header { text-align: center; padding: 24px 0 16px; border-bottom: 1px solid #30363d; margin-bottom: 20px; }
+header h1 { font-size: 24px; margin-bottom: 4px; }
+header h1 span.rabbit { font-size: 28px; }
+header .subtitle { color: #8b949e; font-size: 14px; }
+header .date { color: #58a6ff; font-size: 16px; margin-top: 8px; }
+
+.section-title { font-size: 18px; margin: 24px 0 12px; padding-left: 8px; border-left: 3px solid #f85149; }
+.section-title.down { border-left-color: #3fb950; }
+
+.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+.stock-card a { text-decoration: none; color: inherit; display: block; padding: 14px 16px; }
+.stock-card a:hover { background: #1c2129; }
+.stock-header { display: flex; justify-content: space-between; align-items: center; }
+.stock-name { font-size: 16px; font-weight: 600; }
+.stock-code { color: #8b949e; font-size: 13px; margin-left: 8px; }
+.stock-price { text-align: right; }
+.stock-close { font-size: 16px; font-weight: 600; }
+.stock-change { font-size: 13px; margin-top: 2px; }
+.up { color: #f85149; }
+.down { color: #3fb950; }
+.stock-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #8b949e; }
+
+/* Stock detail page */
+.back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
+.back:hover { text-decoration: underline; }
+.info-bar { display: flex; justify-content: space-between; align-items: center; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+.info-left h2 { font-size: 22px; }
+.info-left .code { color: #8b949e; font-size: 14px; }
+.info-right { text-align: right; }
+.info-right .price { font-size: 24px; font-weight: 700; }
+.info-right .change-info { font-size: 14px; margin-top: 4px; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+.badge.up { background: rgba(248,81,73,0.2); }
+.badge.down { background: rgba(63,185,80,0.2); }
+
+.tab-bar { display: flex; margin-bottom: 16px; }
+.tab { flex: 1; text-align: center; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid #30363d; }
+.tab.active-buy { border-bottom-color: #f85149; color: #f85149; }
+.tab.active-sell { border-bottom-color: #3fb950; color: #3fb950; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 8px 12px; font-size: 12px; color: #8b949e; border-bottom: 1px solid #30363d; }
+th:nth-child(n+2) { text-align: right; }
+td { padding: 10px 12px; font-size: 14px; border-bottom: 1px solid #21262d; }
+td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
+tr:hover { background: #1c2129; }
+.rank { color: #8b949e; width: 30px; }
+
+footer { text-align: center; padding: 32px 0 24px; color: #484f58; font-size: 12px; border-top: 1px solid #30363d; margin-top: 32px; }
+footer a { color: #58a6ff; text-decoration: none; }
+
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .info-bar { flex-direction: column; text-align: center; gap: 12px; }
+  .info-right { text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../index.html" class="back">← 返回漲跌停總覽</a>
+
+  <div class="info-bar">
+    <div class="info-left">
+      <h2>中石化</h2>
+      <div class="code">1314 · 2026/03/06</div>
+    </div>
+    <div class="info-right">
+      <div class="price up">$8.92</div>
+      <div class="change-info up">
+        +0.81 (9.99%)
+        <span class="badge up">漲停</span>
+      </div>
+    </div>
+  </div>
+
+  <p style="color:#8b949e;font-size:13px;margin-bottom:20px;">共 391 家券商交易</p>
+
+  <!-- Buy Top 15 -->
+  <div class="tab-bar">
+    <div class="tab active-buy">買方 Top15</div>
+  </div>
+  <table>
+    <thead>
+      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>買超(張)</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td class="rank">1</td>
+      <td>凱基城中</td>
+      <td class="up">23461</td>
+      <td class="down">18341</td>
+      <td class="up" style="font-weight:600">5120</td>
+    </tr>
+    <tr>
+      <td class="rank">2</td>
+      <td>國泰敦南</td>
+      <td class="up">3169</td>
+      <td class="down">1055</td>
+      <td class="up" style="font-weight:600">2114</td>
+    </tr>
+    <tr>
+      <td class="rank">3</td>
+      <td>統一</td>
+      <td class="up">5086</td>
+      <td class="down">3117</td>
+      <td class="up" style="font-weight:600">1969</td>
+    </tr>
+    <tr>
+      <td class="rank">4</td>
+      <td>元大</td>
+      <td class="up">15703</td>
+      <td class="down">13763</td>
+      <td class="up" style="font-weight:600">1940</td>
+    </tr>
+    <tr>
+      <td class="rank">5</td>
+      <td>合庫彰化</td>
+      <td class="up">575</td>
+      <td class="down">54</td>
+      <td class="up" style="font-weight:600">521</td>
+    </tr>
+    <tr>
+      <td class="rank">6</td>
+      <td>玉山板橋</td>
+      <td class="up">1035</td>
+      <td class="down">521</td>
+      <td class="up" style="font-weight:600">514</td>
+    </tr>
+    <tr>
+      <td class="rank">7</td>
+      <td>富邦永和</td>
+      <td class="up">627</td>
+      <td class="down">210</td>
+      <td class="up" style="font-weight:600">417</td>
+    </tr>
+    <tr>
+      <td class="rank">8</td>
+      <td>凱基長庚</td>
+      <td class="up">495</td>
+      <td class="down">82</td>
+      <td class="up" style="font-weight:600">413</td>
+    </tr>
+    <tr>
+      <td class="rank">9</td>
+      <td>口袋</td>
+      <td class="up">427</td>
+      <td class="down">31</td>
+      <td class="up" style="font-weight:600">396</td>
+    </tr>
+    <tr>
+      <td class="rank">10</td>
+      <td>國泰台中</td>
+      <td class="up">682</td>
+      <td class="down">293</td>
+      <td class="up" style="font-weight:600">389</td>
+    </tr>
+    <tr>
+      <td class="rank">11</td>
+      <td>富邦宜蘭</td>
+      <td class="up">408</td>
+      <td class="down">37</td>
+      <td class="up" style="font-weight:600">371</td>
+    </tr>
+    <tr>
+      <td class="rank">12</td>
+      <td>臺銀民權</td>
+      <td class="up">461</td>
+      <td class="down">109</td>
+      <td class="up" style="font-weight:600">352</td>
+    </tr>
+    <tr>
+      <td class="rank">13</td>
+      <td>群益彰化</td>
+      <td class="up">502</td>
+      <td class="down">157</td>
+      <td class="up" style="font-weight:600">345</td>
+    </tr>
+    <tr>
+      <td class="rank">14</td>
+      <td>群益民權</td>
+      <td class="up">360</td>
+      <td class="down">46</td>
+      <td class="up" style="font-weight:600">314</td>
+    </tr>
+    <tr>
+      <td class="rank">15</td>
+      <td>永全八德</td>
+      <td class="up">311</td>
+      <td class="down">0</td>
+      <td class="up" style="font-weight:600">311</td>
+    </tr></tbody>
+  </table>
+
+  <!-- Sell Top 15 -->
+  <div class="tab-bar" style="margin-top:32px;">
+    <div class="tab active-sell">賣方 Top15</div>
+  </div>
+  <table>
+    <thead>
+      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>賣超(張)</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td class="rank">1</td>
+      <td>富邦三重</td>
+      <td class="up">72</td>
+      <td class="down">1701</td>
+      <td class="down" style="font-weight:600">-1629</td>
+    </tr>
+    <tr>
+      <td class="rank">2</td>
+      <td>台新</td>
+      <td class="up">1068</td>
+      <td class="down">2498</td>
+      <td class="down" style="font-weight:600">-1430</td>
+    </tr>
+    <tr>
+      <td class="rank">3</td>
+      <td>元大敦化</td>
+      <td class="up">4</td>
+      <td class="down">1286</td>
+      <td class="down" style="font-weight:600">-1282</td>
+    </tr>
+    <tr>
+      <td class="rank">4</td>
+      <td>瑞銀</td>
+      <td class="up">0</td>
+      <td class="down">1235</td>
+      <td class="down" style="font-weight:600">-1235</td>
+    </tr>
+    <tr>
+      <td class="rank">5</td>
+      <td>國票綜合</td>
+      <td class="up">34</td>
+      <td class="down">1249</td>
+      <td class="down" style="font-weight:600">-1215</td>
+    </tr>
+    <tr>
+      <td class="rank">6</td>
+      <td>凱基台北</td>
+      <td class="up">72</td>
+      <td class="down">1193</td>
+      <td class="down" style="font-weight:600">-1121</td>
+    </tr>
+    <tr>
+      <td class="rank">7</td>
+      <td>富邦陽明</td>
+      <td class="up">214</td>
+      <td class="down">1142</td>
+      <td class="down" style="font-weight:600">-928</td>
+    </tr>
+    <tr>
+      <td class="rank">8</td>
+      <td>合庫台中</td>
+      <td class="up">91</td>
+      <td class="down">862</td>
+      <td class="down" style="font-weight:600">-771</td>
+    </tr>
+    <tr>
+      <td class="rank">9</td>
+      <td>兆豐嘉義</td>
+      <td class="up">70</td>
+      <td class="down">753</td>
+      <td class="down" style="font-weight:600">-683</td>
+    </tr>
+    <tr>
+      <td class="rank">10</td>
+      <td>富邦仁愛</td>
+      <td class="up">143</td>
+      <td class="down">806</td>
+      <td class="down" style="font-weight:600">-663</td>
+    </tr>
+    <tr>
+      <td class="rank">11</td>
+      <td>富邦嘉義</td>
+      <td class="up">815</td>
+      <td class="down">1354</td>
+      <td class="down" style="font-weight:600">-539</td>
+    </tr>
+    <tr>
+      <td class="rank">12</td>
+      <td>凱基市政</td>
+      <td class="up">349</td>
+      <td class="down">832</td>
+      <td class="down" style="font-weight:600">-483</td>
+    </tr>
+    <tr>
+      <td class="rank">13</td>
+      <td>華南永昌</td>
+      <td class="up">78</td>
+      <td class="down">546</td>
+      <td class="down" style="font-weight:600">-468</td>
+    </tr>
+    <tr>
+      <td class="rank">14</td>
+      <td>富邦板橋</td>
+      <td class="up">224</td>
+      <td class="down">681</td>
+      <td class="down" style="font-weight:600">-457</td>
+    </tr>
+    <tr>
+      <td class="rank">15</td>
+      <td>華南忠孝</td>
+      <td class="up">20</td>
+      <td class="down">469</td>
+      <td class="down" style="font-weight:600">-449</td>
+    </tr></tbody>
+  </table>
+
+  <footer>
+    <p>資料來源：台灣證券交易所公開資訊</p>
+    <p><a href="../index.html">烏薩奇漲停版</a> &copy; 2026 | 每日盤後更新</p>
+  </footer>
+</div>
+</body>
+</html>
