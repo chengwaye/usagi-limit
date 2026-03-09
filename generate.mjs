@@ -487,11 +487,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
       },
       plugins: {
         legend: {
-          labels: {
-            color: '#8b949e',
-            font: { size: 11 },
-            usePointStyle: true,
-            pointStyle: 'circle',
+          display: false,
           }
         },
         tooltip: {
