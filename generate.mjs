@@ -460,11 +460,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
           ctx.lineTo(el.x, el.y);
           ctx.stroke();
           ctx.setLineDash([]);
-          // Label pill
-          ctx.fillStyle = 'rgba(13,17,23,0.8)';
-          ctx.beginPath();
-          ctx.roundRect(r.x, r.y, r.w, r.h, 3);
-          ctx.fill();
+          // Label text (no background)
           ctx.fillStyle = '#e6edf3';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'bottom';
