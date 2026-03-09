@@ -325,7 +325,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
   const flatPrice = +(closePrice - change).toFixed(2); // 平盤價 = 昨收
   const yRange = closePrice - flatPrice || 0.5;
   const yAxisMin = flatPrice;
-  const yAxisMax = +(closePrice + yRange * 0.15).toFixed(2); // 上方留 15% 給標籤
+  const yAxisMax = +(closePrice + yRange * 0.25).toFixed(2); // 上方留 25% 給標籤
 
   const buyers = (brokerData.top_buyers || []).map(b => ({
     x: toZhang(b.net_volume),
@@ -432,7 +432,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
           const raw = ds.data[i];
           if (!el) continue;
           ctx.save();
-          const name = raw.label.length > 4 ? raw.label.substring(0, 4) : raw.label;
+          const name = raw.label; // show full broker name
           ctx.font = 'bold 9px sans-serif';
           const tw = ctx.measureText(name).width;
           let tx = el.x;

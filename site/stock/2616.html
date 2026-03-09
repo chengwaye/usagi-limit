@@ -410,7 +410,7 @@ footer a { color: #58a6ff; text-decoration: none; }
           const raw = ds.data[i];
           if (!el) continue;
           ctx.save();
-          const name = raw.label.length > 4 ? raw.label.substring(0, 4) : raw.label;
+          const name = raw.label; // show full broker name
           ctx.font = 'bold 9px sans-serif';
           const tw = ctx.measureText(name).width;
           let tx = el.x;
@@ -560,7 +560,7 @@ footer a { color: #58a6ff; text-decoration: none; }
           },
           border: { color: '#30363d' },
           min: 21.75,
-          max: 24.22
+          max: 24.44
         }
       }
     },
