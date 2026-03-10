@@ -1,65 +1,92 @@
 {
+  "2230": {
+    "code": "2230",
+    "name": "泰茂",
+    "close": 36.6,
+    "change": 3.2,
+    "changePct": "9.58",
+    "volume": 953000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
   "3709": {
     "code": "3709",
-    "name": "Loading...",
+    "name": "鑫聯大投控",
+    "close": 77.5,
+    "change": 7,
+    "changePct": "9.93",
+    "volume": 7999000,
     "type": "漲停",
-    "close": 0,
-    "change": 0,
-    "changePct": "9.91",
-    "volume": 1000000
+    "market": "TPEX"
   },
   "4911": {
     "code": "4911",
-    "name": "Loading...",
-    "type": "漲停",
-    "close": 0,
-    "change": 0,
+    "name": "德英",
+    "close": 37.7,
+    "change": 3.4,
     "changePct": "9.91",
-    "volume": 1000000
+    "volume": 251000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
+  "4950": {
+    "code": "4950",
+    "name": "金耘國際",
+    "close": 16.65,
+    "change": 1.45,
+    "changePct": "9.54",
+    "volume": 46000,
+    "type": "漲停",
+    "market": "TPEX"
   },
   "4973": {
     "code": "4973",
-    "name": "Loading...",
+    "name": "廣穎",
+    "close": 46.05,
+    "change": 4.15,
+    "changePct": "9.90",
+    "volume": 6691000,
     "type": "漲停",
-    "close": 0,
-    "change": 0,
-    "changePct": "9.91",
-    "volume": 1000000
+    "market": "TPEX"
   },
   "5386": {
     "code": "5386",
-    "name": "Loading...",
+    "name": "青雲",
+    "close": 286,
+    "change": 26,
+    "changePct": "10.00",
+    "volume": 1886000,
     "type": "漲停",
-    "close": 0,
-    "change": 0,
-    "changePct": "9.91",
-    "volume": 1000000
+    "market": "TPEX"
   },
   "6508": {
     "code": "6508",
-    "name": "Loading...",
+    "name": "惠光",
+    "close": 28.9,
+    "change": 2.6,
+    "changePct": "9.89",
+    "volume": 1427000,
     "type": "漲停",
-    "close": 0,
-    "change": 0,
-    "changePct": "9.91",
-    "volume": 1000000
+    "market": "TPEX"
   },
   "8908": {
     "code": "8908",
-    "name": "Loading...",
+    "name": "欣雄",
+    "close": 48.95,
+    "change": 4.45,
+    "changePct": "10.00",
+    "volume": 2660000,
     "type": "漲停",
-    "close": 0,
-    "change": 0,
-    "changePct": "9.91",
-    "volume": 1000000
+    "market": "TPEX"
   },
   "8917": {
     "code": "8917",
-    "name": "Loading...",
+    "name": "欣泰",
+    "close": 69.3,
+    "change": 6.3,
+    "changePct": "10.00",
+    "volume": 531000,
     "type": "漲停",
-    "close": 0,
-    "change": 0,
-    "changePct": "9.91",
-    "volume": 1000000
+    "market": "TPEX"
   }
 }
