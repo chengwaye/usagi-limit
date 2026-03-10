@@ -90,7 +90,11 @@ async function fetchTPEXInstitutionalData(date) {
       return {};
     }
 
-    // Parse TPEX data: [0]=代號, [1]=名稱, [4]=外資買賣超, [7]=投信買賣超, [10]=自營商買賣超
+    // Parse TPEX data (3itrade_hedge_result, se=EW):
+    // 7 groups × 3 cols (買進/賣出/買賣超) + 合計
+    // [2-4] 外資(不含自營商)  [5-7] 外資-自營商  [8-10] 外資合計
+    // [11-13] 投信  [14-16] 自營商(避險)  [17-19] 自營商合計
+    // [20-22] 三大法人  [23] 三大法人合計
     const parse = (val) => parseInt(String(val || '0').replace(/,/g, '')) || 0;
     const institutionalMap = {};
 
@@ -101,15 +105,15 @@ async function fetchTPEXInstitutionalData(date) {
       // Skip ETF and bond codes (usually start with 00)
       if (code.startsWith('00')) return;
 
-      const foreign = parse(row[4]);   // 外資買賣超
-      const trust = parse(row[7]);     // 投信買賣超
-      const dealer = parse(row[10]);   // 自營商買賣超
+      const foreign = parse(row[4]);   // 外資(不含自營商) 買賣超
+      const trust = parse(row[13]);    // 投信 買賣超
+      const dealer = parse(row[19]);   // 自營商合計 買賣超
 
       institutionalMap[code] = {
         foreign: foreign,
         trust: trust,
         dealer: dealer,
-        total: foreign + trust + dealer  // 自己計算合計
+        total: parse(row[23])           // 三大法人合計（API 直接提供）
       };
     });
 
