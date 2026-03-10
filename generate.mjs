@@ -693,7 +693,7 @@ async function generateIndexPage(limitStocks, date) {
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
-    <p>烏薩奇漲停版 &copy; 2026 | 每個交易日 18:00 自動更新</p>
+    <p>烏薩奇漲停版 &copy; 2026 | 每個交易日 16:30 自動更新</p>
   </footer>
 </div>
 
