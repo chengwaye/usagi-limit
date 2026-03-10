@@ -1369,7 +1369,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
 
     <!-- 主要內容 -->
     <div class="content-wrapper">
-      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">${brokerData ? `共 ${brokerData.total_brokers} 家券商交易` : "交易量不足，暫無分點資料"}</p>
+      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">${brokerData ? `共 ${brokerData.total_brokers} 家券商交易` : "⏳ 分點資料每日 16:30 後更新"}</p>
 
       ${generateInstitutionalCard()}
 
@@ -1387,11 +1387,17 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
 
       ${generateBubbleChart(brokerData, stockInfo)}` : `
       <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:32px;margin:24px 0;text-align:center;">
-        <div style="color:#8b949e;font-size:16px;margin-bottom:12px;">📊</div>
-        <div style="color:#e6edf3;font-size:14px;margin-bottom:8px;">暫無分點資料</div>
+        <div style="color:#8b949e;font-size:16px;margin-bottom:12px;">🕐</div>
+        <div style="color:#e6edf3;font-size:14px;margin-bottom:8px;">分點買賣超資料準備中</div>
         <div style="color:#8b949e;font-size:12px;line-height:1.5;">
-          該股票當日成交量較小<br>
-          或交易過於分散，無法提供有效的分點買賣超分析
+          每日 16:30 後更新券商分點買賣超排行
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="panel-title" style="border-bottom-color:#58a6ff;color:#58a6ff;">籌碼泡泡圖</div>
+        <div style="position:relative;width:100%;max-width:700px;margin:0 auto;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:40px 20px;text-align:center;">
+          <div style="color:#8b949e;font-size:13px;">🕐 泡泡圖將於 16:30 後更新</div>
         </div>
       </div>`}
 
