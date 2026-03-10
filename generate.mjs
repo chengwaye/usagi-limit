@@ -1142,7 +1142,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo) {
         🏛️ 三大法人買賣超
         <span style="font-size:11px;color:#8b949e;font-weight:normal;">(當日)</span>
       </h3>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
         <div style="text-align:center;">
           <div style="color:#8b949e;font-size:11px;margin-bottom:4px;">外資</div>
           <div style="font-size:13px;font-weight:600;">${formatInstitutional(institutionalInfo.foreign)}</div>
