@@ -650,7 +650,7 @@ async function generateIndexPage(limitStocks, date) {
 <div class="container">
   <header>
     <div class="cta-hint" onclick="scrollToStocks()">
-      🚀 AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣
+      💡 點股票看分點、主力泡泡圖
     </div>
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
     <div class="subtitle">AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣</div>
