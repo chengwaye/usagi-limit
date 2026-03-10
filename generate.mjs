@@ -250,6 +250,59 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
 .down { color: #3fb950; }
 .stock-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: #8b949e; }
 
+/* AdSense 廣告位 */
+.ads-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.content-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+.sidebar-ad {
+  width: 160px;
+  min-height: 600px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #484f58;
+  font-size: 11px;
+  text-align: center;
+  position: sticky;
+  top: 20px;
+}
+.header-ad {
+  width: 100%;
+  height: 90px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #484f58;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.concept-ad {
+  width: 100%;
+  height: 100px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #484f58;
+  font-size: 11px;
+  margin: 20px 0;
+}
+
 /* Stock detail page */
 .back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
 .back:hover { text-decoration: underline; }
@@ -281,6 +334,10 @@ tr:hover { background: #1c2129; }
 footer { text-align: center; padding: 32px 0 24px; color: #484f58; font-size: 12px; border-top: 1px solid #30363d; margin-top: 32px; }
 footer a { color: #58a6ff; text-decoration: none; }
 
+@media (max-width: 1000px) {
+  .ads-container { flex-direction: column; }
+  .sidebar-ad { width: 100%; height: 100px; min-height: auto; position: static; }
+}
 @media (max-width: 900px) {
   .stock-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -294,6 +351,8 @@ footer a { color: #58a6ff; text-decoration: none; }
   td { padding: 3px 2px; font-size: 9px; }
   td:first-child { max-width: 52px; font-size: 9px; }
   .panel-title { font-size: 11px; padding: 6px; }
+  .header-ad { height: 70px; font-size: 10px; }
+  .concept-ad { height: 80px; font-size: 10px; }
 }
 `;
 }
@@ -338,7 +397,16 @@ function generateIndexPage(limitStocks, date) {
       </a>
     </div>`;
 
-  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData]) => `
+  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData], index) => {
+    // 每3個概念插入一個廣告
+    const adBlock = (index > 0 && index % 3 === 0) ? `
+    <!-- AdSense 概念間廣告位 -->
+    <div class="concept-ad">
+      <!-- 將來在這裡放置 AdSense 橫幅廣告代碼 -->
+      廣告位 (728x90)
+    </div>` : '';
+
+    return `${adBlock}
     <div class="concept-section">
       <div class="concept-title">
         <span class="icon">${conceptData.icon}</span>
@@ -348,8 +416,8 @@ function generateIndexPage(limitStocks, date) {
       <div class="stock-grid">
         ${conceptData.stocks.map(stockCard).join("\n")}
       </div>
-    </div>
-  `).join("\n");
+    </div>`;
+  }).join("\n");
 
   return `<!DOCTYPE html>
 <html lang="zh-TW">
@@ -358,6 +426,12 @@ function generateIndexPage(limitStocks, date) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>烏薩奇漲停版 — ${adDate} 漲停分點追蹤</title>
 <meta name="description" content="${adDate} 台股漲停股票券商分點買賣超排行，追蹤主力動向">
+
+<!-- AdSense 自動廣告 (待填入) -->
+<!--
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXX" crossorigin="anonymous"></script>
+-->
+
 <style>${css()}</style>
 </head>
 <body>
@@ -368,8 +442,31 @@ function generateIndexPage(limitStocks, date) {
     <div class="date">${adDate}</div>
   </header>
 
-  <div class="section-title">🔴 漲停 (${upStocks.length})</div>
-  ${conceptSections}
+  <!-- AdSense 頂部橫幅廣告 -->
+  <div class="header-ad">
+    <!-- 將來在這裡放置 AdSense 橫幅廣告代碼 -->
+    廣告位 (728x90)
+  </div>
+
+  <div class="ads-container">
+    <!-- 左側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- 將來在這裡放置 AdSense 垂直廣告代碼 -->
+      廣告位<br>(160x600)
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="content-wrapper">
+      <div class="section-title">🔴 漲停 (${upStocks.length})</div>
+      ${conceptSections}
+    </div>
+
+    <!-- 右側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- 將來在這裡放置 AdSense 垂直廣告代碼 -->
+      廣告位<br>(160x600)
+    </div>
+  </div>
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
