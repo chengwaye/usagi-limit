@@ -1503,7 +1503,14 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
 
   // 統一用日期目錄 stock/{date}/{code}.html，避免連續漲停衝突
   const stockPageDir = path.join(STOCK_DIR, date);
-  if (!fs.existsSync(stockPageDir)) fs.mkdirSync(stockPageDir, { recursive: true });
+  // 清空舊頁面，避免殘留過期檔案
+  if (fs.existsSync(stockPageDir)) {
+    for (const f of fs.readdirSync(stockPageDir)) {
+      if (f.endsWith('.html')) fs.unlinkSync(path.join(stockPageDir, f));
+    }
+  } else {
+    fs.mkdirSync(stockPageDir, { recursive: true });
+  }
 
   // Stock card link prefix
   const stockLinkPrefix = `stock/${date}/`;
