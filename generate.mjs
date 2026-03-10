@@ -227,7 +227,7 @@ async function simulateClaudeAnalysis(stocks) {
   const gasStocks = stockArray.filter(s =>
     s.name.includes('欣') || s.name.includes('新海') || ['8908', '8917', '9918', '9926', '9931'].includes(s.code)
   );
-  if (gasStocks.length >= 2) {
+  if (gasStocks.length >= 3) {
     groups.push({
       name: '天然氣概念股大爆發',
       icon: '🔥',
@@ -240,7 +240,7 @@ async function simulateClaudeAnalysis(stocks) {
   const petroStocks = stockArray.filter(s =>
     s.name.includes('化') || s.name.includes('塑') || ['1309', '1314', '6505'].includes(s.code)
   );
-  if (petroStocks.length >= 2) {
+  if (petroStocks.length >= 3) {
     groups.push({
       name: '石化塑化族群同步走強',
       icon: '🛢️',
@@ -253,7 +253,7 @@ async function simulateClaudeAnalysis(stocks) {
   const techStocks = stockArray.filter(s =>
     ['2426', '4973', '3054', '5386'].includes(s.code) || s.name.includes('元') || s.name.includes('雲')
   );
-  if (techStocks.length >= 2) {
+  if (techStocks.length >= 3) {
     groups.push({
       name: 'AI科技概念續熱',
       icon: '🤖',
@@ -266,38 +266,12 @@ async function simulateClaudeAnalysis(stocks) {
   const biotechStocks = stockArray.filter(s =>
     s.name.includes('生') || s.name.includes('醫') || s.name.includes('基') || ['1762', '4911', '6715'].includes(s.code)
   );
-  if (biotechStocks.length >= 2) {
+  if (biotechStocks.length >= 3) {
     groups.push({
       name: '生技醫療政策利多',
       icon: '💊',
       reason: `生技新藥進展或醫療政策利多，相關股票同步上漲`,
       stocks: biotechStocks
-    });
-  }
-
-  // 金融投控
-  const financeStocks = stockArray.filter(s =>
-    s.name.includes('投控') || s.name.includes('金') || ['3709'].includes(s.code)
-  );
-  if (financeStocks.length >= 1) {
-    groups.push({
-      name: '金融投控概念',
-      icon: '🏦',
-      reason: '金融環境改善，投控股票表現亮眼',
-      stocks: financeStocks
-    });
-  }
-
-  // 原物料鋼鐵
-  const materialStocks = stockArray.filter(s =>
-    s.name.includes('隆') || s.name.includes('鋼') || ['2616'].includes(s.code)
-  );
-  if (materialStocks.length >= 1) {
-    groups.push({
-      name: '原物料行情回溫',
-      icon: '🔩',
-      reason: '原物料價格上漲，相關概念股受惠',
-      stocks: materialStocks
     });
   }
 
@@ -307,31 +281,49 @@ async function simulateClaudeAnalysis(stocks) {
     group.stocks.forEach(stock => groupedStocks.add(stock.code));
   });
 
-  // 剩餘股票按漲幅分組
+  // 處理剩餘股票 - 合併單檔股票避免浪費空間
   const remaining = stockArray.filter(s => !groupedStocks.has(s.code));
-  if (remaining.length > 0) {
-    // 依照漲幅和成交量分成強勢股和一般股
-    const strongStocks = remaining.filter(s => parseFloat(s.changePct) >= 9.95);
-    const normalStocks = remaining.filter(s => parseFloat(s.changePct) < 9.95);
+
+  // 先檢查是否有單檔股票的概念群組，將它們合併
+  const singleStockGroups = groups.filter(g => g.stocks.length === 1);
+  const multiStockGroups = groups.filter(g => g.stocks.length > 1);
+
+  // 將單檔概念股和其他單檔股票合併
+  const allSingleStocks = [];
+  singleStockGroups.forEach(g => allSingleStocks.push(...g.stocks));
+  allSingleStocks.push(...remaining);
+
+  // 重置 groups 為多檔股票群組
+  const finalGroups = [...multiStockGroups];
+
+  if (allSingleStocks.length > 0) {
+    // 依照漲幅分類單檔股票
+    const strongStocks = allSingleStocks.filter(s => parseFloat(s.changePct) >= 9.95);
+    const normalStocks = allSingleStocks.filter(s => parseFloat(s.changePct) < 9.95);
 
     if (strongStocks.length > 0) {
-      groups.push({
+      finalGroups.push({
         name: '強勢股表現',
         icon: '🚀',
-        reason: `漲幅達滿檔漲停，展現強勁買盤力道`,
-        stocks: strongStocks
+        reason: `${strongStocks.length}檔滿檔漲停，展現強勁買盤力道`,
+        stocks: strongStocks,
+        isCompact: strongStocks.length <= 2
       });
     }
 
     if (normalStocks.length > 0) {
-      groups.push({
+      finalGroups.push({
         name: '個股利多',
         icon: '📈',
-        reason: '個別基本面利多或技術面突破',
-        stocks: normalStocks
+        reason: `${normalStocks.length}檔個別基本面利多或技術面突破`,
+        stocks: normalStocks,
+        isCompact: normalStocks.length <= 2
       });
     }
   }
+
+  // 更新 groups
+  groups.splice(0, groups.length, ...finalGroups);
 
   // 轉換為最終格式
   groups.forEach(group => {
@@ -389,7 +381,8 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
   margin: 0 12px 8px 12px;
   font-style: italic;
 }
-.stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.stock-grid.compact { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; }
 .stock-card a:hover { background: #1c2129; }
@@ -478,8 +471,13 @@ footer a { color: #58a6ff; text-decoration: none; }
   .ads-container { flex-direction: column; }
   .sidebar-ad { width: 100%; height: 100px; min-height: auto; position: static; }
 }
+@media (max-width: 1200px) {
+  .stock-grid { grid-template-columns: repeat(3, 1fr); }
+  .stock-grid.compact { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 900px) {
   .stock-grid { grid-template-columns: repeat(2, 1fr); }
+  .stock-grid.compact { grid-template-columns: 1fr; }
 }
 @media (max-width: 700px) {
   .container { padding: 4px; }
@@ -536,7 +534,9 @@ async function generateIndexPage(limitStocks, date) {
       </a>
     </div>`;
 
-  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData]) => `
+  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData]) => {
+    const gridClass = conceptData.isCompact ? 'stock-grid compact' : 'stock-grid';
+    return `
     <div class="concept-section">
       <div class="concept-title">
         <span class="icon">${conceptData.icon}</span>
@@ -544,11 +544,11 @@ async function generateIndexPage(limitStocks, date) {
         <span class="count">${conceptData.stocks.length}檔</span>
       </div>
       ${conceptData.reason ? `<div class="concept-reason">${conceptData.reason}</div>` : ''}
-      <div class="stock-grid">
+      <div class="${gridClass}">
         ${conceptData.stocks.map(stockCard).join("\n")}
       </div>
-    </div>
-  `).join("\n");
+    </div>`;
+  }).join("\n");
 
   return `<!DOCTYPE html>
 <html lang="zh-TW">

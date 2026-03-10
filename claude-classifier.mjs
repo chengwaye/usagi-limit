@@ -16,33 +16,36 @@ export async function classifyWithClaude(stocks) {
 
     console.log('🤖 Calling Claude for intelligent stock classification...');
 
-    const prompt = `分析今日這些漲停股，根據漲停原因智能分組。請回傳 JSON 格式：
+    const prompt = `你是台股分析專家，請分析今日漲停股票的共同原因並智能分組。
 
-漲停股清單：
+今日漲停股清單（${Object.keys(stocks).length}檔）：
 ${stockList}
 
-請分析每檔股票可能的漲停原因（如AI熱潮、原物料上漲、政策利多、財報佳、技術面突破等），將相同概念的股票歸類一組。
+分析要點：
+1. 找出可能的漲停主因：產業政策、國際情勢、原物料價格、AI科技趨勢、財報利多、技術面突破等
+2. 觀察股票名稱規律：如「欣」字輩（天然氣）、「化」字尾（石化）等
+3. 產業關聯性：半導體、生技、金融、傳產等
 
-回傳格式：
+分組原則：
+- 優先以「漲停主因」分組（如天然氣漲價 → 欣字輩集體漲停）
+- 每組至少3檔，避免過度分散
+- 單獨個股或2檔以下合併為「個股表現」類別
+
+回傳 JSON 格式：
 {
-  "概念名稱1": {
-    "icon": "🤖",
-    "reason": "簡短說明漲停原因",
-    "stocks": ["2330", "2454"]
+  "天然氣概念發威": {
+    "icon": "🔥",
+    "reason": "天然氣價格大漲，欣字輩概念股集體漲停",
+    "stocks": ["8908", "8917", "9918"]
   },
-  "概念名稱2": {
+  "石化族群反彈": {
     "icon": "🛢️",
-    "reason": "簡短說明漲停原因",
-    "stocks": ["6505", "1314"]
+    "reason": "原油反彈帶動石化上游，塑化股同步走強",
+    "stocks": ["1309", "6505"]
   }
 }
 
-要求：
-1. 概念名稱要具體（如"AI晶片熱潮"而非"科技股"）
-2. 每組至少2檔股票，除非某股票獨特性很強
-3. 選擇合適的 emoji 圖示
-4. 只回傳 JSON，不要其他文字
-5. 股票代碼必須完全匹配清單中的代碼`;
+注意：只回傳JSON，代碼必須完全匹配，概念名稱要具體且吸引人。`;
 
     // Call Claude via claude_cli (similar to telegram worker)
     const result = await callClaude(prompt);
@@ -78,32 +81,54 @@ ${stockList}
 
 function callClaude(prompt) {
   return new Promise((resolve, reject) => {
-    const claude = spawn('claude', ['-q', prompt], {
-      stdio: ['inherit', 'pipe', 'pipe'],
-      env: process.env
-    });
+    // Try different possible Claude CLI locations
+    const possiblePaths = [
+      'claude',
+      'C:\\Users\\user\\.claude\\claude.exe',
+      'C:\\Program Files\\Claude\\claude.exe',
+      process.env.CLAUDE_CLI_PATH
+    ].filter(Boolean);
 
-    let stdout = '';
-    let stderr = '';
+    let lastError = null;
 
-    claude.stdout.on('data', (data) => {
-      stdout += data.toString();
-    });
-
-    claude.stderr.on('data', (data) => {
-      stderr += data.toString();
-    });
-
-    claude.on('close', (code) => {
-      if (code === 0) {
-        resolve(stdout.trim());
-      } else {
-        reject(new Error(`Claude CLI failed with code ${code}: ${stderr}`));
+    function tryNext(index) {
+      if (index >= possiblePaths.length) {
+        reject(new Error(`Claude CLI not found. Tried: ${possiblePaths.join(', ')}. Last error: ${lastError?.message}`));
+        return;
       }
-    });
 
-    claude.on('error', (error) => {
-      reject(new Error(`Failed to spawn Claude CLI: ${error.message}`));
-    });
+      const claudePath = possiblePaths[index];
+      const claude = spawn(claudePath, ['-q', prompt], {
+        stdio: ['inherit', 'pipe', 'pipe'],
+        env: process.env
+      });
+
+      let stdout = '';
+      let stderr = '';
+
+      claude.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+
+      claude.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+
+      claude.on('close', (code) => {
+        if (code === 0) {
+          resolve(stdout.trim());
+        } else {
+          lastError = new Error(`Claude CLI failed with code ${code}: ${stderr}`);
+          tryNext(index + 1);
+        }
+      });
+
+      claude.on('error', (error) => {
+        lastError = error;
+        tryNext(index + 1);
+      });
+    }
+
+    tryNext(0);
   });
 }
