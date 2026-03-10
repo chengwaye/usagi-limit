@@ -631,10 +631,18 @@ async function generateIndexPage(limitStocks, date) {
 <title>烏薩奇漲停版 — ${adDate} 漲停分點追蹤</title>
 <meta name="description" content="${adDate} 台股漲停股票券商分點買賣超排行，追蹤主力動向">
 
-<!-- AdSense 自動廣告 (待填入) -->
-<!--
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXX" crossorigin="anonymous"></script>
--->
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L3W7YJ6N37"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L3W7YJ6N37');
+</script>
+
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7922778370889908"
+     crossorigin="anonymous"></script>
 
 <style>${css()}</style>
 </head>
@@ -1087,6 +1095,20 @@ function generateStockPage(stockInfo, brokerData, date) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${stockInfo.name}(${stockInfo.code}) ${stockInfo.type}分點買賣超 — 烏薩奇漲停版</title>
 <meta name="description" content="${adDate} ${stockInfo.name}(${stockInfo.code}) ${stockInfo.type}，券商分點買賣超前15大排行，追蹤主力動向">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L3W7YJ6N37"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L3W7YJ6N37');
+</script>
+
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7922778370889908"
+     crossorigin="anonymous"></script>
+
 <style>${css()}</style>
 </head>
 <body>
