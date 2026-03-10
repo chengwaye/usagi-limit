@@ -360,6 +360,63 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
 
 .section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
 
+.cta-banner {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  text-align: center;
+}
+.cta-banner .title {
+  color: #60a5fa;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.cta-banner .desc {
+  color: #93c5fd;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.date-navigator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 12px 0;
+  padding: 8px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+}
+.nav-btn {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn:hover {
+  background: #30363d;
+  color: #e6edf3;
+}
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.current-date {
+  color: #58a6ff;
+  font-weight: 600;
+  font-size: 14px;
+  min-width: 80px;
+  text-align: center;
+}
+
 .concept-section { margin-bottom: 20px; }
 .concept-title {
   font-size: 14px;
@@ -387,8 +444,8 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
 .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
 .singles-container { display: flex; flex-wrap: wrap; gap: 0; }
-.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
-.stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; }
+.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; transition: all 0.2s ease; }
+.stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; transition: all 0.2s ease; }
 .stock-card a:hover { background: #1c2129; }
 .stock-header { display: flex; justify-content: space-between; align-items: center; }
 .stock-name { font-size: 14px; font-weight: 600; }
@@ -495,6 +552,11 @@ footer a { color: #58a6ff; text-decoration: none; }
   td:first-child { max-width: 52px; font-size: 9px; }
   .panel-title { font-size: 11px; padding: 6px; }
   .header-ad { height: 70px; font-size: 10px; }
+  .date-navigator { gap: 8px; }
+  .nav-btn { padding: 4px 8px; font-size: 11px; }
+  .current-date { font-size: 12px; min-width: 70px; }
+  .cta-banner .title { font-size: 12px; }
+  .cta-banner .desc { font-size: 10px; }
 }
 `;
 }
@@ -632,6 +694,19 @@ async function generateIndexPage(limitStocks, date) {
 
     <!-- 主要內容 -->
     <div class="content-wrapper">
+      <!-- 日期導航 -->
+      <div class="date-navigator">
+        <button class="nav-btn" onclick="navigateDate(-1)" disabled>← 前一日</button>
+        <div class="current-date">${adDate}</div>
+        <button class="nav-btn" onclick="navigateDate(1)" disabled>後一日 →</button>
+      </div>
+
+      <!-- 功能引導 -->
+      <div class="cta-banner">
+        <div class="title">💡 點擊任一股票查看詳細分析</div>
+        <div class="desc">內含券商分點買賣超排行、籌碼泡泡圖視覺化、主力動向追蹤</div>
+      </div>
+
       <div class="section-title">🔴 漲停 (${upStocks.length})</div>
       ${conceptSections}
     </div>
@@ -656,6 +731,52 @@ async function generateIndexPage(limitStocks, date) {
     <p>烏薩奇漲停版 &copy; 2026 | 每日盤後更新</p>
   </footer>
 </div>
+
+<script>
+// 日期導航功能
+function navigateDate(direction) {
+  const currentDateStr = '${date}'; // YYYYMMDD format
+  const currentDate = new Date(
+    parseInt(currentDateStr.substring(0, 4)),
+    parseInt(currentDateStr.substring(4, 6)) - 1,
+    parseInt(currentDateStr.substring(6, 8))
+  );
+
+  // 計算新日期
+  const newDate = new Date(currentDate);
+  newDate.setDate(newDate.getDate() + direction);
+
+  // 格式化為 YYYYMMDD
+  const year = newDate.getFullYear();
+  const month = String(newDate.getMonth() + 1).padStart(2, '0');
+  const day = String(newDate.getDate()).padStart(2, '0');
+  const newDateStr = year + month + day;
+
+  // 構造新的 URL (假設未來會有其他日期的頁面)
+  const newUrl = window.location.pathname.replace(/\\/[^/]*$/, '') + '/' + newDateStr + '.html';
+
+  // 目前先顯示提示，未來有多日數據時可以直接跳轉
+  alert('🚧 歷史數據功能開發中\\n將來會支援查看 ' + year + '/' + month + '/' + day + ' 的漲停數據');
+
+  // 未來啟用:
+  // window.location.href = newUrl;
+}
+
+// 股票卡片點擊提示動畫
+document.addEventListener('DOMContentLoaded', function() {
+  const stockCards = document.querySelectorAll('.stock-card a');
+  stockCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-1px)';
+      this.style.boxShadow = '0 4px 12px rgba(88, 166, 255, 0.15)';
+    });
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+});
+</script>
 </body>
 </html>`;
 }
