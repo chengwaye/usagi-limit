@@ -134,6 +134,32 @@ async function fetchAllInstitutionalData(date) {
 }
 
 // ============================================================
+// 台股漲停價計算（含升降單位 tick 規則）
+// ============================================================
+function getTick(price) {
+  if (price < 10) return 0.01;
+  if (price < 50) return 0.05;
+  if (price < 100) return 0.1;
+  if (price < 500) return 0.5;
+  if (price < 1000) return 1;
+  return 5;
+}
+
+function calcLimitUpPrice(prevClose) {
+  // 理論漲停價 = 昨收 × 1.10
+  const raw = prevClose * 1.10;
+  const tick = getTick(raw);
+  // 取最接近但不超過理論漲停價的 tick
+  return Math.floor(raw / tick) * tick;
+}
+
+function isLimitUp(close, prevClose) {
+  const limitPrice = calcLimitUpPrice(prevClose);
+  // 浮點數比較，容許極小誤差
+  return Math.abs(close - limitPrice) < 0.001;
+}
+
+// ============================================================
 // Step 1: Get today's market data for limit up/down detection
 // ============================================================
 async function getLimitStocks() {
@@ -171,11 +197,10 @@ async function getLimitStocks() {
     if (prevClose <= 0) continue;
     const pct = (change / prevClose) * 100;
 
-    // 只追蹤漲停（跌停暫不處理） - 修正判斷條件
-    if (!(close === high && pct >= 9.9)) continue;
+    // 漲停判斷：收盤價 === 漲停價（依 tick 規則計算）
+    if (!isLimitUp(close, prevClose)) continue;
 
     {
-      const type = "漲停";
       stocks[s.Code] = {
         code: s.Code,
         name: s.Name,
@@ -183,7 +208,7 @@ async function getLimitStocks() {
         change,
         changePct: pct.toFixed(2),
         volume: parseInt(String(s.TradeVolume).replace(/,/g, '')),
-        type,
+        type: "漲停",
       };
     }
   }
@@ -205,7 +230,8 @@ async function getLimitStocks() {
       if (prevClose <= 0) continue;
       const pct = (change / prevClose) * 100;
 
-      if (!(close === high && pct >= 9.9)) continue;
+      // 漲停判斷：收盤價 === 漲停價（依 tick 規則計算）
+      if (!isLimitUp(close, prevClose)) continue;
 
       otcCount++;
       stocks[s.SecuritiesCompanyCode] = {
