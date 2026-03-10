@@ -359,7 +359,8 @@ header .subtitle { color: #8b949e; font-size: 13px; }
 header .cta-hint {
   position: absolute;
   top: 16px;
-  right: 16px;
+  right: 50%;
+  transform: translateX(50%);
   background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
   border: 1px solid #3b82f6;
   border-radius: 6px;
@@ -370,7 +371,7 @@ header .cta-hint {
   cursor: pointer;
   transition: all 0.2s;
   text-align: center;
-  min-width: 140px;
+  min-width: 180px;
 }
 header .cta-hint:hover {
   background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
@@ -656,7 +657,7 @@ async function generateIndexPage(limitStocks, date) {
 <div class="container">
   <header>
     <div class="cta-hint" onclick="scrollToStocks()">
-      💡 點股票看分析
+      💡 點股票看分點、主力泡泡圖
     </div>
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
     <div class="subtitle">漲停分點追蹤 — 看誰在買、誰在賣</div>
