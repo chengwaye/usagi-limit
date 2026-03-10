@@ -554,10 +554,14 @@ function formatDate(dateStr) {
   return `${y}/${m}/${d}`;
 }
 
-function formatVolume(v) {
-  if (v >= 100000000) return (v / 100000000).toFixed(1) + "億";
-  if (v >= 10000) return (v / 10000).toFixed(0) + "萬";
-  return v.toLocaleString();
+function formatVolume(shares) {
+  // Convert shares to lots (張): 1 lot = 1000 shares
+  const lots = Math.round(shares / 1000);
+
+  if (lots >= 100000000) return (lots / 100000000).toFixed(1) + "億張";
+  if (lots >= 10000) return (lots / 10000).toFixed(0) + "萬張";
+  if (lots >= 1000) return (lots / 1000).toFixed(1) + "千張";
+  return lots + "張";
 }
 
 async function generateIndexPage(limitStocks, date) {
