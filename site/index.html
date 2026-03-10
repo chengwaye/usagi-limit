@@ -16,10 +16,31 @@
 body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; }
 .container { max-width: 1200px; margin: 0 auto; padding: 16px; }
 .container.wide { max-width: 1200px; }
-header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #30363d; margin-bottom: 16px; }
+header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #30363d; margin-bottom: 16px; position: relative; }
 header h1 { font-size: 22px; margin-bottom: 2px; }
 header h1 span.rabbit { font-size: 26px; }
 header .subtitle { color: #8b949e; font-size: 13px; }
+header .cta-hint {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #60a5fa;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  min-width: 140px;
+}
+header .cta-hint:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
 header .date-nav {
   display: flex;
   align-items: center;
@@ -42,26 +63,6 @@ header .date-nav .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
 
 .section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
-
-.cta-banner {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
-  border: 1px solid #3b82f6;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin: 16px 0;
-  text-align: center;
-}
-.cta-banner .title {
-  color: #60a5fa;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.cta-banner .desc {
-  color: #93c5fd;
-  font-size: 11px;
-  line-height: 1.4;
-}
 
 .concept-section { margin-bottom: 20px; }
 .concept-title {
@@ -200,14 +201,16 @@ footer a { color: #58a6ff; text-decoration: none; }
   .header-ad { height: 70px; font-size: 10px; }
   header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
   header .date-nav .date { font-size: 13px; }
-  .cta-banner .title { font-size: 12px; }
-  .cta-banner .desc { font-size: 10px; }
+  header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; }
 }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
+    <div class="cta-hint" onclick="scrollToStocks()">
+      💡 點股票看分析
+    </div>
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
     <div class="subtitle">漲停分點追蹤 — 看誰在買、誰在賣</div>
     <div class="date-nav">
@@ -232,13 +235,7 @@ footer a { color: #58a6ff; text-decoration: none; }
 
     <!-- 主要內容 -->
     <div class="content-wrapper">
-      <!-- 功能引導 -->
-      <div class="cta-banner">
-        <div class="title">💡 點擊任一股票查看詳細分析</div>
-        <div class="desc">內含券商分點買賣超排行、籌碼泡泡圖視覺化</div>
-      </div>
-
-      <div class="section-title">🔴 漲停 (18)</div>
+      <div class="section-title" id="stocks-section">🔴 漲停 (18)</div>
       
     <div class="concept-section">
       <div class="concept-title">
@@ -674,7 +671,7 @@ footer a { color: #58a6ff; text-decoration: none; }
   <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; margin: 20px 0; text-align: center;">
     <div style="color: #58a6ff; font-size: 11px; margin-bottom: 4px;">🤖 AI 智能分析</div>
     <div style="color: #8b949e; font-size: 10px; line-height: 1.4;">
-      漲停原因與族群分類由 AI 自動分析產生，僅供參考，請自行判斷投資風險
+      漲停原因與族群分類由 AI 自動分析產生，僅供參考，不代表投資建議，請自行判斷投資風險
     </div>
   </div>
 
@@ -685,6 +682,14 @@ footer a { color: #58a6ff; text-decoration: none; }
 </div>
 
 <script>
+// 滾動到股票區
+function scrollToStocks() {
+  document.getElementById('stocks-section').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+
 // 日期導航功能
 function navigateDate(direction) {
   const currentDateStr = '20260309'; // YYYYMMDD format
