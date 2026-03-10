@@ -92,9 +92,9 @@ async function fetchTPEXInstitutionalData(date) {
 
     // Parse TPEX data (3itrade_hedge_result, se=EW):
     // 7 groups × 3 cols (買進/賣出/買賣超) + 合計
-    // [2-4] 外資(不含自營商)  [5-7] 外資-自營商  [8-10] 外資合計
-    // [11-13] 投信  [14-16] 自營商(避險)  [17-19] 自營商合計
-    // [20-22] 三大法人  [23] 三大法人合計
+    // [2-4] 外資(不含自營商)  [5-7] 外資自營商  [8-10] 外資合計
+    // [11-13] 投信  [14-16] 自營商(自行買賣)  [17-19] 自營商(避險)
+    // [20-22] 自營商合計  [23] 三大法人合計
     const parse = (val) => parseInt(String(val || '0').replace(/,/g, '')) || 0;
     const institutionalMap = {};
 
@@ -107,7 +107,7 @@ async function fetchTPEXInstitutionalData(date) {
 
       const foreign = parse(row[4]);   // 外資(不含自營商) 買賣超
       const trust = parse(row[13]);    // 投信 買賣超
-      const dealer = parse(row[19]);   // 自營商合計 買賣超
+      const dealer = parse(row[22]);   // 自營商合計 買賣超
 
       institutionalMap[code] = {
         foreign: foreign,
