@@ -43,7 +43,8 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
   font-style: italic;
 }
 .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.stock-grid.compact { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
+.singles-container { display: flex; flex-wrap: wrap; gap: 0; }
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; }
 .stock-card a:hover { background: #1c2129; }
@@ -134,11 +135,12 @@ footer a { color: #58a6ff; text-decoration: none; }
 }
 @media (max-width: 1200px) {
   .stock-grid { grid-template-columns: repeat(3, 1fr); }
-  .stock-grid.compact { grid-template-columns: repeat(2, 1fr); }
+  .stock-grid.single { max-width: 240px; }
 }
 @media (max-width: 900px) {
   .stock-grid { grid-template-columns: repeat(2, 1fr); }
-  .stock-grid.compact { grid-template-columns: 1fr; }
+  .stock-grid.single { max-width: 100%; margin-right: 0; margin-bottom: 8px; }
+  .singles-container { flex-direction: column; }
 }
 @media (max-width: 700px) {
   .container { padding: 4px; }

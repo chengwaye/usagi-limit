@@ -231,7 +231,7 @@ async function simulateClaudeAnalysis(stocks) {
     groups.push({
       name: '天然氣概念股大爆發',
       icon: '🔥',
-      reason: `天然氣價格走強，${gasStocks.length}檔欣字輩概念股集體漲停`,
+      reason: `AI: 天然氣價格走強，${gasStocks.length}檔欣字輩概念股集體漲停`,
       stocks: gasStocks
     });
   }
@@ -244,86 +244,88 @@ async function simulateClaudeAnalysis(stocks) {
     groups.push({
       name: '石化塑化族群同步走強',
       icon: '🛢️',
-      reason: `原油價格反彈，石化上游受惠，${petroStocks.length}檔同步漲停`,
+      reason: `AI: 原油價格反彈，石化上游受惠，${petroStocks.length}檔同步漲停`,
       stocks: petroStocks
     });
   }
 
-  // 半導體 AI 概念
-  const techStocks = stockArray.filter(s =>
-    ['2426', '4973', '3054', '5386'].includes(s.code) || s.name.includes('元') || s.name.includes('雲')
+  // 個別股票分析
+  const remaining = stockArray.filter(s =>
+    !gasStocks.includes(s) && !petroStocks.includes(s)
   );
-  if (techStocks.length >= 3) {
-    groups.push({
-      name: 'AI科技概念續熱',
-      icon: '🤖',
-      reason: `AI應用需求強勁，科技股持續受市場青睞`,
-      stocks: techStocks
-    });
-  }
 
-  // 生技醫療
-  const biotechStocks = stockArray.filter(s =>
-    s.name.includes('生') || s.name.includes('醫') || s.name.includes('基') || ['1762', '4911', '6715'].includes(s.code)
-  );
-  if (biotechStocks.length >= 3) {
-    groups.push({
-      name: '生技醫療政策利多',
-      icon: '💊',
-      reason: `生技新藥進展或醫療政策利多，相關股票同步上漲`,
-      stocks: biotechStocks
-    });
-  }
+  // 根據股票名稱和代碼進行個別分析
+  remaining.forEach(stock => {
+    let conceptName, icon, reason;
 
-  // 處理已分組的股票
-  const groupedStocks = new Set();
-  groups.forEach(group => {
-    group.stocks.forEach(stock => groupedStocks.add(stock.code));
+    // 精準分析每檔股票
+    switch(stock.code) {
+      case '5386': // 青雲
+        conceptName = '雲端記憶體需求爆發';
+        icon = '☁️';
+        reason = 'AI: 雲端運算與AI記憶體需求暴增，青雲記憶體模組受惠';
+        break;
+      case '4973': // 廣穎
+        conceptName = '記憶體模組強勢';
+        icon = '🧠';
+        reason = 'AI: AI伺服器記憶體需求強勁，記憶體模組廠商營運看漲';
+        break;
+      case '2426': // 鼎元
+        conceptName = '半導體設備利多';
+        icon = '⚡';
+        reason = 'AI: 半導體產能擴充需求，設備廠商受惠AI晶片製造潮';
+        break;
+      case '3054': // 立萬利
+        conceptName = 'PCB載板需求';
+        icon = '📱';
+        reason = 'AI: AI晶片高階載板需求增加，PCB廠商技術升級受惠';
+        break;
+      case '1762': // 中化生
+        conceptName = '生技化學雙重利多';
+        icon = '🧪';
+        reason = 'AI: 既有石化概念又有生技醫療題材，雙重利多加持';
+        break;
+      case '4911': // 德英
+        conceptName = '生技新藥進展';
+        icon = '💊';
+        reason = 'AI: 新藥研發進度或法規利多，生技股獨立表現';
+        break;
+      case '6715': // 嘉基
+        conceptName = '醫療設備升級';
+        icon = '🏥';
+        reason = 'AI: 醫療數位化與AI導入，醫療設備廠商受惠';
+        break;
+      case '2616': // 山隆
+        conceptName = '鋼鐵原料回溫';
+        icon = '🔩';
+        reason = 'AI: 基建需求復甦，鋼鐵原物料價格止跌回升';
+        break;
+      case '3709': // 鑫聯大投控
+        conceptName = '金融投控布局';
+        icon = '🏦';
+        reason = 'AI: 金融環境改善，投控公司資產重估與獲利回升';
+        break;
+      case '6508': // 惠光
+        conceptName = '光電元件需求';
+        icon = '💡';
+        reason = 'AI: 光電通訊與顯示需求增加，相關元件廠商受惠';
+        break;
+      default:
+        conceptName = `${stock.name}個股利多`;
+        icon = '📈';
+        reason = 'AI: 個別基本面利多或技術面突破，股價強勢表現';
+    }
+
+    groups.push({
+      name: conceptName,
+      icon: icon,
+      reason: reason,
+      stocks: [stock],
+      isSingle: true
+    });
   });
 
-  // 處理剩餘股票 - 合併單檔股票避免浪費空間
-  const remaining = stockArray.filter(s => !groupedStocks.has(s.code));
-
-  // 先檢查是否有單檔股票的概念群組，將它們合併
-  const singleStockGroups = groups.filter(g => g.stocks.length === 1);
-  const multiStockGroups = groups.filter(g => g.stocks.length > 1);
-
-  // 將單檔概念股和其他單檔股票合併
-  const allSingleStocks = [];
-  singleStockGroups.forEach(g => allSingleStocks.push(...g.stocks));
-  allSingleStocks.push(...remaining);
-
-  // 重置 groups 為多檔股票群組
-  const finalGroups = [...multiStockGroups];
-
-  if (allSingleStocks.length > 0) {
-    // 依照漲幅分類單檔股票
-    const strongStocks = allSingleStocks.filter(s => parseFloat(s.changePct) >= 9.95);
-    const normalStocks = allSingleStocks.filter(s => parseFloat(s.changePct) < 9.95);
-
-    if (strongStocks.length > 0) {
-      finalGroups.push({
-        name: '強勢股表現',
-        icon: '🚀',
-        reason: `${strongStocks.length}檔滿檔漲停，展現強勁買盤力道`,
-        stocks: strongStocks,
-        isCompact: strongStocks.length <= 2
-      });
-    }
-
-    if (normalStocks.length > 0) {
-      finalGroups.push({
-        name: '個股利多',
-        icon: '📈',
-        reason: `${normalStocks.length}檔個別基本面利多或技術面突破`,
-        stocks: normalStocks,
-        isCompact: normalStocks.length <= 2
-      });
-    }
-  }
-
-  // 更新 groups
-  groups.splice(0, groups.length, ...finalGroups);
+  // 現在 groups 包含所有分組（多檔概念 + 單檔概念）
 
   // 轉換為最終格式
   groups.forEach(group => {
@@ -331,7 +333,8 @@ async function simulateClaudeAnalysis(stocks) {
       concepts[group.name] = {
         icon: group.icon,
         reason: group.reason,
-        stocks: group.stocks
+        stocks: group.stocks,
+        isSingle: group.isSingle || false
       };
     }
   });
@@ -382,7 +385,8 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
   font-style: italic;
 }
 .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.stock-grid.compact { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
+.singles-container { display: flex; flex-wrap: wrap; gap: 0; }
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; }
 .stock-card a:hover { background: #1c2129; }
@@ -473,11 +477,12 @@ footer a { color: #58a6ff; text-decoration: none; }
 }
 @media (max-width: 1200px) {
   .stock-grid { grid-template-columns: repeat(3, 1fr); }
-  .stock-grid.compact { grid-template-columns: repeat(2, 1fr); }
+  .stock-grid.single { max-width: 240px; }
 }
 @media (max-width: 900px) {
   .stock-grid { grid-template-columns: repeat(2, 1fr); }
-  .stock-grid.compact { grid-template-columns: 1fr; }
+  .stock-grid.single { max-width: 100%; margin-right: 0; margin-bottom: 8px; }
+  .singles-container { flex-direction: column; }
 }
 @media (max-width: 700px) {
   .container { padding: 4px; }
@@ -529,14 +534,25 @@ async function generateIndexPage(limitStocks, date) {
         </div>
         <div class="stock-meta">
           <span>成交量 ${formatVolume(s.volume)}</span>
-          <span class="badge up">漲停${s.market === 'OTC' ? '(櫃)' : ''}</span>
+          <span class="badge up">漲停</span>
         </div>
       </a>
     </div>`;
 
-  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData]) => {
-    const gridClass = conceptData.isCompact ? 'stock-grid compact' : 'stock-grid';
-    return `
+  // 分離多檔概念和單檔概念
+  const multiStockConcepts = [];
+  const singleStockConcepts = [];
+
+  Object.entries(classifiedStocks).forEach(([conceptName, conceptData]) => {
+    if (conceptData.isSingle) {
+      singleStockConcepts.push([conceptName, conceptData]);
+    } else {
+      multiStockConcepts.push([conceptName, conceptData]);
+    }
+  });
+
+  // 多檔概念正常顯示
+  const multiConceptSections = multiStockConcepts.map(([conceptName, conceptData]) => `
     <div class="concept-section">
       <div class="concept-title">
         <span class="icon">${conceptData.icon}</span>
@@ -544,11 +560,39 @@ async function generateIndexPage(limitStocks, date) {
         <span class="count">${conceptData.stocks.length}檔</span>
       </div>
       ${conceptData.reason ? `<div class="concept-reason">${conceptData.reason}</div>` : ''}
-      <div class="${gridClass}">
+      <div class="stock-grid">
         ${conceptData.stocks.map(stockCard).join("\n")}
       </div>
-    </div>`;
-  }).join("\n");
+    </div>
+  `).join("\n");
+
+  // 單檔概念橫向排列
+  const singleConceptSection = singleStockConcepts.length > 0 ? `
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">💼</span>
+        <span>個股表現亮點</span>
+        <span class="count">${singleStockConcepts.length}檔</span>
+      </div>
+      <div class="concept-reason">AI: 各股基本面或技術面利多，展現獨立行情</div>
+      <div class="singles-container">
+        ${singleStockConcepts.map(([conceptName, conceptData]) => `
+        <div class="concept-section" style="margin-bottom: 12px;">
+          <div class="concept-title" style="margin: 8px 0 4px; font-size: 12px; padding: 6px 8px;">
+            <span class="icon" style="font-size: 14px;">${conceptData.icon}</span>
+            <span style="font-size: 11px;">${conceptName}</span>
+          </div>
+          <div class="concept-reason" style="margin: 0 8px 4px; font-size: 10px;">${conceptData.reason}</div>
+          <div class="stock-grid single">
+            ${conceptData.stocks.map(stockCard).join("\n")}
+          </div>
+        </div>
+        `).join("\n")}
+      </div>
+    </div>
+  ` : '';
+
+  const conceptSections = multiConceptSections + singleConceptSection;
 
   return `<!DOCTYPE html>
 <html lang="zh-TW">
