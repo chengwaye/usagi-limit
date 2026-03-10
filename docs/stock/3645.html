@@ -4,32 +4,151 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>達邁(3645) 漲停分點買賣超 — 烏薩奇漲停版</title>
-<meta name="description" content="2026/03/06 達邁(3645) 漲停，券商分點買賣超前15大排行，追蹤主力動向">
+<meta name="description" content="2026/03/10 達邁(3645) 漲停，券商分點買賣超前15大排行，追蹤主力動向">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L3W7YJ6N37"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L3W7YJ6N37');
+</script>
+
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7922778370889908"
+     crossorigin="anonymous"></script>
+
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; }
-.container { max-width: 800px; margin: 0 auto; padding: 16px; }
-header { text-align: center; padding: 24px 0 16px; border-bottom: 1px solid #30363d; margin-bottom: 20px; }
-header h1 { font-size: 24px; margin-bottom: 4px; }
-header h1 span.rabbit { font-size: 28px; }
-header .subtitle { color: #8b949e; font-size: 14px; }
-header .date { color: #58a6ff; font-size: 16px; margin-top: 8px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.container.wide { max-width: 1200px; }
+header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #30363d; margin-bottom: 16px; position: relative; }
+header h1 { font-size: 22px; margin-bottom: 2px; }
+header h1 span.rabbit { font-size: 26px; }
+header .subtitle { color: #8b949e; font-size: 13px; }
 
-.section-title { font-size: 18px; margin: 24px 0 12px; padding-left: 8px; border-left: 3px solid #f85149; }
-.section-title.down { border-left-color: #3fb950; }
+/* Date navigation */
+.date-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.date-nav .date { font-size: 14px; color: #e6edf3; font-weight: 600; min-width: 100px; }
+.date-nav .nav-btn {
+  background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 4px 10px;
+  border-radius: 4px; cursor: pointer; font-size: 12px; transition: all 0.2s;
+}
+.date-nav .nav-btn:hover:not(:disabled) { background: #30363d; color: #e6edf3; }
+.date-nav .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
-.stock-card a { text-decoration: none; color: inherit; display: block; padding: 14px 16px; }
+header .cta-hint {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #60a5fa;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  min-width: 180px;
+}
+header .cta-hint:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+header .date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+header .date-nav .nav-btn {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+header .date-nav .nav-btn:hover { background: #30363d; color: #e6edf3; }
+header .date-nav .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
+
+.section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
+
+.concept-section { margin-bottom: 20px; }
+.concept-title {
+  font-size: 14px;
+  margin: 12px 0 8px;
+  padding: 8px 12px;
+  background: #21262d;
+  border-radius: 6px;
+  border-left: 3px solid #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.concept-title .icon { font-size: 16px; }
+.concept-title .count {
+  color: #8b949e;
+  font-size: 12px;
+  margin-left: auto;
+}
+.concept-reason {
+  color: #8b949e;
+  font-size: 11px;
+  margin: 0 12px 8px 12px;
+  font-style: italic;
+}
+.stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
+.singles-container { display: flex; flex-wrap: wrap; gap: 0; }
+.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; transition: all 0.2s ease; }
+.stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; transition: all 0.2s ease; }
 .stock-card a:hover { background: #1c2129; }
 .stock-header { display: flex; justify-content: space-between; align-items: center; }
-.stock-name { font-size: 16px; font-weight: 600; }
-.stock-code { color: #8b949e; font-size: 13px; margin-left: 8px; }
+.stock-name { font-size: 14px; font-weight: 600; }
+.stock-code { color: #8b949e; font-size: 12px; margin-left: 6px; }
 .stock-price { text-align: right; }
-.stock-close { font-size: 16px; font-weight: 600; }
-.stock-change { font-size: 13px; margin-top: 2px; }
+.stock-close { font-size: 14px; font-weight: 600; }
+.stock-change { font-size: 11px; margin-top: 1px; }
 .up { color: #f85149; }
 .down { color: #3fb950; }
-.stock-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #8b949e; }
+.stock-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: #8b949e; }
+
+/* AdSense 廣告位 */
+.ads-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.content-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+.sidebar-ad {
+  width: 160px;
+  min-height: 600px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #484f58;
+  font-size: 11px;
+  text-align: center;
+  position: sticky;
+  top: 20px;
+}
 
 /* Stock detail page */
 .back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
@@ -44,285 +163,121 @@ header .date { color: #58a6ff; font-size: 16px; margin-top: 8px; }
 .badge.up { background: rgba(248,81,73,0.2); }
 .badge.down { background: rgba(63,185,80,0.2); }
 
-.tab-bar { display: flex; margin-bottom: 16px; }
-.tab { flex: 1; text-align: center; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid #30363d; }
-.tab.active-buy { border-bottom-color: #f85149; color: #f85149; }
-.tab.active-sell { border-bottom-color: #3fb950; color: #3fb950; }
+/* Side-by-side tables */
+.dual-panel { display: flex; gap: 16px; }
+.panel { flex: 1; min-width: 0; }
+.panel-title { text-align: center; padding: 8px; font-size: 13px; font-weight: 600; border-bottom: 2px solid #30363d; margin-bottom: 8px; }
+.panel-title.buy { border-bottom-color: #f85149; color: #f85149; }
+.panel-title.sell { border-bottom-color: #3fb950; color: #3fb950; }
 
 table { width: 100%; border-collapse: collapse; }
-th { text-align: left; padding: 8px 12px; font-size: 12px; color: #8b949e; border-bottom: 1px solid #30363d; }
-th:nth-child(n+2) { text-align: right; }
-td { padding: 10px 12px; font-size: 14px; border-bottom: 1px solid #21262d; }
-td:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
+th { text-align: right; padding: 3px 4px; font-size: 10px; color: #8b949e; border-bottom: 1px solid #30363d; white-space: nowrap; }
+th:first-child { text-align: left; }
+td { padding: 4px 4px; font-size: 11px; border-bottom: 1px solid #21262d; text-align: right; font-variant-numeric: tabular-nums; }
+td:first-child { text-align: left; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65px; }
 tr:hover { background: #1c2129; }
-.rank { color: #8b949e; width: 30px; }
+.net { font-weight: 600; }
 
 footer { text-align: center; padding: 32px 0 24px; color: #484f58; font-size: 12px; border-top: 1px solid #30363d; margin-top: 32px; }
 footer a { color: #58a6ff; text-decoration: none; }
 
-@media (max-width: 600px) {
-  .container { padding: 12px; }
+@media (max-width: 1000px) {
+  .ads-container { flex-direction: column; }
+  .sidebar-ad { display: none; }
+}
+@media (max-width: 1200px) {
+  .stock-grid { grid-template-columns: repeat(3, 1fr); }
+  .stock-grid.single { max-width: 240px; }
+}
+@media (max-width: 900px) {
+  .stock-grid { grid-template-columns: repeat(2, 1fr); }
+  .stock-grid.single { max-width: 100%; margin-right: 0; margin-bottom: 8px; }
+  .singles-container { flex-direction: column; }
+}
+@media (max-width: 700px) {
+  .container { padding: 4px; }
+  .stock-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; }
   .info-bar { flex-direction: column; text-align: center; gap: 12px; }
   .info-right { text-align: center; }
+  .dual-panel { gap: 4px; }
+  th { padding: 2px 2px; font-size: 9px; }
+  td { padding: 3px 2px; font-size: 9px; }
+  td:first-child { max-width: 52px; font-size: 9px; }
+  .panel-title { font-size: 11px; padding: 6px; }
+  header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
+  header .date-nav .date { font-size: 13px; }
+  header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; width: fit-content; font-size: 10px; padding: 6px 10px; }
 }
 </style>
 </head>
 <body>
-<div class="container">
-  <a href="../index.html" class="back">← 返回漲跌停總覽</a>
+<div class="container wide">
+  <a href="../index.html" class="back">← 返回漲停總覽</a>
 
   <div class="info-bar">
     <div class="info-left">
       <h2>達邁</h2>
-      <div class="code">3645 · 2026/03/06</div>
+      <div class="code">3645 · 2026/03/10</div>
     </div>
     <div class="info-right">
-      <div class="price up">$69</div>
+      <div class="price up">$75.5</div>
       <div class="change-info up">
-        +6.2 (9.87%)
+        +6.8 (9.90%)
         <span class="badge up">漲停</span>
       </div>
     </div>
   </div>
 
-  <p style="color:#8b949e;font-size:13px;margin-bottom:20px;">共 370 家券商交易</p>
+  <div class="ads-container">
+    <!-- 左側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- AdSense 側邊廣告位 -->
+      廣告位<br>(160x600)
+    </div>
 
-  <!-- Buy Top 15 -->
-  <div class="tab-bar">
-    <div class="tab active-buy">買方 Top15</div>
-  </div>
-  <table>
-    <thead>
-      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>買超(張)</th></tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="rank">1</td>
-      <td>統一</td>
-      <td class="up">920</td>
-      <td class="down">46</td>
-      <td class="up" style="font-weight:600">874</td>
-    </tr>
-    <tr>
-      <td class="rank">2</td>
-      <td>群益</td>
-      <td class="up">788</td>
-      <td class="down">470</td>
-      <td class="up" style="font-weight:600">318</td>
-    </tr>
-    <tr>
-      <td class="rank">3</td>
-      <td>國泰綜合</td>
-      <td class="up">303</td>
-      <td class="down">19</td>
-      <td class="up" style="font-weight:600">284</td>
-    </tr>
-    <tr>
-      <td class="rank">4</td>
-      <td>凱基台北</td>
-      <td class="up">917</td>
-      <td class="down">745</td>
-      <td class="up" style="font-weight:600">172</td>
-    </tr>
-    <tr>
-      <td class="rank">5</td>
-      <td>瑞銀</td>
-      <td class="up">538</td>
-      <td class="down">389</td>
-      <td class="up" style="font-weight:600">149</td>
-    </tr>
-    <tr>
-      <td class="rank">6</td>
-      <td>美林</td>
-      <td class="up">328</td>
-      <td class="down">180</td>
-      <td class="up" style="font-weight:600">148</td>
-    </tr>
-    <tr>
-      <td class="rank">7</td>
-      <td>元大文心</td>
-      <td class="up">62</td>
-      <td class="down">3</td>
-      <td class="up" style="font-weight:600">59</td>
-    </tr>
-    <tr>
-      <td class="rank">8</td>
-      <td>群益西松</td>
-      <td class="up">68</td>
-      <td class="down">16</td>
-      <td class="up" style="font-weight:600">52</td>
-    </tr>
-    <tr>
-      <td class="rank">9</td>
-      <td>富邦基隆</td>
-      <td class="up">52</td>
-      <td class="down">4</td>
-      <td class="up" style="font-weight:600">48</td>
-    </tr>
-    <tr>
-      <td class="rank">10</td>
-      <td>宏遠</td>
-      <td class="up">113</td>
-      <td class="down">70</td>
-      <td class="up" style="font-weight:600">43</td>
-    </tr>
-    <tr>
-      <td class="rank">11</td>
-      <td>國泰新莊</td>
-      <td class="up">51</td>
-      <td class="down">11</td>
-      <td class="up" style="font-weight:600">40</td>
-    </tr>
-    <tr>
-      <td class="rank">12</td>
-      <td>國票綜合</td>
-      <td class="up">73</td>
-      <td class="down">34</td>
-      <td class="up" style="font-weight:600">39</td>
-    </tr>
-    <tr>
-      <td class="rank">13</td>
-      <td>統一新竹</td>
-      <td class="up">35</td>
-      <td class="down">3</td>
-      <td class="up" style="font-weight:600">33</td>
-    </tr>
-    <tr>
-      <td class="rank">14</td>
-      <td>摩根大通</td>
-      <td class="up">206</td>
-      <td class="down">175</td>
-      <td class="up" style="font-weight:600">31</td>
-    </tr>
-    <tr>
-      <td class="rank">15</td>
-      <td>群益民權</td>
-      <td class="up">49</td>
-      <td class="down">22</td>
-      <td class="up" style="font-weight:600">27</td>
-    </tr></tbody>
-  </table>
+    <!-- 主要內容 -->
+    <div class="content-wrapper">
+      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">交易量不足，暫無分點資料</p>
 
-  <!-- Sell Top 15 -->
-  <div class="tab-bar" style="margin-top:32px;">
-    <div class="tab active-sell">賣方 Top15</div>
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;">
+        <h3 style="color:#e6edf3;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          🏛️ 三大法人買賣超
+          <span style="font-size:11px;color:#8b949e;font-weight:normal;">(當日)</span>
+        </h3>
+        <div style="text-align:center;padding:16px;color:#8b949e;font-size:13px;line-height:1.5;">
+          📊 資料整理中<br>
+          <span style="font-size:11px;color:#6c7a89;">請等待 16:30 更新</span>
+        </div>
+      </div>
+
+      
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:32px;margin:24px 0;text-align:center;">
+        <div style="color:#8b949e;font-size:16px;margin-bottom:12px;">📊</div>
+        <div style="color:#e6edf3;font-size:14px;margin-bottom:8px;">暫無分點資料</div>
+        <div style="color:#8b949e;font-size:12px;line-height:1.5;">
+          該股票當日成交量較小<br>
+          或交易過於分散，無法提供有效的分點買賣超分析
+        </div>
+      </div>
+
+      <!-- 底部廣告位 -->
+      <div style="margin:32px 0;text-align:center;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;color:#484f58;font-size:12px;">
+        底部廣告位<br>(728x90 或回應式)
+      </div>
+    </div>
+
+    <!-- 右側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- AdSense 側邊廣告位 -->
+      廣告位<br>(160x600)
+    </div>
   </div>
-  <table>
-    <thead>
-      <tr><th class="rank">#</th><th>券商</th><th>買(張)</th><th>賣(張)</th><th>賣超(張)</th></tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="rank">1</td>
-      <td>富邦</td>
-      <td class="up">20</td>
-      <td class="down">237</td>
-      <td class="down" style="font-weight:600">-217</td>
-    </tr>
-    <tr>
-      <td class="rank">2</td>
-      <td>台灣摩根</td>
-      <td class="up">207</td>
-      <td class="down">314</td>
-      <td class="down" style="font-weight:600">-107</td>
-    </tr>
-    <tr>
-      <td class="rank">3</td>
-      <td>華南竹北</td>
-      <td class="up">3</td>
-      <td class="down">90</td>
-      <td class="down" style="font-weight:600">-87</td>
-    </tr>
-    <tr>
-      <td class="rank">4</td>
-      <td>美商高盛</td>
-      <td class="up">178</td>
-      <td class="down">256</td>
-      <td class="down" style="font-weight:600">-78</td>
-    </tr>
-    <tr>
-      <td class="rank">5</td>
-      <td>華南楠梓</td>
-      <td class="up">3</td>
-      <td class="down">64</td>
-      <td class="down" style="font-weight:600">-61</td>
-    </tr>
-    <tr>
-      <td class="rank">6</td>
-      <td>凱基士林</td>
-      <td class="up">10</td>
-      <td class="down">63</td>
-      <td class="down" style="font-weight:600">-53</td>
-    </tr>
-    <tr>
-      <td class="rank">7</td>
-      <td>元大</td>
-      <td class="up">1322</td>
-      <td class="down">1374</td>
-      <td class="down" style="font-weight:600">-52</td>
-    </tr>
-    <tr>
-      <td class="rank">8</td>
-      <td>群益台南</td>
-      <td class="up">3</td>
-      <td class="down">55</td>
-      <td class="down" style="font-weight:600">-52</td>
-    </tr>
-    <tr>
-      <td class="rank">9</td>
-      <td>凱基敦北</td>
-      <td class="up">15</td>
-      <td class="down">60</td>
-      <td class="down" style="font-weight:600">-45</td>
-    </tr>
-    <tr>
-      <td class="rank">10</td>
-      <td>安泰楠梓</td>
-      <td class="up">5</td>
-      <td class="down">35</td>
-      <td class="down" style="font-weight:600">-30</td>
-    </tr>
-    <tr>
-      <td class="rank">11</td>
-      <td>凱基虎尾</td>
-      <td class="up">2</td>
-      <td class="down">32</td>
-      <td class="down" style="font-weight:600">-30</td>
-    </tr>
-    <tr>
-      <td class="rank">12</td>
-      <td>凱基</td>
-      <td class="up">145</td>
-      <td class="down">173</td>
-      <td class="down" style="font-weight:600">-28</td>
-    </tr>
-    <tr>
-      <td class="rank">13</td>
-      <td>富邦虎尾</td>
-      <td class="up">0</td>
-      <td class="down">27</td>
-      <td class="down" style="font-weight:600">-27</td>
-    </tr>
-    <tr>
-      <td class="rank">14</td>
-      <td>福勝</td>
-      <td class="up">11</td>
-      <td class="down">33</td>
-      <td class="down" style="font-weight:600">-22</td>
-    </tr>
-    <tr>
-      <td class="rank">15</td>
-      <td>富邦員林</td>
-      <td class="up">26</td>
-      <td class="down">48</td>
-      <td class="down" style="font-weight:600">-22</td>
-    </tr></tbody>
-  </table>
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
     <p><a href="../index.html">烏薩奇漲停版</a> &copy; 2026 | 每日盤後更新</p>
   </footer>
 </div>
+
 </body>
 </html>

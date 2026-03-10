@@ -1,9 +1,8 @@
 /**
- * Claude Stock Classifier
- * 使用 Claude API 智能分析漲停股概念分組
+ * Improved Claude Stock Classifier
+ * 修復間歇性 SDK 連接問題並增強錯誤處理
  */
 
-import { spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
@@ -16,43 +15,27 @@ export async function classifyWithClaude(stocks) {
 
     console.log('🤖 Calling Claude for intelligent stock classification...');
 
-    const prompt = `你是台股分析專家，請分析今日漲停股票的共同原因並智能分組。
+    // 簡化並優化 prompt
+    const prompt = `你是台股分析專家。請分析這些漲停股並智能分組：
 
-今日漲停股清單（${Object.keys(stocks).length}檔）：
 ${stockList}
 
-分析要點：
-1. 找出可能的漲停主因：產業政策、國際情勢、原物料價格、AI科技趨勢、財報利多、技術面突破等
-2. 觀察股票名稱規律：如「欣」字輩（天然氣）、「化」字尾（石化）等
-3. 產業關聯性：半導體、生技、金融、傳產等
-
-分組原則：
-- 優先以「漲停主因」分組（如天然氣漲價 → 欣字輩集體漲停）
-- 每組至少3檔，避免過度分散
-- 單獨個股或2檔以下合併為「個股表現」類別
-
-回傳 JSON 格式：
+請按產業/主題分組，每組至少2檔。回傳JSON格式：
 {
-  "天然氣概念發威": {
+  "概念名稱": {
     "icon": "🔥",
-    "reason": "天然氣價格大漲，欣字輩概念股集體漲停",
-    "stocks": ["8908", "8917", "9918"]
-  },
-  "石化族群反彈": {
-    "icon": "🛢️",
-    "reason": "原油反彈帶動石化上游，塑化股同步走強",
-    "stocks": ["1309", "6505"]
+    "reason": "漲停原因",
+    "stocks": ["代碼1", "代碼2"]
   }
 }
 
-注意：只回傳JSON，代碼必須完全匹配，概念名稱要具體且吸引人。`;
+只回傳JSON，不要其他文字。`;
 
-    // Call Claude via claude_cli (similar to telegram worker)
-    const result = await callClaude(prompt);
+    // Call Claude with improved error handling
+    const result = await callClaudeWithRetry(prompt, 3);
 
-    // Parse Claude response
-    const cleanedResult = result.replace(/^```json\s*/, '').replace(/\s*```$/, '').trim();
-    const classification = JSON.parse(cleanedResult);
+    // Parse Claude response - handle various response formats
+    const classification = parseClaudeResponse(result);
 
     // Convert to our expected format
     const processedConcepts = {};
@@ -79,56 +62,129 @@ ${stockList}
   }
 }
 
-function callClaude(prompt) {
-  return new Promise((resolve, reject) => {
-    // Try different possible Claude CLI locations
-    const possiblePaths = [
-      'claude',
-      'C:\\Users\\user\\.claude\\claude.exe',
-      'C:\\Program Files\\Claude\\claude.exe',
-      process.env.CLAUDE_CLI_PATH
-    ].filter(Boolean);
+function parseClaudeResponse(result) {
+  let cleanedResult = result.trim();
 
-    let lastError = null;
+  // Remove markdown code blocks if present
+  cleanedResult = cleanedResult.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+  cleanedResult = cleanedResult.replace(/^```\s*/, '').replace(/\s*```$/, '');
 
-    function tryNext(index) {
-      if (index >= possiblePaths.length) {
-        reject(new Error(`Claude CLI not found. Tried: ${possiblePaths.join(', ')}. Last error: ${lastError?.message}`));
-        return;
+  // Find JSON part if mixed with other text
+  const jsonMatch = cleanedResult.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    cleanedResult = jsonMatch[0];
+  }
+
+  // Try to parse JSON with better error handling
+  try {
+    return JSON.parse(cleanedResult);
+  } catch (parseError) {
+    console.log('JSON parse failed, raw response preview:', result.slice(0, 200));
+    throw new Error(`JSON parse failed: ${parseError.message}`);
+  }
+}
+
+async function callClaudeWithRetry(prompt, maxRetries = 5) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`Attempt ${attempt}/${maxRetries}...`);
+      const result = await callClaude(prompt);
+
+      if (result && result.trim()) {
+        console.log(`✓ SDK connection successful on attempt ${attempt}`);
+        return result;
+      } else {
+        throw new Error("Empty result from Claude Agent SDK");
       }
+    } catch (error) {
+      lastError = error;
+      console.log(`✗ Attempt ${attempt} failed: ${error.message}`);
 
-      const claudePath = possiblePaths[index];
-      const claude = spawn(claudePath, ['-q', prompt], {
-        stdio: ['inherit', 'pipe', 'pipe'],
-        env: process.env
-      });
+      if (attempt < maxRetries) {
+        // 逐步增加等待時間: 2秒 -> 4秒 -> 6秒 -> 8秒
+        const waitTime = attempt * 2000;
+        console.log(`  Waiting ${waitTime}ms before retry...`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+      }
+    }
+  }
 
-      let stdout = '';
-      let stderr = '';
+  throw new Error(`All ${maxRetries} attempts failed. Last error: ${lastError.message}`);
+}
 
-      claude.stdout.on('data', (data) => {
-        stdout += data.toString();
-      });
+async function callClaude(prompt) {
+  const startTime = Date.now();
 
-      claude.stderr.on('data', (data) => {
-        stderr += data.toString();
-      });
+  try {
+    console.log(`  Initializing Claude Agent SDK...`);
 
-      claude.on('close', (code) => {
-        if (code === 0) {
-          resolve(stdout.trim());
-        } else {
-          lastError = new Error(`Claude CLI failed with code ${code}: ${stderr}`);
-          tryNext(index + 1);
+    // 動態載入 Claude Agent SDK
+    const { query } = await import("@anthropic-ai/claude-agent-sdk");
+
+    // 優化 SDK 選項
+    const sdkOptions = {
+      settingSources: ["project", "user"],
+      model: "claude-opus-4-20250514",
+      maxTurns: 10, // 進一步增加 maxTurns
+      workingDirectory: process.cwd()
+    };
+
+    // 清理環境變數，避免與 Telegram worker 衝突
+    const cleanEnv = { ...process.env };
+    delete cleanEnv.CLAUDECODE;
+    delete cleanEnv.TELEGRAM_BOT_TOKEN;
+    sdkOptions.env = cleanEnv;
+
+    console.log(`  Starting conversation (model: ${sdkOptions.model})...`);
+
+    let finalResult = "";
+    const conversation = query({ prompt, options: sdkOptions });
+
+    let messageCount = 0;
+    let hasAssistantMessage = false;
+    let lastMessageType = "";
+
+    // 增加 timeout 保護
+    const timeout = setTimeout(() => {
+      throw new Error("SDK conversation timeout after 60 seconds");
+    }, 60000);
+
+    try {
+      for await (const message of conversation) {
+        messageCount++;
+        lastMessageType = message.type;
+
+        console.log(`  Message ${messageCount}: ${message.type}`);
+
+        if (message.type === 'assistant') {
+          hasAssistantMessage = true;
         }
-      });
 
-      claude.on('error', (error) => {
-        lastError = error;
-        tryNext(index + 1);
-      });
+        if (message.type === "result") {
+          finalResult = (message.result || "").trim();
+          console.log(`  Result received (${finalResult.length} chars)`);
+          break;
+        }
+      }
+    } finally {
+      clearTimeout(timeout);
     }
 
-    tryNext(0);
-  });
+    const elapsed = Date.now() - startTime;
+    console.log(`  SDK conversation completed in ${elapsed}ms`);
+
+    // 詳細除錯資訊
+    if (!finalResult) {
+      const errorMsg = `No result from Claude Agent SDK (${messageCount} messages, hasAssistant: ${hasAssistantMessage}, lastType: ${lastMessageType})`;
+      throw new Error(errorMsg);
+    }
+
+    return finalResult;
+  } catch (error) {
+    const elapsed = Date.now() - startTime;
+    console.log(`  SDK failed after ${elapsed}ms: ${error.message}`);
+    throw new Error(`Claude Agent SDK failed: ${error.message}`);
+  }
 }

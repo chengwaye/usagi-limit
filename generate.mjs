@@ -171,8 +171,8 @@ async function getLimitStocks() {
     if (prevClose <= 0) continue;
     const pct = (change / prevClose) * 100;
 
-    // 只追蹤漲停（跌停暫不處理）
-    if (!(close === high && pct >= 9.5)) continue;
+    // 只追蹤漲停（跌停暫不處理） - 修正判斷條件
+    if (!(close === high && pct >= 9.9)) continue;
 
     {
       const type = "漲停";
@@ -205,7 +205,7 @@ async function getLimitStocks() {
       if (prevClose <= 0) continue;
       const pct = (change / prevClose) * 100;
 
-      if (!(close === high && pct >= 9.5)) continue;
+      if (!(close === high && pct >= 9.9)) continue;
 
       otcCount++;
       stocks[s.SecuritiesCompanyCode] = {
@@ -1238,8 +1238,8 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
     </tr>`;
   };
 
-  const buyerRows = (brokerData.top_buyers || []).map(b => brokerRow(b, true)).join("");
-  const sellerRows = (brokerData.top_sellers || []).map(b => brokerRow(b, false)).join("");
+  const buyerRows = brokerData ? (brokerData.top_buyers || []).map(b => brokerRow(b, true)).join("") : "";
+  const sellerRows = brokerData ? (brokerData.top_sellers || []).map(b => brokerRow(b, false)).join("") : "";
 
   // Generate institutional investors card
   const generateInstitutionalCard = () => {
@@ -1343,10 +1343,11 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
 
     <!-- 主要內容 -->
     <div class="content-wrapper">
-      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 ${brokerData.total_brokers} 家券商交易</p>
+      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">${brokerData ? `共 ${brokerData.total_brokers} 家券商交易` : "交易量不足，暫無分點資料"}</p>
 
       ${generateInstitutionalCard()}
 
+      ${brokerData ? `
       <div class="dual-panel">
         <div class="panel">
           <div class="panel-title buy">買超 Top15</div>
@@ -1358,7 +1359,15 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
         </div>
       </div>
 
-      ${generateBubbleChart(brokerData, stockInfo)}
+      ${generateBubbleChart(brokerData, stockInfo)}` : `
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:32px;margin:24px 0;text-align:center;">
+        <div style="color:#8b949e;font-size:16px;margin-bottom:12px;">📊</div>
+        <div style="color:#e6edf3;font-size:14px;margin-bottom:8px;">暫無分點資料</div>
+        <div style="color:#8b949e;font-size:12px;line-height:1.5;">
+          該股票當日成交量較小<br>
+          或交易過於分散，無法提供有效的分點買賣超分析
+        </div>
+      </div>`}
 
       <!-- 底部廣告位 -->
       <div style="margin:32px 0;text-align:center;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;color:#484f58;font-size:12px;">
@@ -1378,10 +1387,10 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
     <p><a href="../index.html">烏薩奇漲停版</a> &copy; 2026 | 每日盤後更新</p>
   </footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+${brokerData ? `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
 ${generateBubbleChartScript(brokerData, stockInfo)}
-</script>
+</script>` : ''}
 </body>
 </html>`;
 }
@@ -1452,8 +1461,7 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   for (const [code, info] of Object.entries(limitStocks)) {
     const brokerData = loadBrokerData(code, cacheDate);
     if (!brokerData) {
-      console.log(`    [SKIP] ${code} ${info.name} — no broker data`);
-      continue;
+      console.log(`    [INFO] ${code} ${info.name} — no broker data, generating basic page`);
     }
     const institutionalInfo = institutionalData[code] || null;
     const backLink = isLatest ? "../index.html" : `../../index-${date}.html`;

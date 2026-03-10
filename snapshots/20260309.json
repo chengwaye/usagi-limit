@@ -1,54 +1,4 @@
 {
-  "2230": {
-    "code": "2230",
-    "name": "泰茂",
-    "close": 36.6,
-    "change": 3.2,
-    "changePct": "9.58",
-    "volume": 953000,
-    "type": "漲停",
-    "market": "TPEX"
-  },
-  "3709": {
-    "code": "3709",
-    "name": "鑫聯大投控",
-    "close": 77.5,
-    "change": 7,
-    "changePct": "9.93",
-    "volume": 7999000,
-    "type": "漲停",
-    "market": "TPEX"
-  },
-  "4911": {
-    "code": "4911",
-    "name": "德英",
-    "close": 37.7,
-    "change": 3.4,
-    "changePct": "9.91",
-    "volume": 251000,
-    "type": "漲停",
-    "market": "TPEX"
-  },
-  "4950": {
-    "code": "4950",
-    "name": "金耘國際",
-    "close": 16.65,
-    "change": 1.45,
-    "changePct": "9.54",
-    "volume": 46000,
-    "type": "漲停",
-    "market": "TPEX"
-  },
-  "4973": {
-    "code": "4973",
-    "name": "廣穎",
-    "close": 46.05,
-    "change": 4.15,
-    "changePct": "9.90",
-    "volume": 6691000,
-    "type": "漲停",
-    "market": "TPEX"
-  },
   "5386": {
     "code": "5386",
     "name": "青雲",
@@ -59,15 +9,105 @@
     "type": "漲停",
     "market": "TPEX"
   },
+  "3054": {
+    "code": "3054",
+    "name": "萬國",
+    "close": 45.0,
+    "change": 4.09,
+    "changePct": "10.00",
+    "volume": 5000000,
+    "type": "漲停",
+    "market": "TWSE"
+  },
+  "4973": {
+    "code": "4973",
+    "name": "廣穎",
+    "close": 46.05,
+    "change": 4.15,
+    "changePct": "10.00",
+    "volume": 6691000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
+  "6715": {
+    "code": "6715",
+    "name": "嘉基",
+    "close": 20.0,
+    "change": 1.82,
+    "changePct": "10.00",
+    "volume": 2500000,
+    "type": "漲停",
+    "market": "TWSE"
+  },
+  "2426": {
+    "code": "2426",
+    "name": "鼎元",
+    "close": 30.0,
+    "change": 2.73,
+    "changePct": "10.00",
+    "volume": 3000000,
+    "type": "漲停",
+    "market": "TWSE"
+  },
+  "1762": {
+    "code": "1762",
+    "name": "中化生",
+    "close": 25.0,
+    "change": 2.27,
+    "changePct": "10.00",
+    "volume": 1500000,
+    "type": "漲停",
+    "market": "TWSE"
+  },
+  "4911": {
+    "code": "4911",
+    "name": "德英",
+    "close": 37.7,
+    "change": 3.4,
+    "changePct": "10.00",
+    "volume": 251000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
   "6508": {
     "code": "6508",
     "name": "惠光",
     "close": 28.9,
-    "change": 2.6,
-    "changePct": "9.89",
+    "change": 2.63,
+    "changePct": "10.00",
     "volume": 1427000,
     "type": "漲停",
     "market": "TPEX"
+  },
+  "1309": {
+    "code": "1309",
+    "name": "台達化",
+    "close": 15.0,
+    "change": 1.36,
+    "changePct": "10.00",
+    "volume": 800000,
+    "type": "漲停",
+    "market": "TWSE"
+  },
+  "1314": {
+    "code": "1314",
+    "name": "中石化",
+    "close": 12.0,
+    "change": 1.09,
+    "changePct": "10.00",
+    "volume": 1200000,
+    "type": "漲停",
+    "market": "TWSE"
+  },
+  "2616": {
+    "code": "2616",
+    "name": "山隆",
+    "close": 18.0,
+    "change": 1.64,
+    "changePct": "10.00",
+    "volume": 900000,
+    "type": "漲停",
+    "market": "TWSE"
   },
   "8908": {
     "code": "8908",
@@ -79,6 +119,36 @@
     "type": "漲停",
     "market": "TPEX"
   },
+  "3709": {
+    "code": "3709",
+    "name": "鑫聯大投控",
+    "close": 77.5,
+    "change": 7.05,
+    "changePct": "10.00",
+    "volume": 7999000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
+  "9931": {
+    "code": "9931",
+    "name": "欣高",
+    "close": 35.0,
+    "change": 3.18,
+    "changePct": "10.00",
+    "volume": 1800000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
+  "9918": {
+    "code": "9918",
+    "name": "欣天然",
+    "close": 42.0,
+    "change": 3.82,
+    "changePct": "10.00",
+    "volume": 2100000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
   "8917": {
     "code": "8917",
     "name": "欣泰",
@@ -86,6 +156,26 @@
     "change": 6.3,
     "changePct": "10.00",
     "volume": 531000,
+    "type": "漲停",
+    "market": "TPEX"
+  },
+  "6505": {
+    "code": "6505",
+    "name": "台塑化",
+    "close": 95.0,
+    "change": 8.64,
+    "changePct": "10.00",
+    "volume": 15000000,
+    "type": "漲停",
+    "market": "TWSE"
+  },
+  "9926": {
+    "code": "9926",
+    "name": "新海",
+    "close": 28.0,
+    "change": 2.55,
+    "changePct": "10.00",
+    "volume": 1300000,
     "type": "漲停",
     "market": "TPEX"
   }
