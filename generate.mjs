@@ -676,14 +676,14 @@ function getNextDate(currentDate, availableDates) {
   return currentIndex < availableDates.length - 1 ? availableDates[currentIndex + 1] : null;
 }
 
-async function generateIndexPage(limitStocks, date, availableDates = []) {
+async function generateIndexPage(limitStocks, date, availableDates = [], stockLinkPrefix = "stock/") {
   const adDate = formatDate(date);
   const upStocks = Object.values(limitStocks);
   const classifiedStocks = await classifyStocksIntelligently(limitStocks);
 
   const stockCard = (s) => `
     <div class="stock-card">
-      <a href="stock/${s.code}.html">
+      <a href="${stockLinkPrefix}${s.code}.html">
         <div class="stock-header">
           <div><span class="stock-name">${s.name}</span><span class="stock-code">${s.code}</span></div>
           <div class="stock-price">
@@ -1221,7 +1221,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
 `;
 }
 
-function generateStockPage(stockInfo, brokerData, date, institutionalInfo) {
+function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backLink = "../index.html") {
   const adDate = formatDate(date);
   const typeClass = stockInfo.type === "漲停" ? "up" : "down";
 
@@ -1318,7 +1318,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo) {
 </head>
 <body>
 <div class="container wide">
-  <a href="../index.html" class="back">← 返回漲停總覽</a>
+  <a href="${backLink}" class="back">← 返回漲停總覽</a>
 
   <div class="info-bar">
     <div class="info-left">
@@ -1407,48 +1407,111 @@ function getAvailableDates() {
 // ============================================================
 // Main
 // ============================================================
-async function main() {
-  console.log("🐰 烏薩奇漲停版 — 靜態網頁生成器");
-  console.log("");
+// Snapshot directory for preserving historical limit stock data
+const SNAPSHOT_DIR = path.resolve("./snapshots");
+if (!fs.existsSync(SNAPSHOT_DIR)) fs.mkdirSync(SNAPSHOT_DIR, { recursive: true });
 
-  // Detect available dates
-  const availableDates = getAvailableDates();
-  console.log(`Available dates: ${availableDates.join(', ')}`);
+function saveSnapshot(date, limitStocks) {
+  const snapshotPath = path.join(SNAPSHOT_DIR, `${date}.json`);
+  fs.writeFileSync(snapshotPath, JSON.stringify(limitStocks, null, 2));
+  console.log(`  Saved snapshot: ${snapshotPath}`);
+}
 
-  // Get limit stocks
-  console.log("Fetching market data...");
-  const { stocks: limitStocks, date } = await getLimitStocks();
-  // date is now YYYYMMDD from TWSE API (or converted from ROC)
-  const cacheDate = date; // direct match
-  const adDate = formatDate(date);
+function loadSnapshot(date) {
+  const snapshotPath = path.join(SNAPSHOT_DIR, `${date}.json`);
+  if (!fs.existsSync(snapshotPath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(snapshotPath, "utf-8"));
+  } catch (e) {
+    return null;
+  }
+}
 
-  console.log(`Date: ${adDate} (cache key: ${cacheDate})`);
-  console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
-  console.log("");
+// Generate a full date page (index + stock pages)
+async function generateDatePages(limitStocks, date, availableDates, isLatest) {
+  const cacheDate = date;
 
-  // Fetch institutional data (TWSE + TPEX)
+  // Fetch institutional data
   const institutionalData = await fetchAllInstitutionalData(cacheDate);
 
+  // Determine stock page path prefix for this date
+  const stockPageDir = isLatest ? STOCK_DIR : path.join(STOCK_DIR, date);
+  if (!isLatest && !fs.existsSync(stockPageDir)) fs.mkdirSync(stockPageDir, { recursive: true });
+
+  // Stock card link prefix
+  const stockLinkPrefix = isLatest ? "stock/" : `stock/${date}/`;
+
   // Generate index page
-  console.log("Generating index.html...");
-  const indexHtml = await generateIndexPage(limitStocks, date, availableDates);
-  fs.writeFileSync(path.join(SITE_DIR, "index.html"), indexHtml);
+  const indexFileName = isLatest ? "index.html" : `index-${date}.html`;
+  console.log(`  Generating ${indexFileName}...`);
+  const indexHtml = await generateIndexPage(limitStocks, date, availableDates, stockLinkPrefix);
+  fs.writeFileSync(path.join(SITE_DIR, indexFileName), indexHtml);
 
   // Generate stock pages
   let generated = 0;
   for (const [code, info] of Object.entries(limitStocks)) {
     const brokerData = loadBrokerData(code, cacheDate);
     if (!brokerData) {
-      console.log(`  [SKIP] ${code} ${info.name} — no broker data cached`);
+      console.log(`    [SKIP] ${code} ${info.name} — no broker data`);
       continue;
     }
     const institutionalInfo = institutionalData[code] || null;
-    const html = generateStockPage(info, brokerData, date, institutionalInfo);
-    fs.writeFileSync(path.join(STOCK_DIR, `${code}.html`), html);
+    const backLink = isLatest ? "../index.html" : `../../index-${date}.html`;
+    const html = generateStockPage(info, brokerData, date, institutionalInfo, backLink);
+    fs.writeFileSync(path.join(stockPageDir, `${code}.html`), html);
     generated++;
   }
+  return generated;
+}
 
-  console.log(`Generated ${generated} stock pages`);
+async function main() {
+  console.log("🐰 烏薩奇漲停版 — 靜態網頁生成器");
+  console.log("");
+
+  // Get today's limit stocks from API
+  console.log("Fetching market data...");
+  const { stocks: limitStocks, date } = await getLimitStocks();
+  const adDate = formatDate(date);
+
+  console.log(`Date: ${adDate}`);
+  console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
+
+  // Save snapshot for today
+  saveSnapshot(date, limitStocks);
+
+  // Detect all available dates (from cache + snapshots)
+  const availableDates = getAvailableDates();
+  // Also include snapshot dates
+  const snapshotFiles = fs.readdirSync(SNAPSHOT_DIR).filter(f => f.endsWith('.json'));
+  snapshotFiles.forEach(f => {
+    const d = f.replace('.json', '');
+    if (!availableDates.includes(d)) availableDates.push(d);
+  });
+  availableDates.sort().reverse(); // Latest first
+  console.log(`Available dates: ${availableDates.join(', ')}`);
+  console.log("");
+
+  // Generate pages for TODAY (latest)
+  console.log(`📅 Generating TODAY (${adDate}):`);
+  const todayCount = await generateDatePages(limitStocks, date, availableDates, true);
+  console.log(`  Generated ${todayCount} stock pages`);
+
+  // Generate pages for HISTORICAL dates
+  for (const histDate of availableDates) {
+    if (histDate === date) continue; // Skip today, already done
+
+    const histStocks = loadSnapshot(histDate);
+    if (!histStocks) {
+      console.log(`📅 Skipping ${formatDate(histDate)} — no snapshot`);
+      continue;
+    }
+
+    console.log(`📅 Generating HISTORY (${formatDate(histDate)}):`);
+    const histCount = await generateDatePages(histStocks, histDate, availableDates, false);
+    console.log(`  Generated ${histCount} stock pages`);
+  }
+
+  console.log("");
   console.log(`Output: ${SITE_DIR}`);
   console.log("Done! 🎉");
 }
