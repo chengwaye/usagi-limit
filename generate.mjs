@@ -1197,8 +1197,15 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo) {
   // Generate institutional investors card
   const generateInstitutionalCard = () => {
     if (!institutionalInfo) {
-      return `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;text-align:center;color:#8b949e;font-size:12px;">
-        三大法人資料暫無
+      return `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;">
+        <h3 style="color:#e6edf3;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          🏛️ 三大法人買賣超
+          <span style="font-size:11px;color:#8b949e;font-weight:normal;">(當日)</span>
+        </h3>
+        <div style="text-align:center;padding:16px;color:#8b949e;font-size:13px;line-height:1.5;">
+          📊 資料整理中<br>
+          <span style="font-size:11px;color:#6c7a89;">請等待 16:30 更新</span>
+        </div>
       </div>`;
     }
 
