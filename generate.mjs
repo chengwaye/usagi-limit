@@ -9,7 +9,7 @@ import axios from "axios";
 import { classifyWithClaude } from "./claude-classifier.mjs";
 
 const CACHE_DIR = path.resolve("../twse-broker-mcp/cache");
-const SITE_DIR = path.resolve("./site");
+const SITE_DIR = path.resolve("./docs");
 
 // Load concept mapping
 let conceptMapping = {};
