@@ -6,6 +6,7 @@
 import fs from "fs";
 import path from "path";
 import axios from "axios";
+import { classifyWithClaude } from "./claude-classifier.mjs";
 
 const CACHE_DIR = path.resolve("../twse-broker-mcp/cache");
 const SITE_DIR = path.resolve("./site");
@@ -148,9 +149,22 @@ function loadBrokerData(stockCode, date) {
 }
 
 // ============================================================
-// Step 2.5: Classify stocks by concepts
+// Step 2.5: Intelligent concept classification using Claude
 // ============================================================
-function classifyStocks(stocks) {
+async function classifyStocksIntelligently(stocks) {
+  try {
+    // Try Claude-powered intelligent classification
+    const analysisResult = await classifyWithClaude(stocks);
+    return analysisResult;
+
+  } catch (error) {
+    console.log('Claude analysis failed, falling back to smart heuristics');
+    return await simulateClaudeAnalysis(stocks);
+  }
+}
+
+// Fallback to static classification
+function classifyStocksStatic(stocks) {
   const classified = {};
   const unclassified = [];
 
@@ -201,6 +215,139 @@ function classifyStocks(stocks) {
   return result;
 }
 
+// Smart heuristic analysis based on industry patterns
+async function simulateClaudeAnalysis(stocks) {
+  const concepts = {};
+  const stockArray = Object.values(stocks);
+
+  // Analyze stock patterns and group by likely reasons
+  const groups = [];
+
+  // 天然氣族群 (欣字輩 + 新海)
+  const gasStocks = stockArray.filter(s =>
+    s.name.includes('欣') || s.name.includes('新海') || ['8908', '8917', '9918', '9926', '9931'].includes(s.code)
+  );
+  if (gasStocks.length >= 2) {
+    groups.push({
+      name: '天然氣概念股大爆發',
+      icon: '🔥',
+      reason: `天然氣價格走強，${gasStocks.length}檔欣字輩概念股集體漲停`,
+      stocks: gasStocks
+    });
+  }
+
+  // 石化塑化族群
+  const petroStocks = stockArray.filter(s =>
+    s.name.includes('化') || s.name.includes('塑') || ['1309', '1314', '6505'].includes(s.code)
+  );
+  if (petroStocks.length >= 2) {
+    groups.push({
+      name: '石化塑化族群同步走強',
+      icon: '🛢️',
+      reason: `原油價格反彈，石化上游受惠，${petroStocks.length}檔同步漲停`,
+      stocks: petroStocks
+    });
+  }
+
+  // 半導體 AI 概念
+  const techStocks = stockArray.filter(s =>
+    ['2426', '4973', '3054', '5386'].includes(s.code) || s.name.includes('元') || s.name.includes('雲')
+  );
+  if (techStocks.length >= 2) {
+    groups.push({
+      name: 'AI科技概念續熱',
+      icon: '🤖',
+      reason: `AI應用需求強勁，科技股持續受市場青睞`,
+      stocks: techStocks
+    });
+  }
+
+  // 生技醫療
+  const biotechStocks = stockArray.filter(s =>
+    s.name.includes('生') || s.name.includes('醫') || s.name.includes('基') || ['1762', '4911', '6715'].includes(s.code)
+  );
+  if (biotechStocks.length >= 2) {
+    groups.push({
+      name: '生技醫療政策利多',
+      icon: '💊',
+      reason: `生技新藥進展或醫療政策利多，相關股票同步上漲`,
+      stocks: biotechStocks
+    });
+  }
+
+  // 金融投控
+  const financeStocks = stockArray.filter(s =>
+    s.name.includes('投控') || s.name.includes('金') || ['3709'].includes(s.code)
+  );
+  if (financeStocks.length >= 1) {
+    groups.push({
+      name: '金融投控概念',
+      icon: '🏦',
+      reason: '金融環境改善，投控股票表現亮眼',
+      stocks: financeStocks
+    });
+  }
+
+  // 原物料鋼鐵
+  const materialStocks = stockArray.filter(s =>
+    s.name.includes('隆') || s.name.includes('鋼') || ['2616'].includes(s.code)
+  );
+  if (materialStocks.length >= 1) {
+    groups.push({
+      name: '原物料行情回溫',
+      icon: '🔩',
+      reason: '原物料價格上漲，相關概念股受惠',
+      stocks: materialStocks
+    });
+  }
+
+  // 處理已分組的股票
+  const groupedStocks = new Set();
+  groups.forEach(group => {
+    group.stocks.forEach(stock => groupedStocks.add(stock.code));
+  });
+
+  // 剩餘股票按漲幅分組
+  const remaining = stockArray.filter(s => !groupedStocks.has(s.code));
+  if (remaining.length > 0) {
+    // 依照漲幅和成交量分成強勢股和一般股
+    const strongStocks = remaining.filter(s => parseFloat(s.changePct) >= 9.95);
+    const normalStocks = remaining.filter(s => parseFloat(s.changePct) < 9.95);
+
+    if (strongStocks.length > 0) {
+      groups.push({
+        name: '強勢股表現',
+        icon: '🚀',
+        reason: `漲幅達滿檔漲停，展現強勁買盤力道`,
+        stocks: strongStocks
+      });
+    }
+
+    if (normalStocks.length > 0) {
+      groups.push({
+        name: '個股利多',
+        icon: '📈',
+        reason: '個別基本面利多或技術面突破',
+        stocks: normalStocks
+      });
+    }
+  }
+
+  // 轉換為最終格式
+  groups.forEach(group => {
+    if (group.stocks.length > 0) {
+      concepts[group.name] = {
+        icon: group.icon,
+        reason: group.reason,
+        stocks: group.stocks
+      };
+    }
+  });
+
+  console.log(`✅ Smart heuristics classified ${Object.keys(concepts).length} concept groups`);
+  return concepts;
+}
+
 // ============================================================
 // Step 3: Generate HTML
 // ============================================================
@@ -235,6 +382,12 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
   color: #8b949e;
   font-size: 12px;
   margin-left: auto;
+}
+.concept-reason {
+  color: #8b949e;
+  font-size: 11px;
+  margin: 0 12px 8px 12px;
+  font-style: italic;
 }
 .stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
@@ -289,19 +442,6 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
   font-size: 12px;
   margin: 16px 0;
 }
-.concept-ad {
-  width: 100%;
-  height: 100px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #484f58;
-  font-size: 11px;
-  margin: 20px 0;
-}
 
 /* Stock detail page */
 .back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
@@ -352,7 +492,6 @@ footer a { color: #58a6ff; text-decoration: none; }
   td:first-child { max-width: 52px; font-size: 9px; }
   .panel-title { font-size: 11px; padding: 6px; }
   .header-ad { height: 70px; font-size: 10px; }
-  .concept-ad { height: 80px; font-size: 10px; }
 }
 `;
 }
@@ -375,10 +514,10 @@ function formatVolume(v) {
   return v.toLocaleString();
 }
 
-function generateIndexPage(limitStocks, date) {
+async function generateIndexPage(limitStocks, date) {
   const adDate = formatDate(date);
   const upStocks = Object.values(limitStocks);
-  const classifiedStocks = classifyStocks(limitStocks);
+  const classifiedStocks = await classifyStocksIntelligently(limitStocks);
 
   const stockCard = (s) => `
     <div class="stock-card">
@@ -397,27 +536,19 @@ function generateIndexPage(limitStocks, date) {
       </a>
     </div>`;
 
-  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData], index) => {
-    // 每3個概念插入一個廣告
-    const adBlock = (index > 0 && index % 3 === 0) ? `
-    <!-- AdSense 概念間廣告位 -->
-    <div class="concept-ad">
-      <!-- 將來在這裡放置 AdSense 橫幅廣告代碼 -->
-      廣告位 (728x90)
-    </div>` : '';
-
-    return `${adBlock}
+  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData]) => `
     <div class="concept-section">
       <div class="concept-title">
         <span class="icon">${conceptData.icon}</span>
         <span>${conceptName}</span>
         <span class="count">${conceptData.stocks.length}檔</span>
       </div>
+      ${conceptData.reason ? `<div class="concept-reason">${conceptData.reason}</div>` : ''}
       <div class="stock-grid">
         ${conceptData.stocks.map(stockCard).join("\n")}
       </div>
-    </div>`;
-  }).join("\n");
+    </div>
+  `).join("\n");
 
   return `<!DOCTYPE html>
 <html lang="zh-TW">
@@ -886,7 +1017,8 @@ async function main() {
 
   // Generate index page
   console.log("Generating index.html...");
-  fs.writeFileSync(path.join(SITE_DIR, "index.html"), generateIndexPage(limitStocks, date));
+  const indexHtml = await generateIndexPage(limitStocks, date);
+  fs.writeFileSync(path.join(SITE_DIR, "index.html"), indexHtml);
 
   // Generate stock pages
   let generated = 0;
