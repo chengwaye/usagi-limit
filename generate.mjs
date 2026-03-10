@@ -285,7 +285,8 @@ function loadBrokerData(stockCode, date) {
       });
       const best = pastFiles[0];
       const bestDate = best.match(/_(\d{8})\.json$/)?.[1] || "";
-      if (dateInt - parseInt(bestDate) <= 1) {
+      // 允許最多 5 天差距（涵蓋週末+連假）
+      if (dateInt - parseInt(bestDate) <= 5) {
         return { data: JSON.parse(fs.readFileSync(path.join(CACHE_DIR, best), "utf-8")), dataDate: bestDate };
       }
     }
@@ -969,8 +970,8 @@ function generateBubbleChart(brokerData, stockInfo, brokerDataDate, pageDate) {
     </div>
     <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;flex-wrap:wrap;">
       <span style="color:#484f58;font-size:10px;">⬤ 大泡泡＝成交量大</span>
-      <span style="color:#484f58;font-size:10px;">── ${isOldData ? '上一交易日' : ''}收盤價 $${displayClose}</span>
       <span style="color:#484f58;font-size:10px;">┆ 買賣分界</span>
+      <span style="color:#f85149;font-size:10px;">Y軸紅字＝${isOldData ? '上一交易日' : ''}收盤價</span>
     </div>
   </div>`;
 }
@@ -1083,25 +1084,6 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     },
     afterDatasetsDraw(chart) {
       const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
-
-      // Close price label (right edge, above bubbles)
-      if (closePrice > 0) {
-        const yClose = y.getPixelForValue(closePrice);
-        if (yClose >= top && yClose <= bottom) {
-          ctx.save();
-          const label = '收盤 $' + closePrice;
-          ctx.font = '9px sans-serif';
-          const tw = ctx.measureText(label).width;
-          ctx.fillStyle = 'rgba(13,17,23,0.8)';
-          ctx.fillRect(right - tw - 6, yClose - 12, tw + 4, 13);
-          ctx.fillStyle = 'rgba(255,200,55,0.8)';
-          ctx.textAlign = 'right';
-          ctx.fillText(label, right - 3, yClose - 1);
-          ctx.restore();
-        }
-      }
-
-      // (buy/sell direction labels removed — red/green already obvious)
 
       // Top 5 broker labels with collision avoidance
       const placed = [];
@@ -1249,8 +1231,13 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
           title: { display: true, text: '成交均價', color: '#8b949e', font: { size: 11 } },
           grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
           ticks: {
-            color: '#8b949e',
-            font: { size: 10 },
+            color: function(context) {
+              return context.tick && context.tick.value === ${closePrice} ? '#f85149' : '#8b949e';
+            },
+            font: function(context) {
+              return context.tick && context.tick.value === ${closePrice}
+                ? { size: 11, weight: 'bold' } : { size: 10 };
+            },
             callback: function(value) { return value <= ${closePrice} ? value : ''; }
           },
           afterBuildTicks: function(axis) {
