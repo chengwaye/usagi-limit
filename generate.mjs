@@ -25,6 +25,38 @@ if (!fs.existsSync(SITE_DIR)) fs.mkdirSync(SITE_DIR, { recursive: true });
 const STOCK_DIR = path.join(SITE_DIR, "stock");
 if (!fs.existsSync(STOCK_DIR)) fs.mkdirSync(STOCK_DIR, { recursive: true });
 
+// Fetch institutional investors (三大法人) data
+async function fetchInstitutionalData(date) {
+  try {
+    const url = `https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=${date}&selectType=24`;
+    const resp = await axios.get(url);
+    const json = resp.data;
+
+    if (json.stat !== "OK" || !json.data) {
+      console.log(`No institutional data for ${date}`);
+      return {};
+    }
+
+    // Parse institutional data: 0=代號, 1=名稱, 4=外資買賣超, 10=投信買賣超, 11=自營商買賣超, 18=三大法人合計
+    const institutionalMap = {};
+    json.data.forEach(row => {
+      const code = row[0];
+      institutionalMap[code] = {
+        foreign: parseInt(row[4].replace(/,/g, '')) || 0,      // 外資買賣超
+        trust: parseInt(row[10].replace(/,/g, '')) || 0,       // 投信買賣超
+        dealer: parseInt(row[11].replace(/,/g, '')) || 0,      // 自營商買賣超
+        total: parseInt(row[18].replace(/,/g, '')) || 0        // 三大法人合計
+      };
+    });
+
+    console.log(`Fetched institutional data: ${Object.keys(institutionalMap).length} stocks`);
+    return institutionalMap;
+  } catch (e) {
+    console.log(`Failed to fetch institutional data: ${e.message}`);
+    return {};
+  }
+}
+
 // ============================================================
 // Step 1: Get today's market data for limit up/down detection
 // ============================================================
@@ -1066,7 +1098,7 @@ function generateBubbleChartScript(brokerData, stockInfo) {
 `;
 }
 
-function generateStockPage(stockInfo, brokerData, date) {
+function generateStockPage(stockInfo, brokerData, date, institutionalInfo) {
   const adDate = formatDate(date);
   const typeClass = stockInfo.type === "漲停" ? "up" : "down";
 
@@ -1085,6 +1117,48 @@ function generateStockPage(stockInfo, brokerData, date) {
 
   const buyerRows = (brokerData.top_buyers || []).map(b => brokerRow(b, true)).join("");
   const sellerRows = (brokerData.top_sellers || []).map(b => brokerRow(b, false)).join("");
+
+  // Generate institutional investors card
+  const generateInstitutionalCard = () => {
+    if (!institutionalInfo) {
+      return `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;text-align:center;color:#8b949e;font-size:12px;">
+        三大法人資料暫無
+      </div>`;
+    }
+
+    const formatInstitutional = (value) => {
+      const abs = Math.abs(value);
+      const sign = value >= 0 ? '+' : '-';
+      const color = value >= 0 ? '#f85149' : '#3fb950';
+      if (abs >= 10000) return `<span style="color:${color}">${sign}${(abs/10000).toFixed(1)}萬張</span>`;
+      return `<span style="color:${color}">${sign}${abs.toLocaleString()}張</span>`;
+    };
+
+    return `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;">
+      <h3 style="color:#e6edf3;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+        🏛️ 三大法人買賣超
+        <span style="font-size:11px;color:#8b949e;font-weight:normal;">(當日)</span>
+      </h3>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+        <div style="text-align:center;">
+          <div style="color:#8b949e;font-size:11px;margin-bottom:4px;">外資</div>
+          <div style="font-size:13px;font-weight:600;">${formatInstitutional(institutionalInfo.foreign)}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="color:#8b949e;font-size:11px;margin-bottom:4px;">投信</div>
+          <div style="font-size:13px;font-weight:600;">${formatInstitutional(institutionalInfo.trust)}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="color:#8b949e;font-size:11px;margin-bottom:4px;">自營商</div>
+          <div style="font-size:13px;font-weight:600;">${formatInstitutional(institutionalInfo.dealer)}</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="color:#8b949e;font-size:11px;margin-bottom:4px;">合計</div>
+          <div style="font-size:14px;font-weight:700;">${formatInstitutional(institutionalInfo.total)}</div>
+        </div>
+      </div>
+    </div>`;
+  };
 
   const tableHead = `<thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead>`;
 
@@ -1139,6 +1213,8 @@ function generateStockPage(stockInfo, brokerData, date) {
     <!-- 主要內容 -->
     <div class="content-wrapper">
       <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 ${brokerData.total_brokers} 家券商交易</p>
+
+      ${generateInstitutionalCard()}
 
       <div class="dual-panel">
         <div class="panel">
@@ -1197,6 +1273,9 @@ async function main() {
   console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
   console.log("");
 
+  // Fetch institutional data
+  const institutionalData = await fetchInstitutionalData(cacheDate);
+
   // Generate index page
   console.log("Generating index.html...");
   const indexHtml = await generateIndexPage(limitStocks, date);
@@ -1210,7 +1289,8 @@ async function main() {
       console.log(`  [SKIP] ${code} ${info.name} — no broker data cached`);
       continue;
     }
-    const html = generateStockPage(info, brokerData, date);
+    const institutionalInfo = institutionalData[code] || null;
+    const html = generateStockPage(info, brokerData, date, institutionalInfo);
     fs.writeFileSync(path.join(STOCK_DIR, `${code}.html`), html);
     generated++;
   }
