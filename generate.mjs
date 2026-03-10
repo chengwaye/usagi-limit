@@ -704,7 +704,7 @@ async function generateIndexPage(limitStocks, date) {
       <!-- 功能引導 -->
       <div class="cta-banner">
         <div class="title">💡 點擊任一股票查看詳細分析</div>
-        <div class="desc">內含券商分點買賣超排行、籌碼泡泡圖視覺化、主力動向追蹤</div>
+        <div class="desc">內含券商分點買賣超排行、籌碼泡泡圖視覺化</div>
       </div>
 
       <div class="section-title">🔴 漲停 (${upStocks.length})</div>
