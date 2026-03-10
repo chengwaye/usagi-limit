@@ -231,7 +231,7 @@ async function simulateClaudeAnalysis(stocks) {
     groups.push({
       name: '天然氣概念股大爆發',
       icon: '🔥',
-      reason: `AI: 天然氣價格走強，${gasStocks.length}檔欣字輩概念股集體漲停`,
+      reason: `天然氣價格走強，${gasStocks.length}檔欣字輩概念股集體漲停`,
       stocks: gasStocks
     });
   }
@@ -244,7 +244,7 @@ async function simulateClaudeAnalysis(stocks) {
     groups.push({
       name: '石化塑化族群同步走強',
       icon: '🛢️',
-      reason: `AI: 原油價格反彈，石化上游受惠，${petroStocks.length}檔同步漲停`,
+      reason: `原油價格反彈，石化上游受惠，${petroStocks.length}檔同步漲停`,
       stocks: petroStocks
     });
   }
@@ -263,57 +263,57 @@ async function simulateClaudeAnalysis(stocks) {
       case '5386': // 青雲
         conceptName = '雲端記憶體需求爆發';
         icon = '☁️';
-        reason = 'AI: 雲端運算與AI記憶體需求暴增，青雲記憶體模組受惠';
+        reason = '雲端運算與AI記憶體需求暴增，青雲記憶體模組受惠';
         break;
       case '4973': // 廣穎
         conceptName = '記憶體模組強勢';
         icon = '🧠';
-        reason = 'AI: AI伺服器記憶體需求強勁，記憶體模組廠商營運看漲';
+        reason = 'AI伺服器記憶體需求強勁，記憶體模組廠商營運看漲';
         break;
       case '2426': // 鼎元
         conceptName = '半導體設備利多';
         icon = '⚡';
-        reason = 'AI: 半導體產能擴充需求，設備廠商受惠AI晶片製造潮';
+        reason = '半導體產能擴充需求，設備廠商受惠AI晶片製造潮';
         break;
       case '3054': // 立萬利
         conceptName = 'PCB載板需求';
         icon = '📱';
-        reason = 'AI: AI晶片高階載板需求增加，PCB廠商技術升級受惠';
+        reason = 'AI晶片高階載板需求增加，PCB廠商技術升級受惠';
         break;
       case '1762': // 中化生
         conceptName = '生技化學雙重利多';
         icon = '🧪';
-        reason = 'AI: 既有石化概念又有生技醫療題材，雙重利多加持';
+        reason = '既有石化概念又有生技醫療題材，雙重利多加持';
         break;
       case '4911': // 德英
         conceptName = '生技新藥進展';
         icon = '💊';
-        reason = 'AI: 新藥研發進度或法規利多，生技股獨立表現';
+        reason = '新藥研發進度或法規利多，生技股獨立表現';
         break;
       case '6715': // 嘉基
         conceptName = '醫療設備升級';
         icon = '🏥';
-        reason = 'AI: 醫療數位化與AI導入，醫療設備廠商受惠';
+        reason = '醫療數位化與AI導入，醫療設備廠商受惠';
         break;
       case '2616': // 山隆
         conceptName = '鋼鐵原料回溫';
         icon = '🔩';
-        reason = 'AI: 基建需求復甦，鋼鐵原物料價格止跌回升';
+        reason = '基建需求復甦，鋼鐵原物料價格止跌回升';
         break;
       case '3709': // 鑫聯大投控
         conceptName = '金融投控布局';
         icon = '🏦';
-        reason = 'AI: 金融環境改善，投控公司資產重估與獲利回升';
+        reason = '金融環境改善，投控公司資產重估與獲利回升';
         break;
       case '6508': // 惠光
         conceptName = '光電元件需求';
         icon = '💡';
-        reason = 'AI: 光電通訊與顯示需求增加，相關元件廠商受惠';
+        reason = '光電通訊與顯示需求增加，相關元件廠商受惠';
         break;
       default:
         conceptName = `${stock.name}個股利多`;
         icon = '📈';
-        reason = 'AI: 個別基本面利多或技術面突破，股價強勢表現';
+        reason = '個別基本面利多或技術面突破，股價強勢表現';
     }
 
     groups.push({
@@ -574,7 +574,7 @@ async function generateIndexPage(limitStocks, date) {
         <span>個股表現亮點</span>
         <span class="count">${singleStockConcepts.length}檔</span>
       </div>
-      <div class="concept-reason">AI: 各股基本面或技術面利多，展現獨立行情</div>
+      <div class="concept-reason">各股基本面或技術面利多，展現獨立行情</div>
       <div class="singles-container">
         ${singleStockConcepts.map(([conceptName, conceptData]) => `
         <div class="concept-section" style="margin-bottom: 12px;">
@@ -640,6 +640,14 @@ async function generateIndexPage(limitStocks, date) {
     <div class="sidebar-ad">
       <!-- 將來在這裡放置 AdSense 垂直廣告代碼 -->
       廣告位<br>(160x600)
+    </div>
+  </div>
+
+  <!-- AI 分析聲明 -->
+  <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; margin: 20px 0; text-align: center;">
+    <div style="color: #58a6ff; font-size: 11px; margin-bottom: 4px;">🤖 AI 智能分析</div>
+    <div style="color: #8b949e; font-size: 10px; line-height: 1.4;">
+      漲停原因與族群分類由 AI 自動分析產生，僅供參考，請自行判斷投資風險
     </div>
   </div>
 
