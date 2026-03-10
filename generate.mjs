@@ -1316,7 +1316,6 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
       const abs = Math.abs(lots);
       const sign = lots >= 0 ? '+' : '-';
       const color = lots >= 0 ? '#f85149' : '#3fb950';
-      if (abs >= 10000) return `<span style="color:${color}">${sign}${(abs/10000).toFixed(1)}萬張</span>`;
       return `<span style="color:${color}">${sign}${abs.toLocaleString()}張</span>`;
     };
 
