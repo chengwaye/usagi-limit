@@ -466,19 +466,6 @@ header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
   position: sticky;
   top: 20px;
 }
-.header-ad {
-  width: 100%;
-  height: 90px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #484f58;
-  font-size: 12px;
-  margin: 16px 0;
-}
 
 /* Stock detail page */
 .back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
@@ -534,7 +521,6 @@ footer a { color: #58a6ff; text-decoration: none; }
   td { padding: 3px 2px; font-size: 9px; }
   td:first-child { max-width: 52px; font-size: 9px; }
   .panel-title { font-size: 11px; padding: 6px; }
-  .header-ad { height: 70px; font-size: 10px; }
   header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
   header .date-nav .date { font-size: 13px; }
   header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; }
@@ -667,11 +653,7 @@ async function generateIndexPage(limitStocks, date) {
     </div>
   </header>
 
-  <!-- AdSense 頂部橫幅廣告 -->
-  <div class="header-ad">
-    <!-- 將來在這裡放置 AdSense 橫幅廣告代碼 -->
-    廣告位 (728x90)
-  </div>
+  <!-- 首頁頂部廣告已移除，提升使用者體驗 -->
 
   <div class="ads-container">
     <!-- 左側廣告 (桌面版) -->
