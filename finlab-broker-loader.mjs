@@ -85,9 +85,9 @@ async function loadFinLabBrokerDataRange(startDate, endDate) {
 
         brokerData[dateKey][stockId].push({
           broker_name: broker,
-          buy_volume: buy,
-          sell_volume: sell,
-          net_volume: buy - sell
+          buy_volume: buy * 1000,  // FinLab 單位是張，轉換為股
+          sell_volume: sell * 1000,
+          net_volume: (buy - sell) * 1000
         });
       }
 
