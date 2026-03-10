@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>烏薩奇漲停版 — 2026/01/19 漲停分點追蹤</title>
+<meta name="description" content="2026/01/19 台股漲停股票券商分點買賣超排行，追蹤主力動向">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L3W7YJ6N37"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L3W7YJ6N37');
+</script>
+
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7922778370889908"
+     crossorigin="anonymous"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; }
+.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.container.wide { max-width: 1200px; }
+header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #30363d; margin-bottom: 16px; position: relative; }
+header h1 { font-size: 22px; margin-bottom: 2px; }
+header h1 span.rabbit { font-size: 26px; }
+header .subtitle { color: #8b949e; font-size: 13px; }
+
+/* Date navigation */
+.date-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.date-nav .date { font-size: 14px; color: #e6edf3; font-weight: 600; min-width: 100px; }
+.date-nav .nav-btn {
+  background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 4px 10px;
+  border-radius: 4px; cursor: pointer; font-size: 12px; transition: all 0.2s;
+}
+.date-nav .nav-btn:hover:not(:disabled) { background: #30363d; color: #e6edf3; }
+.date-nav .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+header .cta-hint {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #60a5fa;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  min-width: 180px;
+}
+header .cta-hint:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+header .date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+header .date-nav .nav-btn {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+header .date-nav .nav-btn:hover { background: #30363d; color: #e6edf3; }
+header .date-nav .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
+
+.section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
+
+.concept-section { margin-bottom: 20px; }
+.concept-title {
+  font-size: 14px;
+  margin: 12px 0 8px;
+  padding: 8px 12px;
+  background: #21262d;
+  border-radius: 6px;
+  border-left: 3px solid #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.concept-title .icon { font-size: 16px; }
+.concept-title .count {
+  color: #8b949e;
+  font-size: 12px;
+  margin-left: auto;
+}
+.concept-reason {
+  color: #8b949e;
+  font-size: 11px;
+  margin: 0 12px 8px 12px;
+  font-style: italic;
+}
+.stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
+.singles-container { display: flex; flex-wrap: wrap; gap: 0; }
+.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; transition: all 0.2s ease; }
+.stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; transition: all 0.2s ease; }
+.stock-card a:hover { background: #1c2129; }
+.stock-header { display: flex; justify-content: space-between; align-items: center; }
+.stock-name { font-size: 14px; font-weight: 600; }
+.stock-code { color: #8b949e; font-size: 12px; margin-left: 6px; }
+.stock-price { text-align: right; }
+.stock-close { font-size: 14px; font-weight: 600; }
+.stock-change { font-size: 11px; margin-top: 1px; }
+.up { color: #f85149; }
+.down { color: #3fb950; }
+.stock-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: #8b949e; }
+
+/* AdSense 廣告位 */
+.ads-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.content-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+.sidebar-ad {
+  width: 160px;
+  min-height: 600px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #484f58;
+  font-size: 11px;
+  text-align: center;
+  position: sticky;
+  top: 20px;
+}
+
+/* Stock detail page */
+.back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
+.back:hover { text-decoration: underline; }
+.info-bar { display: flex; justify-content: space-between; align-items: center; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+.info-left h2 { font-size: 22px; }
+.info-left .code { color: #8b949e; font-size: 14px; }
+.info-right { text-align: right; }
+.info-right .price { font-size: 24px; font-weight: 700; }
+.info-right .change-info { font-size: 14px; margin-top: 4px; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+.badge.up { background: rgba(248,81,73,0.2); }
+.badge.down { background: rgba(63,185,80,0.2); }
+
+/* Side-by-side tables */
+.dual-panel { display: flex; gap: 16px; }
+.panel { flex: 1; min-width: 0; }
+.panel-title { text-align: center; padding: 8px; font-size: 13px; font-weight: 600; border-bottom: 2px solid #30363d; margin-bottom: 8px; }
+.panel-title.buy { border-bottom-color: #f85149; color: #f85149; }
+.panel-title.sell { border-bottom-color: #3fb950; color: #3fb950; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: right; padding: 3px 4px; font-size: 10px; color: #8b949e; border-bottom: 1px solid #30363d; white-space: nowrap; }
+th:first-child { text-align: left; }
+td { padding: 4px 4px; font-size: 11px; border-bottom: 1px solid #21262d; text-align: right; font-variant-numeric: tabular-nums; }
+td:first-child { text-align: left; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65px; }
+tr:hover { background: #1c2129; }
+.net { font-weight: 600; }
+
+footer { text-align: center; padding: 32px 0 24px; color: #484f58; font-size: 12px; border-top: 1px solid #30363d; margin-top: 32px; }
+footer a { color: #58a6ff; text-decoration: none; }
+
+@media (max-width: 1000px) {
+  .ads-container { flex-direction: column; }
+  .sidebar-ad { display: none; }
+}
+@media (max-width: 1200px) {
+  .stock-grid { grid-template-columns: repeat(3, 1fr); }
+  .stock-grid.single { max-width: 240px; }
+}
+@media (max-width: 900px) {
+  .stock-grid { grid-template-columns: repeat(2, 1fr); }
+  .stock-grid.single { max-width: 100%; margin-right: 0; margin-bottom: 8px; }
+  .singles-container { flex-direction: column; }
+}
+@media (max-width: 700px) {
+  .container { padding: 4px; }
+  .stock-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; }
+  .info-bar { flex-direction: column; text-align: center; gap: 12px; }
+  .info-right { text-align: center; }
+  .dual-panel { gap: 4px; }
+  th { padding: 2px 2px; font-size: 9px; }
+  td { padding: 3px 2px; font-size: 9px; }
+  td:first-child { max-width: 52px; font-size: 9px; }
+  .panel-title { font-size: 11px; padding: 6px; }
+  header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
+  header .date-nav .date { font-size: 13px; }
+  header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; width: fit-content; font-size: 10px; padding: 6px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="cta-hint" onclick="scrollToStocks()">
+      💡 點股票看分點、主力泡泡圖
+    </div>
+    <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
+    <div class="subtitle">AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣</div>
+    <div class="date-nav">
+      <button class="nav-btn" onclick="navigateDate('20260119', -1)" >◀ 前一天</button>
+      <div class="date">2026/01/19</div>
+      <button class="nav-btn" onclick="navigateDate('20260119', 1)" >後一天 ▶</button>
+    </div>
+  </header>
+
+  <!-- 首頁頂部廣告已移除，提升使用者體驗 -->
+
+  <div class="ads-container">
+    <!-- 左側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- 將來在這裡放置 AdSense 垂直廣告代碼 -->
+      廣告位<br>(160x600)
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="content-wrapper">
+      <div class="section-title" id="stocks-section">🔴 漲停 (68)</div>
+      
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">💾</span>
+        <span>記憶體/DRAM</span>
+        <span class="count">5檔</span>
+      </div>
+      <div class="concept-reason">記憶體族群全面噴發，南亞科、旺宏、力晶積成領軍，DRAM/Flash報價回升預期帶動</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/2337.html">
+        <div class="stock-header">
+          <div><span class="stock-name">旺宏電子股份有限公司</span><span class="stock-code">2337</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$73.7</div>
+            <div class="stock-change up">+6.7 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 46,078張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2408.html">
+        <div class="stock-header">
+          <div><span class="stock-name">南亞科技股份有限公司</span><span class="stock-code">2408</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$275</div>
+            <div class="stock-change up">+25 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 13,084張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6770.html">
+        <div class="stock-header">
+          <div><span class="stock-name">力晶積成電子製造股份有限公司</span><span class="stock-code">6770</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$62</div>
+            <div class="stock-change up">+5.6 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 24,160張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/4973.html">
+        <div class="stock-header">
+          <div><span class="stock-name">廣穎電通股份有限公司</span><span class="stock-code">4973</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$58.3</div>
+            <div class="stock-change up">+5.3 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,356張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/5289.html">
+        <div class="stock-header">
+          <div><span class="stock-name">宜鼎國際股份有限公司</span><span class="stock-code">5289</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$750</div>
+            <div class="stock-change up">+68 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,763張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔌</span>
+        <span>PCB/載板</span>
+        <span class="count">4檔</span>
+      </div>
+      <div class="concept-reason">AI伺服器需求帶動高階載板與PCB訂單回溫，欣興、景碩、南電量能爆發</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/3037.html">
+        <div class="stock-header">
+          <div><span class="stock-name">欣興電子股份有限公司</span><span class="stock-code">3037</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$301</div>
+            <div class="stock-change up">+27 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 76,309張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/3189.html">
+        <div class="stock-header">
+          <div><span class="stock-name">景碩科技股份有限公司</span><span class="stock-code">3189</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$211.5</div>
+            <div class="stock-change up">+19 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 68,351張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8046.html">
+        <div class="stock-header">
+          <div><span class="stock-name">南亞電路板股份有限公司</span><span class="stock-code">8046</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$318</div>
+            <div class="stock-change up">+28.5 (9.84%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 54,304張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8088.html">
+        <div class="stock-header">
+          <div><span class="stock-name">品安科技股份有限公司</span><span class="stock-code">8088</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$73.1</div>
+            <div class="stock-change up">+6.6 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 11,742張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">📺</span>
+        <span>面板/顯示器</span>
+        <span class="count">5檔</span>
+      </div>
+      <div class="concept-reason">面板報價止跌回升，友達帶量攻漲停，相關供應鏈同步受惠</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/2409.html">
+        <div class="stock-header">
+          <div><span class="stock-name">友達光電股份有限公司</span><span class="stock-code">2409</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$17.25</div>
+            <div class="stock-change up">+1.55 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 470,528張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/3535.html">
+        <div class="stock-header">
+          <div><span class="stock-name">晶彩科技股份有限公司</span><span class="stock-code">3535</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$106.5</div>
+            <div class="stock-change up">+9.6 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 15,514張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8110.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華東科技股份有限公司</span><span class="stock-code">8110</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$88</div>
+            <div class="stock-change up">+8 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 52,924張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2489.html">
+        <div class="stock-header">
+          <div><span class="stock-name">瑞軒科技股份有限公司</span><span class="stock-code">2489</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$18</div>
+            <div class="stock-change up">+1.6 (9.76%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 17,201張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6124.html">
+        <div class="stock-header">
+          <div><span class="stock-name">業強科技股份有限公司</span><span class="stock-code">6124</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$29.7</div>
+            <div class="stock-change up">+2.7 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 193張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">⚡</span>
+        <span>半導體封測/IC</span>
+        <span class="count">7檔</span>
+      </div>
+      <div class="concept-reason">半導體景氣回升，封測與IC設計股受資金追捧</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/2329.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華泰電子股份有限公司</span><span class="stock-code">2329</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$68</div>
+            <div class="stock-change up">+6.1 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 36,379張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2369.html">
+        <div class="stock-header">
+          <div><span class="stock-name">菱生精密工業股份有限公司</span><span class="stock-code">2369</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$30.95</div>
+            <div class="stock-change up">+2.8 (9.95%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 34,066張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/5302.html">
+        <div class="stock-header">
+          <div><span class="stock-name">太欣半導體股份有限公司</span><span class="stock-code">5302</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$12.3</div>
+            <div class="stock-change up">+1.1 (9.82%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,382張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8024.html">
+        <div class="stock-header">
+          <div><span class="stock-name">佑華微電子股份有限公司</span><span class="stock-code">8024</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$13.85</div>
+            <div class="stock-change up">+1.25 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 193張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6415.html">
+        <div class="stock-header">
+          <div><span class="stock-name">矽力杰股份有限公司</span><span class="stock-code">6415</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$238.5</div>
+            <div class="stock-change up">+21.5 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 7,325張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8131.html">
+        <div class="stock-header">
+          <div><span class="stock-name">福懋科技股份有限公司</span><span class="stock-code">8131</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$76.4</div>
+            <div class="stock-change up">+6.9 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 16,085張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/4971.html">
+        <div class="stock-header">
+          <div><span class="stock-name">英特磊科技股份有限公司</span><span class="stock-code">4971</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$338.5</div>
+            <div class="stock-change up">+30.5 (9.90%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 9,207張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔬</span>
+        <span>半導體設備/探針</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="concept-reason">半導體設備與檢測需求增溫，探針卡與測試設備族群走強</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/6217.html">
+        <div class="stock-header">
+          <div><span class="stock-name">中國探針股份有限公司</span><span class="stock-code">6217</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$58</div>
+            <div class="stock-change up">+5.2 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 29,824張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6706.html">
+        <div class="stock-header">
+          <div><span class="stock-name">惠特科技股份有限公司</span><span class="stock-code">6706</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$133</div>
+            <div class="stock-change up">+12 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 11,019張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6735.html">
+        <div class="stock-header">
+          <div><span class="stock-name">美達科技股份有限公司</span><span class="stock-code">6735</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$64</div>
+            <div class="stock-change up">+5.8 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 785張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🧩</span>
+        <span>被動元件/電子零組件</span>
+        <span class="count">5檔</span>
+      </div>
+      <div class="concept-reason">被動元件庫存回補啟動，華新科領軍帶動族群齊揚</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/2492.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華新科技股份有限公司</span><span class="stock-code">2492</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$146.5</div>
+            <div class="stock-change up">+13 (9.74%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 41,123張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2484.html">
+        <div class="stock-header">
+          <div><span class="stock-name">希華晶體科技股份有限公司</span><span class="stock-code">2484</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$29.05</div>
+            <div class="stock-change up">+2.6 (9.83%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 5,448張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6155.html">
+        <div class="stock-header">
+          <div><span class="stock-name">鈞寶電子工業股份有限公司</span><span class="stock-code">6155</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$61.1</div>
+            <div class="stock-change up">+5.5 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 18,508張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/3308.html">
+        <div class="stock-header">
+          <div><span class="stock-name">聯德電子股份有限公司</span><span class="stock-code">3308</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$26.3</div>
+            <div class="stock-change up">+2.35 (9.81%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 655張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/5356.html">
+        <div class="stock-header">
+          <div><span class="stock-name">協益電子股份有限公司</span><span class="stock-code">5356</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$27.3</div>
+            <div class="stock-change up">+2.45 (9.86%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 587張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🌐</span>
+        <span>網通/伺服器</span>
+        <span class="count">5檔</span>
+      </div>
+      <div class="concept-reason">AI伺服器與網通設備需求持續成長，啟碁、精英、普安受惠</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/6285.html">
+        <div class="stock-header">
+          <div><span class="stock-name">啟碁科技股份有限公司</span><span class="stock-code">6285</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$118.5</div>
+            <div class="stock-change up">+10.5 (9.72%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 12,080張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2331.html">
+        <div class="stock-header">
+          <div><span class="stock-name">精英電腦股份有限公司</span><span class="stock-code">2331</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$29.95</div>
+            <div class="stock-change up">+2.7 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 31,222張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2495.html">
+        <div class="stock-header">
+          <div><span class="stock-name">普安科技股份有限公司</span><span class="stock-code">2495</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$33.75</div>
+            <div class="stock-change up">+3.05 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 18,625張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/5328.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華容股份有限公司</span><span class="stock-code">5328</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$31.2</div>
+            <div class="stock-change up">+2.8 (9.86%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 16,294張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/3540.html">
+        <div class="stock-header">
+          <div><span class="stock-name">曜越科技股份有限公司</span><span class="stock-code">3540</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$34.9</div>
+            <div class="stock-change up">+3.15 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,603張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🏭</span>
+        <span>工具機/機械</span>
+        <span class="count">7檔</span>
+      </div>
+      <div class="concept-reason">工具機產業訂單回溫，傳產機械股資金輪動補漲</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/1517.html">
+        <div class="stock-header">
+          <div><span class="stock-name">利奇機械工業股份有限公司</span><span class="stock-code">1517</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$13.45</div>
+            <div class="stock-change up">+1.2 (9.80%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,693張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/1539.html">
+        <div class="stock-header">
+          <div><span class="stock-name">巨庭機械股份有限公司</span><span class="stock-code">1539</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$21.55</div>
+            <div class="stock-change up">+1.95 (9.95%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,876張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/4513.html">
+        <div class="stock-header">
+          <div><span class="stock-name">福裕事業股份有限公司</span><span class="stock-code">4513</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$22.7</div>
+            <div class="stock-change up">+2.05 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,780張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/4561.html">
+        <div class="stock-header">
+          <div><span class="stock-name">健椿工業股份有限公司</span><span class="stock-code">4561</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$39.8</div>
+            <div class="stock-change up">+3.6 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,683張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/4540.html">
+        <div class="stock-header">
+          <div><span class="stock-name">全球傳動科技股份有限公司</span><span class="stock-code">4540</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$42.6</div>
+            <div class="stock-change up">+3.85 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 7,055張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/4534.html">
+        <div class="stock-header">
+          <div><span class="stock-name">慶騰精密科技股份有限公司</span><span class="stock-code">4534</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$19.7</div>
+            <div class="stock-change up">+1.75 (9.75%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,703張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/7642.html">
+        <div class="stock-header">
+          <div><span class="stock-name">昶瑞機電股份有限公司</span><span class="stock-code">7642</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$87.7</div>
+            <div class="stock-change up">+7.9 (9.90%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 144張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🚗</span>
+        <span>汽車零組件</span>
+        <span class="count">4檔</span>
+      </div>
+      <div class="concept-reason">汽車零組件族群受惠電動車與傳統車廠拉貨需求</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/1521.html">
+        <div class="stock-header">
+          <div><span class="stock-name">大億交通工業製造股份有限公司</span><span class="stock-code">1521</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$29.4</div>
+            <div class="stock-change up">+2.65 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 621張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/1526.html">
+        <div class="stock-header">
+          <div><span class="stock-name">日馳企業股份有限公司</span><span class="stock-code">1526</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$20.55</div>
+            <div class="stock-change up">+1.85 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,390張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/1528.html">
+        <div class="stock-header">
+          <div><span class="stock-name">恩德科技股份有限公司</span><span class="stock-code">1528</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$31.15</div>
+            <div class="stock-change up">+2.8 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 18,977張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/1541.html">
+        <div class="stock-header">
+          <div><span class="stock-name">錩泰工業股份有限公司</span><span class="stock-code">1541</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$28.05</div>
+            <div class="stock-change up">+2.55 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 607張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔩</span>
+        <span>螺絲/扣件</span>
+        <span class="count">5檔</span>
+      </div>
+      <div class="concept-reason">扣件族群跟隨傳產資金輪動走強</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/2063.html">
+        <div class="stock-header">
+          <div><span class="stock-name">世鎧精密股份有限公司</span><span class="stock-code">2063</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$29.45</div>
+            <div class="stock-change up">+2.65 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 262張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2065.html">
+        <div class="stock-header">
+          <div><span class="stock-name">世豐螺絲股份有限公司</span><span class="stock-code">2065</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$36.1</div>
+            <div class="stock-change up">+3.25 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 480張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2066.html">
+        <div class="stock-header">
+          <div><span class="stock-name">世德工業股份有限公司</span><span class="stock-code">2066</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$59.7</div>
+            <div class="stock-change up">+5.4 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 262張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/2115.html">
+        <div class="stock-header">
+          <div><span class="stock-name">六暉控股股份有限公司</span><span class="stock-code">2115</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$26.95</div>
+            <div class="stock-change up">+2.45 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,471張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/4528.html">
+        <div class="stock-header">
+          <div><span class="stock-name">江興鍛壓工業股份有限公司</span><span class="stock-code">4528</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$19.7</div>
+            <div class="stock-change up">+1.75 (9.75%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 302張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🏗️</span>
+        <span>玻璃/建材</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="concept-reason">台玻帶量攻漲停領軍，玻璃與建材族群資金湧入</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/1802.html">
+        <div class="stock-header">
+          <div><span class="stock-name">台灣玻璃工業股份有限公司</span><span class="stock-code">1802</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$45.95</div>
+            <div class="stock-change up">+4.15 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 150,633張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/1809.html">
+        <div class="stock-header">
+          <div><span class="stock-name">中國製釉股份有限公司</span><span class="stock-code">1809</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$25</div>
+            <div class="stock-change up">+2.25 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4,109張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/5340.html">
+        <div class="stock-header">
+          <div><span class="stock-name">建榮工業材料股份有限公司</span><span class="stock-code">5340</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$92.6</div>
+            <div class="stock-change up">+8.4 (9.98%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 21,531張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">☀️</span>
+        <span>綠能/能源</span>
+        <span class="count">2檔</span>
+      </div>
+      <div class="concept-reason">綠能政策題材發酵，能源股受資金關注</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/6806.html">
+        <div class="stock-header">
+          <div><span class="stock-name">森崴能源股份有限公司</span><span class="stock-code">6806</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$51.7</div>
+            <div class="stock-change up">+4.7 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,690張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6873.html">
+        <div class="stock-header">
+          <div><span class="stock-name">泓德能源科技股份有限公司</span><span class="stock-code">6873</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$124</div>
+            <div class="stock-change up">+11 (9.73%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,051張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">📡</span>
+        <span>其他電子</span>
+        <span class="count">8檔</span>
+      </div>
+      <div class="concept-reason">電子股全面性多頭，資金擴散至中小型電子股</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/3049.html">
+        <div class="stock-header">
+          <div><span class="stock-name">精金科技股份有限公司</span><span class="stock-code">3049</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$8.38</div>
+            <div class="stock-change up">+0.76 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 13,117張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/3135.html">
+        <div class="stock-header">
+          <div><span class="stock-name">凌航科技股份有限公司</span><span class="stock-code">3135</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$134</div>
+            <div class="stock-change up">+12 (9.84%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 614張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/3432.html">
+        <div class="stock-header">
+          <div><span class="stock-name">台端興業股份有限公司</span><span class="stock-code">3432</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$19.25</div>
+            <div class="stock-change up">+1.75 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 444張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/3567.html">
+        <div class="stock-header">
+          <div><span class="stock-name">逸昌科技股份有限公司</span><span class="stock-code">3567</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$32.15</div>
+            <div class="stock-change up">+2.9 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,323張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6275.html">
+        <div class="stock-header">
+          <div><span class="stock-name">元山科技工業股份有限公司</span><span class="stock-code">6275</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$60.8</div>
+            <div class="stock-change up">+5.5 (9.95%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 6,719張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6840.html">
+        <div class="stock-header">
+          <div><span class="stock-name">東研信超股份有限公司</span><span class="stock-code">6840</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$76.2</div>
+            <div class="stock-change up">+6.9 (9.96%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,022張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6862.html">
+        <div class="stock-header">
+          <div><span class="stock-name">三集瑞科技國際集團股份有限公司</span><span class="stock-code">6862</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$187</div>
+            <div class="stock-change up">+17 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,152張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8444.html">
+        <div class="stock-header">
+          <div><span class="stock-name">綠河股份有限公司</span><span class="stock-code">8444</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$11.15</div>
+            <div class="stock-change up">+1 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 158張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔄</span>
+        <span>傳產/其他</span>
+        <span class="count">6檔</span>
+      </div>
+      <div class="concept-reason">資金輪動擴散至低基期傳產股補漲</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/20260119/5475.html">
+        <div class="stock-header">
+          <div><span class="stock-name">德宏工業股份有限公司</span><span class="stock-code">5475</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$111.5</div>
+            <div class="stock-change up">+10 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 10,075張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/5543.html">
+        <div class="stock-header">
+          <div><span class="stock-name">桓鼎股份有限公司</span><span class="stock-code">5543</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$33.9</div>
+            <div class="stock-change up">+3.05 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 108張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/6671.html">
+        <div class="stock-header">
+          <div><span class="stock-name">三能集團控股股份有限公司</span><span class="stock-code">6671</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$40.4</div>
+            <div class="stock-change up">+3.65 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 36張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8933.html">
+        <div class="stock-header">
+          <div><span class="stock-name">愛地雅工業股份有限公司</span><span class="stock-code">8933</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$7.28</div>
+            <div class="stock-change up">+0.66 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,623張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/8942.html">
+        <div class="stock-header">
+          <div><span class="stock-name">森鉅科技材料股份有限公司</span><span class="stock-code">8942</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$40.95</div>
+            <div class="stock-change up">+3.7 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,547張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/20260119/1528.html">
+        <div class="stock-header">
+          <div><span class="stock-name">恩德科技股份有限公司</span><span class="stock-code">1528</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$31.15</div>
+            <div class="stock-change up">+2.8 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 18,977張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+    </div>
+
+    <!-- 右側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- 將來在這裡放置 AdSense 垂直廣告代碼 -->
+      廣告位<br>(160x600)
+    </div>
+  </div>
+
+  <!-- AI 分析聲明 -->
+  <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; margin: 20px 0; text-align: center;">
+    <div style="color: #58a6ff; font-size: 11px; margin-bottom: 4px;">🤖 AI 智能分析</div>
+    <div style="color: #8b949e; font-size: 10px; line-height: 1.4;">
+      漲停原因與族群分類由 AI 自動分析產生，僅供參考，不代表投資建議，請自行判斷投資風險
+    </div>
+  </div>
+
+  <footer>
+    <p>資料來源：台灣證券交易所公開資訊</p>
+    <p>烏薩奇漲停版 &copy; 2026 | 每個交易日 16:30 自動更新</p>
+  </footer>
+</div>
+
+<script>
+// 滾動到股票區
+function scrollToStocks() {
+  document.getElementById('stocks-section').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+
+// 日期導航功能
+function navigateDate(direction) {
+  const currentDateStr = '20260119'; // YYYYMMDD format
+  const currentDate = new Date(
+    parseInt(currentDateStr.substring(0, 4)),
+    parseInt(currentDateStr.substring(4, 6)) - 1,
+    parseInt(currentDateStr.substring(6, 8))
+  );
+
+  // 計算新日期
+  const newDate = new Date(currentDate);
+  newDate.setDate(newDate.getDate() + direction);
+
+  // 格式化為 YYYYMMDD
+  const year = newDate.getFullYear();
+  const month = String(newDate.getMonth() + 1).padStart(2, '0');
+  const day = String(newDate.getDate()).padStart(2, '0');
+  const newDateStr = year + month + day;
+
+  // 構造新的 URL (假設未來會有其他日期的頁面)
+  const newUrl = window.location.pathname.replace(/\/[^/]*$/, '') + '/' + newDateStr + '.html';
+
+  // 目前先顯示提示，未來有多日數據時可以直接跳轉
+  alert('🚧 歷史數據功能開發中\n將來會支援查看 ' + year + '/' + month + '/' + day + ' 的漲停數據');
+
+  // 未來啟用:
+  // window.location.href = newUrl;
+}
+
+// 股票卡片點擊提示動畫
+document.addEventListener('DOMContentLoaded', function() {
+  const stockCards = document.querySelectorAll('.stock-card a');
+  stockCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-1px)';
+      this.style.boxShadow = '0 4px 12px rgba(88, 166, 255, 0.15)';
+    });
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Date navigation
+  window.navigateDate = function(currentDate, direction) {
+    const availableDates = ["20260310","20260309","20260306","20260305","20260304","20260303","20260302","20260226","20260225","20260224","20260223","20260211","20260210","20260209","20260206","20260205","20260204","20260203","20260202","20260130","20260129","20260128","20260127","20260126","20260123","20260122","20260121","20260120","20260119","20260116","20260115","20260114","20260113","20260112","20260109","20260108","20260107","20260106","20260105"];
+    const currentIndex = availableDates.indexOf(currentDate);
+
+    let targetDate;
+    if (direction === -1 && currentIndex < availableDates.length - 1) {
+      // 前一天：往陣列後面（更舊的日期）
+      targetDate = availableDates[currentIndex + 1];
+    } else if (direction === 1 && currentIndex > 0) {
+      // 後一天：往陣列前面（更新的日期）
+      targetDate = availableDates[currentIndex - 1];
+    }
+
+    if (targetDate) {
+      if (targetDate === availableDates[0]) {
+        // Latest date -> index.html
+        window.location.href = 'index.html';
+      } else {
+        // Historical date -> index-YYYYMMDD.html
+        window.location.href = `index-${targetDate}.html`;
+      }
+    }
+  };
+});
+</script>
+</body>
+</html>
