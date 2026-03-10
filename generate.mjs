@@ -28,7 +28,7 @@ if (!fs.existsSync(STOCK_DIR)) fs.mkdirSync(STOCK_DIR, { recursive: true });
 // Fetch institutional investors (三大法人) data
 async function fetchInstitutionalData(date) {
   try {
-    const url = `https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=${date}&selectType=24`;
+    const url = `https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=${date}&selectType=ALL`;
     const resp = await axios.get(url);
     const json = resp.data;
 
@@ -38,14 +38,16 @@ async function fetchInstitutionalData(date) {
     }
 
     // Parse institutional data: 0=代號, 1=名稱, 4=外資買賣超, 10=投信買賣超, 11=自營商買賣超, 18=三大法人合計
+    const parse = (val) => parseInt(String(val || '0').replace(/,/g, '')) || 0;
     const institutionalMap = {};
     json.data.forEach(row => {
-      const code = row[0];
+      if (!row || row.length < 19) return; // skip incomplete rows
+      const code = String(row[0]).trim();
       institutionalMap[code] = {
-        foreign: parseInt(row[4].replace(/,/g, '')) || 0,      // 外資買賣超
-        trust: parseInt(row[10].replace(/,/g, '')) || 0,       // 投信買賣超
-        dealer: parseInt(row[11].replace(/,/g, '')) || 0,      // 自營商買賣超
-        total: parseInt(row[18].replace(/,/g, '')) || 0        // 三大法人合計
+        foreign: parse(row[4]),      // 外資買賣超
+        trust: parse(row[10]),       // 投信買賣超
+        dealer: parse(row[11]),      // 自營商買賣超
+        total: parse(row[18])        // 三大法人合計
       };
     });
 
@@ -1126,10 +1128,11 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo) {
       </div>`;
     }
 
-    const formatInstitutional = (value) => {
-      const abs = Math.abs(value);
-      const sign = value >= 0 ? '+' : '-';
-      const color = value >= 0 ? '#f85149' : '#3fb950';
+    const formatInstitutional = (sharesValue) => {
+      const lots = Math.round(sharesValue / 1000); // 股→張
+      const abs = Math.abs(lots);
+      const sign = lots >= 0 ? '+' : '-';
+      const color = lots >= 0 ? '#f85149' : '#3fb950';
       if (abs >= 10000) return `<span style="color:${color}">${sign}${(abs/10000).toFixed(1)}萬張</span>`;
       return `<span style="color:${color}">${sign}${abs.toLocaleString()}張</span>`;
     };
