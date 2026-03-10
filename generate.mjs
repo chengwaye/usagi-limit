@@ -523,7 +523,7 @@ footer a { color: #58a6ff; text-decoration: none; }
   .panel-title { font-size: 11px; padding: 6px; }
   header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
   header .date-nav .date { font-size: 13px; }
-  header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; }
+  header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; width: fit-content; font-size: 10px; padding: 6px 10px; }
 }
 `;
 }
