@@ -1524,7 +1524,12 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   // Generate stock pages
   let generated = 0;
   for (const [code, info] of Object.entries(limitStocks)) {
-    const brokerResult = loadBrokerData(code, cacheDate);
+    let brokerResult = loadBrokerData(code, cacheDate);
+    // 最新那天：如果沒有當天的精確匹配，不 fallback（統一顯示「準備中」）
+    if (isLatest && brokerResult && brokerResult.dataDate !== cacheDate) {
+      console.log(`    [INFO] ${code} ${info.name} — today's broker data not ready, skipping old data`);
+      brokerResult = null;
+    }
     const brokerData = brokerResult ? brokerResult.data : null;
     const brokerDataDate = brokerResult ? brokerResult.dataDate : null;
     if (!brokerData) {
