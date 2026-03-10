@@ -653,7 +653,7 @@ async function generateIndexPage(limitStocks, date) {
       🚀 AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣
     </div>
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
-    <div class="subtitle">漲停分點追蹤 — 看誰在買、誰在賣</div>
+    <div class="subtitle">AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣</div>
     <div class="date-nav">
       <button class="nav-btn" onclick="navigateDate(-1)" disabled>◀</button>
       <div class="date">${adDate}</div>
