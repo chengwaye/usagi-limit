@@ -18,6 +18,24 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
 
 .section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
 
+.concept-section { margin-bottom: 20px; }
+.concept-title {
+  font-size: 14px;
+  margin: 12px 0 8px;
+  padding: 8px 12px;
+  background: #21262d;
+  border-radius: 6px;
+  border-left: 3px solid #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.concept-title .icon { font-size: 16px; }
+.concept-title .count {
+  color: #8b949e;
+  font-size: 12px;
+  margin-left: auto;
+}
 .stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; }
@@ -88,7 +106,58 @@ footer a { color: #58a6ff; text-decoration: none; }
   </header>
 
   <div class="section-title">🔴 漲停 (18)</div>
-  <div class="stock-grid">
+  
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🤖</span>
+        <span>AI/半導體</span>
+        <span class="count">2檔</span>
+      </div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/2426.html">
+        <div class="stock-header">
+          <div><span class="stock-name">鼎元</span><span class="stock-code">2426</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$25.05</div>
+            <div class="stock-change up">+2.25 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4026萬</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/4973.html">
+        <div class="stock-header">
+          <div><span class="stock-name">廣穎</span><span class="stock-code">4973</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$46.05</div>
+            <div class="stock-change up">+4.15 (9.90%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 669萬</span>
+          <span class="badge up">漲停(櫃)</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🛢️</span>
+        <span>石化/塑化</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="stock-grid">
+        
     <div class="stock-card">
       <a href="stock/1309.html">
         <div class="stock-header">
@@ -122,134 +191,6 @@ footer a { color: #58a6ff; text-decoration: none; }
     </div>
 
     <div class="stock-card">
-      <a href="stock/1762.html">
-        <div class="stock-header">
-          <div><span class="stock-name">中化生</span><span class="stock-code">1762</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$29.55</div>
-            <div class="stock-change up">+2.65 (9.85%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 199萬</span>
-          <span class="badge up">漲停</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
-      <a href="stock/2426.html">
-        <div class="stock-header">
-          <div><span class="stock-name">鼎元</span><span class="stock-code">2426</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$25.05</div>
-            <div class="stock-change up">+2.25 (9.87%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 4026萬</span>
-          <span class="badge up">漲停</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
-      <a href="stock/2616.html">
-        <div class="stock-header">
-          <div><span class="stock-name">山隆</span><span class="stock-code">2616</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$23.9</div>
-            <div class="stock-change up">+2.15 (9.89%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 644萬</span>
-          <span class="badge up">漲停</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
-      <a href="stock/3054.html">
-        <div class="stock-header">
-          <div><span class="stock-name">立萬利</span><span class="stock-code">3054</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$49.5</div>
-            <div class="stock-change up">+4.5 (10.00%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 85萬</span>
-          <span class="badge up">漲停</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
-      <a href="stock/3709.html">
-        <div class="stock-header">
-          <div><span class="stock-name">鑫聯大投控</span><span class="stock-code">3709</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$77.5</div>
-            <div class="stock-change up">+7 (9.93%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 800萬</span>
-          <span class="badge up">漲停(櫃)</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
-      <a href="stock/4911.html">
-        <div class="stock-header">
-          <div><span class="stock-name">德英</span><span class="stock-code">4911</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$37.7</div>
-            <div class="stock-change up">+3.4 (9.91%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 25萬</span>
-          <span class="badge up">漲停(櫃)</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
-      <a href="stock/4973.html">
-        <div class="stock-header">
-          <div><span class="stock-name">廣穎</span><span class="stock-code">4973</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$46.05</div>
-            <div class="stock-change up">+4.15 (9.90%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 669萬</span>
-          <span class="badge up">漲停(櫃)</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
-      <a href="stock/5386.html">
-        <div class="stock-header">
-          <div><span class="stock-name">青雲</span><span class="stock-code">5386</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$286</div>
-            <div class="stock-change up">+26 (10.00%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 189萬</span>
-          <span class="badge up">漲停(櫃)</span>
-        </div>
-      </a>
-    </div>
-
-    <div class="stock-card">
       <a href="stock/6505.html">
         <div class="stock-header">
           <div><span class="stock-name">台塑化</span><span class="stock-code">6505</span></div>
@@ -264,39 +205,18 @@ footer a { color: #58a6ff; text-decoration: none; }
         </div>
       </a>
     </div>
-
-    <div class="stock-card">
-      <a href="stock/6508.html">
-        <div class="stock-header">
-          <div><span class="stock-name">惠光</span><span class="stock-code">6508</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$28.9</div>
-            <div class="stock-change up">+2.6 (9.89%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 143萬</span>
-          <span class="badge up">漲停(櫃)</span>
-        </div>
-      </a>
+      </div>
     </div>
+  
 
-    <div class="stock-card">
-      <a href="stock/6715.html">
-        <div class="stock-header">
-          <div><span class="stock-name">嘉基</span><span class="stock-code">6715</span></div>
-          <div class="stock-price">
-            <div class="stock-close up">$233.5</div>
-            <div class="stock-change up">+21 (9.88%)</div>
-          </div>
-        </div>
-        <div class="stock-meta">
-          <span>成交量 624萬</span>
-          <span class="badge up">漲停</span>
-        </div>
-      </a>
-    </div>
-
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔥</span>
+        <span>天然氣/能源</span>
+        <span class="count">5檔</span>
+      </div>
+      <div class="stock-grid">
+        
     <div class="stock-card">
       <a href="stock/8908.html">
         <div class="stock-header">
@@ -376,7 +296,203 @@ footer a { color: #58a6ff; text-decoration: none; }
         </div>
       </a>
     </div>
-  </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">💊</span>
+        <span>生技醫療</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/1762.html">
+        <div class="stock-header">
+          <div><span class="stock-name">中化生</span><span class="stock-code">1762</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$29.55</div>
+            <div class="stock-change up">+2.65 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 199萬</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/4911.html">
+        <div class="stock-header">
+          <div><span class="stock-name">德英</span><span class="stock-code">4911</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$37.7</div>
+            <div class="stock-change up">+3.4 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 25萬</span>
+          <span class="badge up">漲停(櫃)</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <a href="stock/6715.html">
+        <div class="stock-header">
+          <div><span class="stock-name">嘉基</span><span class="stock-code">6715</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$233.5</div>
+            <div class="stock-change up">+21 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 624萬</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🏦</span>
+        <span>金融/金控</span>
+        <span class="count">1檔</span>
+      </div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/3709.html">
+        <div class="stock-header">
+          <div><span class="stock-name">鑫聯大投控</span><span class="stock-code">3709</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$77.5</div>
+            <div class="stock-change up">+7 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 800萬</span>
+          <span class="badge up">漲停(櫃)</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔩</span>
+        <span>鋼鐵/原物料</span>
+        <span class="count">1檔</span>
+      </div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/2616.html">
+        <div class="stock-header">
+          <div><span class="stock-name">山隆</span><span class="stock-code">2616</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$23.9</div>
+            <div class="stock-change up">+2.15 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 644萬</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">📺</span>
+        <span>光電/面板</span>
+        <span class="count">1檔</span>
+      </div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/6508.html">
+        <div class="stock-header">
+          <div><span class="stock-name">惠光</span><span class="stock-code">6508</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$28.9</div>
+            <div class="stock-change up">+2.6 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 143萬</span>
+          <span class="badge up">漲停(櫃)</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">💻</span>
+        <span>軟體/雲端</span>
+        <span class="count">1檔</span>
+      </div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/5386.html">
+        <div class="stock-header">
+          <div><span class="stock-name">青雲</span><span class="stock-code">5386</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$286</div>
+            <div class="stock-change up">+26 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 189萬</span>
+          <span class="badge up">漲停(櫃)</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">⚡</span>
+        <span>電子零組件</span>
+        <span class="count">1檔</span>
+      </div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <a href="stock/3054.html">
+        <div class="stock-header">
+          <div><span class="stock-name">立萬利</span><span class="stock-code">3054</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$49.5</div>
+            <div class="stock-change up">+4.5 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 85萬</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>

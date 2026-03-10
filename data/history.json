@@ -1,0 +1,1113 @@
+{
+  "last_updated": "20260310",
+  "days": {
+    "20260309": {
+      "stocks": {
+        "3709": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "name": "凱基彰化",
+                "net": 489000
+              },
+              {
+                "name": "富邦台東",
+                "net": 324000
+              },
+              {
+                "name": "富邦南屯",
+                "net": 323950
+              },
+              {
+                "name": "國票",
+                "net": 151973
+              },
+              {
+                "name": "凱基",
+                "net": 144000
+              }
+            ],
+            "sell": [
+              {
+                "name": "凱基信義",
+                "net": -242000
+              },
+              {
+                "name": "台新高雄",
+                "net": -138000
+              },
+              {
+                "name": "星洲瑞銀",
+                "net": -123000
+              },
+              {
+                "name": "元大四維",
+                "net": -121000
+              },
+              {
+                "name": "台新中壢",
+                "net": -97000
+              }
+            ]
+          }
+        },
+        "4911": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "name": "華南永昌",
+                "net": 18000
+              },
+              {
+                "name": "玉山左營",
+                "net": 15000
+              },
+              {
+                "name": "永豐金桃園",
+                "net": 12000
+              },
+              {
+                "name": "凱基台北",
+                "net": 11000
+              },
+              {
+                "name": "凱基北門",
+                "net": 11000
+              }
+            ],
+            "sell": [
+              {
+                "name": "富邦建國",
+                "net": -64000
+              },
+              {
+                "name": "元大台南",
+                "net": -17000
+              },
+              {
+                "name": "新光台中",
+                "net": -14000
+              },
+              {
+                "name": "新光",
+                "net": -7000
+              },
+              {
+                "name": "永昌小港",
+                "net": -6707
+              }
+            ]
+          }
+        },
+        "4973": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "name": "港商野村",
+                "net": 390000
+              },
+              {
+                "name": "奔亞鑫豐",
+                "net": 310300
+              },
+              {
+                "name": "美林證券",
+                "net": 225000
+              },
+              {
+                "name": "摩根士丹利",
+                "net": 206000
+              },
+              {
+                "name": "康和嘉義",
+                "net": 194000
+              }
+            ],
+            "sell": [
+              {
+                "name": "群益嘉義",
+                "net": -270000
+              },
+              {
+                "name": "凱基台北",
+                "net": -209987
+              },
+              {
+                "name": "群益館前",
+                "net": -206000
+              },
+              {
+                "name": "陽信石牌",
+                "net": -140000
+              },
+              {
+                "name": "新光",
+                "net": -96189
+              }
+            ]
+          }
+        },
+        "5386": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "name": "凱基彰化",
+                "net": 100500
+              },
+              {
+                "name": "統一",
+                "net": 68170
+              },
+              {
+                "name": "永豐金",
+                "net": 45445
+              },
+              {
+                "name": "國泰敦南",
+                "net": 42597
+              },
+              {
+                "name": "凱基竹科",
+                "net": 42500
+              }
+            ],
+            "sell": [
+              {
+                "name": "摩根士丹利",
+                "net": -235000
+              },
+              {
+                "name": "美商高盛亞",
+                "net": -166000
+              },
+              {
+                "name": "凱基台北",
+                "net": -90000
+              },
+              {
+                "name": "華南永昌",
+                "net": -48747
+              },
+              {
+                "name": "凱基市政",
+                "net": -41915
+              }
+            ]
+          }
+        },
+        "6508": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "name": "富邦東門",
+                "net": 182000
+              },
+              {
+                "name": "凱基站前",
+                "net": 66000
+              },
+              {
+                "name": "元大彰化",
+                "net": 48000
+              },
+              {
+                "name": "永昌頭份",
+                "net": 30000
+              },
+              {
+                "name": "群益內湖",
+                "net": 30000
+              }
+            ],
+            "sell": [
+              {
+                "name": "元大新盛",
+                "net": -40970
+              },
+              {
+                "name": "土銀玉里",
+                "net": -32000
+              },
+              {
+                "name": "元大四維",
+                "net": -24000
+              },
+              {
+                "name": "元大東泰",
+                "net": -21000
+              },
+              {
+                "name": "國泰板橋",
+                "net": -20039
+              }
+            ]
+          }
+        },
+        "8908": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "name": "聯邦銀大業",
+                "net": 119000
+              },
+              {
+                "name": "星洲瑞銀",
+                "net": 103000
+              },
+              {
+                "name": "兆豐南京",
+                "net": 100000
+              },
+              {
+                "name": "摩根大通",
+                "net": 63000
+              },
+              {
+                "name": "富邦屏東",
+                "net": 50000
+              }
+            ],
+            "sell": [
+              {
+                "name": "永豐金鳳山",
+                "net": -110060
+              },
+              {
+                "name": "永昌南京",
+                "net": -55000
+              },
+              {
+                "name": "元大台南",
+                "net": -52000
+              },
+              {
+                "name": "元大屏東民",
+                "net": -45100
+              },
+              {
+                "name": "臺銀新竹",
+                "net": -32000
+              }
+            ]
+          }
+        },
+        "8917": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "name": "凱基永康",
+                "net": 30000
+              },
+              {
+                "name": "凱基三峽",
+                "net": 23000
+              },
+              {
+                "name": "中國信託證",
+                "net": 12000
+              },
+              {
+                "name": "台新",
+                "net": 11000
+              },
+              {
+                "name": "富邦彰化",
+                "net": 11000
+              }
+            ],
+            "sell": [
+              {
+                "name": "元大雙和",
+                "net": -48130
+              },
+              {
+                "name": "永豐金板盛",
+                "net": -40000
+              },
+              {
+                "name": "凱基桃園",
+                "net": -32000
+              },
+              {
+                "name": "統一桃園",
+                "net": -31000
+              },
+              {
+                "name": "華南永昌",
+                "net": -18042
+              }
+            ]
+          }
+        }
+      }
+    },
+    "20260310": {
+      "stocks": {
+        "1309": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "9202",
+                "name": "凱基中港",
+                "net": 1154000
+              },
+              {
+                "id": "7790",
+                "name": "國票綜合",
+                "net": 455505
+              },
+              {
+                "id": "8881",
+                "name": "國泰高雄",
+                "net": 225465
+              },
+              {
+                "id": "8564",
+                "name": "新光台南",
+                "net": 183199
+              },
+              {
+                "id": "9692",
+                "name": "富邦嘉義",
+                "net": 132200
+              }
+            ],
+            "sell": [
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": -628993
+              },
+              {
+                "id": "1440",
+                "name": "美林",
+                "net": -307000
+              },
+              {
+                "id": "9837",
+                "name": "元大北港",
+                "net": -213000
+              },
+              {
+                "id": "1480",
+                "name": "美商高盛",
+                "net": -167000
+              },
+              {
+                "id": "1470",
+                "name": "台灣摩根",
+                "net": -166000
+              }
+            ]
+          }
+        },
+        "1314": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "9227",
+                "name": "凱基城中",
+                "net": 5119936
+              },
+              {
+                "id": "8888",
+                "name": "國泰敦南",
+                "net": 2114031
+              },
+              {
+                "id": "5850",
+                "name": "統一",
+                "net": 1969350
+              },
+              {
+                "id": "9800",
+                "name": "元大",
+                "net": 1939557
+              },
+              {
+                "id": "1028",
+                "name": "合庫彰化",
+                "net": 521000
+              }
+            ],
+            "sell": [
+              {
+                "id": "9677",
+                "name": "富邦三重",
+                "net": -1629000
+              },
+              {
+                "id": "8150",
+                "name": "台新",
+                "net": -1430042
+              },
+              {
+                "id": "9833",
+                "name": "元大敦化",
+                "net": -1282300
+              },
+              {
+                "id": "1650",
+                "name": "瑞銀",
+                "net": -1235000
+              },
+              {
+                "id": "7790",
+                "name": "國票綜合",
+                "net": -1215267
+              }
+            ]
+          }
+        },
+        "1762": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "8847",
+                "name": "玉山台南",
+                "net": 88966
+              },
+              {
+                "id": "9188",
+                "name": "群益三民",
+                "net": 46000
+              },
+              {
+                "id": "9625",
+                "name": "富邦竹東",
+                "net": 45000
+              },
+              {
+                "id": "9665",
+                "name": "富邦桃園",
+                "net": 37001
+              },
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": 29025
+              }
+            ],
+            "sell": [
+              {
+                "id": "8450",
+                "name": "康和",
+                "net": -35000
+              },
+              {
+                "id": "9817",
+                "name": "元大東泰",
+                "net": -23000
+              },
+              {
+                "id": "8150",
+                "name": "台新",
+                "net": -19998
+              },
+              {
+                "id": "8882",
+                "name": "國泰台中",
+                "net": -17191
+              },
+              {
+                "id": "1480",
+                "name": "美商高盛",
+                "net": -17000
+              }
+            ]
+          }
+        },
+        "2426": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "9624",
+                "name": "富邦竹北",
+                "net": 595175
+              },
+              {
+                "id": "9600",
+                "name": "富邦",
+                "net": 390011
+              },
+              {
+                "id": "9309",
+                "name": "華南古亭",
+                "net": 180188
+              },
+              {
+                "id": "9237",
+                "name": "凱基敦北",
+                "net": 179000
+              },
+              {
+                "id": "9666",
+                "name": "富邦南屯",
+                "net": 172002
+              }
+            ],
+            "sell": [
+              {
+                "id": "8440",
+                "name": "摩根大通",
+                "net": -641000
+              },
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": -357601
+              },
+              {
+                "id": "9800",
+                "name": "元大",
+                "net": -240581
+              },
+              {
+                "id": "9100",
+                "name": "群益",
+                "net": -236684
+              },
+              {
+                "id": "1650",
+                "name": "瑞銀",
+                "net": -169000
+              }
+            ]
+          }
+        },
+        "2616": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "9800",
+                "name": "元大",
+                "net": 227861
+              },
+              {
+                "id": "1020",
+                "name": "合庫",
+                "net": 200900
+              },
+              {
+                "id": "8560",
+                "name": "新光",
+                "net": 174921
+              },
+              {
+                "id": "8888",
+                "name": "國泰敦南",
+                "net": 149827
+              },
+              {
+                "id": "9812",
+                "name": "元大台中",
+                "net": 125700
+              }
+            ],
+            "sell": [
+              {
+                "id": "9833",
+                "name": "元大敦化",
+                "net": -1836200
+              },
+              {
+                "id": "5389",
+                "name": "第一中山",
+                "net": -398000
+              },
+              {
+                "id": "6464",
+                "name": "大昌新店",
+                "net": -98000
+              },
+              {
+                "id": "9661",
+                "name": "富邦新店",
+                "net": -24358
+              },
+              {
+                "id": "9692",
+                "name": "富邦嘉義",
+                "net": -24212
+              }
+            ]
+          }
+        },
+        "3054": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": 22000
+              },
+              {
+                "id": "9300",
+                "name": "華南永昌",
+                "net": 20000
+              },
+              {
+                "id": "5854",
+                "name": "統一城中",
+                "net": 16000
+              },
+              {
+                "id": "8560",
+                "name": "新光",
+                "net": 13000
+              },
+              {
+                "id": "9800",
+                "name": "元大",
+                "net": 12335
+              }
+            ],
+            "sell": [
+              {
+                "id": "9305",
+                "name": "華南新莊",
+                "net": -53000
+              },
+              {
+                "id": "9205",
+                "name": "凱基三重",
+                "net": -37006
+              },
+              {
+                "id": "9891",
+                "name": "元大永和",
+                "net": -26007
+              },
+              {
+                "id": "8882",
+                "name": "國泰台中",
+                "net": -18000
+              },
+              {
+                "id": "9659",
+                "name": "富邦高雄",
+                "net": -17001
+              }
+            ]
+          }
+        },
+        "6505": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "8150",
+                "name": "台新",
+                "net": 1393900
+              },
+              {
+                "id": "9801",
+                "name": "元大松江",
+                "net": 1198802
+              },
+              {
+                "id": "8888",
+                "name": "國泰敦南",
+                "net": 1054975
+              },
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": 815104
+              },
+              {
+                "id": "9800",
+                "name": "元大",
+                "net": 810512
+              }
+            ],
+            "sell": [
+              {
+                "id": "9600",
+                "name": "富邦",
+                "net": -2642564
+              },
+              {
+                "id": "1650",
+                "name": "瑞銀",
+                "net": -1964860
+              },
+              {
+                "id": "8440",
+                "name": "摩根大通",
+                "net": -1495000
+              },
+              {
+                "id": "1480",
+                "name": "美商高盛",
+                "net": -1207000
+              },
+              {
+                "id": "5850",
+                "name": "統一",
+                "net": -843369
+              }
+            ]
+          }
+        },
+        "6715": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "1480",
+                "name": "美商高盛",
+                "net": 298000
+              },
+              {
+                "id": "8150",
+                "name": "台新",
+                "net": 221212
+              },
+              {
+                "id": "8880",
+                "name": "國泰綜合",
+                "net": 208000
+              },
+              {
+                "id": "9800",
+                "name": "元大",
+                "net": 146657
+              },
+              {
+                "id": "6160",
+                "name": "中國信託",
+                "net": 127835
+              }
+            ],
+            "sell": [
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": -177692
+              },
+              {
+                "id": "9300",
+                "name": "華南永昌",
+                "net": -119083
+              },
+              {
+                "id": "1650",
+                "name": "瑞銀",
+                "net": -117000
+              },
+              {
+                "id": "9207",
+                "name": "凱基永和",
+                "net": -100000
+              },
+              {
+                "id": "9307",
+                "name": "華南大安",
+                "net": -80750
+              }
+            ]
+          }
+        },
+        "9918": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": 45500
+              },
+              {
+                "id": "9100",
+                "name": "群益",
+                "net": 26000
+              },
+              {
+                "id": "8561",
+                "name": "新光台中",
+                "net": 24000
+              },
+              {
+                "id": "8150",
+                "name": "台新",
+                "net": 22000
+              },
+              {
+                "id": "8888",
+                "name": "國泰敦南",
+                "net": 15590
+              }
+            ],
+            "sell": [
+              {
+                "id": "9888",
+                "name": "元大鑫永",
+                "net": -226000
+              },
+              {
+                "id": "7790",
+                "name": "國票綜合",
+                "net": -86000
+              },
+              {
+                "id": "9801",
+                "name": "元大松江",
+                "net": -60000
+              },
+              {
+                "id": "9207",
+                "name": "凱基永和",
+                "net": -15000
+              },
+              {
+                "id": "9891",
+                "name": "元大永和",
+                "net": -12000
+              }
+            ]
+          }
+        },
+        "9926": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": 75000
+              },
+              {
+                "id": "5602",
+                "name": "永興水湳",
+                "net": 41000
+              },
+              {
+                "id": "7791",
+                "name": "國票台東",
+                "net": 40000
+              },
+              {
+                "id": "1650",
+                "name": "瑞銀",
+                "net": 26000
+              },
+              {
+                "id": "9100",
+                "name": "群益",
+                "net": 25538
+              }
+            ],
+            "sell": [
+              {
+                "id": "9858",
+                "name": "元大龍潭",
+                "net": -127851
+              },
+              {
+                "id": "9254",
+                "name": "凱基科園",
+                "net": -111000
+              },
+              {
+                "id": "9205",
+                "name": "凱基三重",
+                "net": -41070
+              },
+              {
+                "id": "8563",
+                "name": "新光新竹",
+                "net": -31000
+              },
+              {
+                "id": "9274",
+                "name": "凱基鳳山",
+                "net": -25000
+              }
+            ]
+          }
+        },
+        "9931": {
+          "name": null,
+          "close": null,
+          "change": null,
+          "changePct": null,
+          "volume": null,
+          "market": null,
+          "backfilled": true,
+          "brokers": {
+            "buy": [
+              {
+                "id": "8560",
+                "name": "新光",
+                "net": 34960
+              },
+              {
+                "id": "9677",
+                "name": "富邦三重",
+                "net": 33000
+              },
+              {
+                "id": "8888",
+                "name": "國泰敦南",
+                "net": 30000
+              },
+              {
+                "id": "9300",
+                "name": "華南永昌",
+                "net": 21000
+              },
+              {
+                "id": "8152",
+                "name": "台新新莊",
+                "net": 20000
+              }
+            ],
+            "sell": [
+              {
+                "id": "9817",
+                "name": "元大東泰",
+                "net": -630000
+              },
+              {
+                "id": "9898",
+                "name": "元大新莊",
+                "net": -100300
+              },
+              {
+                "id": "9268",
+                "name": "凱基台北",
+                "net": -77000
+              },
+              {
+                "id": "9105",
+                "name": "群益高盛",
+                "net": -24662
+              },
+              {
+                "id": "5850",
+                "name": "統一",
+                "net": -20000
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

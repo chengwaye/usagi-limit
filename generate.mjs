@@ -10,6 +10,15 @@ import axios from "axios";
 const CACHE_DIR = path.resolve("../twse-broker-mcp/cache");
 const SITE_DIR = path.resolve("./site");
 
+// Load concept mapping
+let conceptMapping = {};
+try {
+  const conceptData = JSON.parse(fs.readFileSync("./concept-mapping.json", "utf-8"));
+  conceptMapping = conceptData.concepts;
+} catch (e) {
+  console.log("Warning: Could not load concept-mapping.json, will use default classification");
+}
+
 // Ensure output dirs exist
 if (!fs.existsSync(SITE_DIR)) fs.mkdirSync(SITE_DIR, { recursive: true });
 const STOCK_DIR = path.join(SITE_DIR, "stock");
@@ -139,6 +148,60 @@ function loadBrokerData(stockCode, date) {
 }
 
 // ============================================================
+// Step 2.5: Classify stocks by concepts
+// ============================================================
+function classifyStocks(stocks) {
+  const classified = {};
+  const unclassified = [];
+
+  // Initialize concept groups
+  for (const [conceptName, conceptInfo] of Object.entries(conceptMapping)) {
+    if (conceptName !== "其他") {
+      classified[conceptName] = {
+        icon: conceptInfo.icon,
+        stocks: []
+      };
+    }
+  }
+
+  // Classify each stock
+  for (const stock of Object.values(stocks)) {
+    let isClassified = false;
+
+    for (const [conceptName, conceptInfo] of Object.entries(conceptMapping)) {
+      if (conceptName === "其他") continue;
+      if (conceptInfo.stocks.includes(stock.code)) {
+        classified[conceptName].stocks.push(stock);
+        isClassified = true;
+        break;
+      }
+    }
+
+    if (!isClassified) {
+      unclassified.push(stock);
+    }
+  }
+
+  // Add unclassified stocks to "其他" if they exist
+  if (unclassified.length > 0) {
+    classified["其他"] = {
+      icon: conceptMapping["其他"]?.icon || "📊",
+      stocks: unclassified
+    };
+  }
+
+  // Remove empty concept groups
+  const result = {};
+  for (const [conceptName, conceptData] of Object.entries(classified)) {
+    if (conceptData.stocks.length > 0) {
+      result[conceptName] = conceptData;
+    }
+  }
+
+  return result;
+}
+
+// ============================================================
 // Step 3: Generate HTML
 // ============================================================
 function css() {
@@ -155,6 +218,24 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
 
 .section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
 
+.concept-section { margin-bottom: 20px; }
+.concept-title {
+  font-size: 14px;
+  margin: 12px 0 8px;
+  padding: 8px 12px;
+  background: #21262d;
+  border-radius: 6px;
+  border-left: 3px solid #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.concept-title .icon { font-size: 16px; }
+.concept-title .count {
+  color: #8b949e;
+  font-size: 12px;
+  margin-left: auto;
+}
 .stock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; }
@@ -238,6 +319,7 @@ function formatVolume(v) {
 function generateIndexPage(limitStocks, date) {
   const adDate = formatDate(date);
   const upStocks = Object.values(limitStocks);
+  const classifiedStocks = classifyStocks(limitStocks);
 
   const stockCard = (s) => `
     <div class="stock-card">
@@ -255,6 +337,19 @@ function generateIndexPage(limitStocks, date) {
         </div>
       </a>
     </div>`;
+
+  const conceptSections = Object.entries(classifiedStocks).map(([conceptName, conceptData]) => `
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">${conceptData.icon}</span>
+        <span>${conceptName}</span>
+        <span class="count">${conceptData.stocks.length}檔</span>
+      </div>
+      <div class="stock-grid">
+        ${conceptData.stocks.map(stockCard).join("\n")}
+      </div>
+    </div>
+  `).join("\n");
 
   return `<!DOCTYPE html>
 <html lang="zh-TW">
@@ -274,9 +369,7 @@ function generateIndexPage(limitStocks, date) {
   </header>
 
   <div class="section-title">🔴 漲停 (${upStocks.length})</div>
-  <div class="stock-grid">
-  ${upStocks.map(stockCard).join("\n")}
-  </div>
+  ${conceptSections}
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
