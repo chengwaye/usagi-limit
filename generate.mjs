@@ -356,7 +356,26 @@ header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #303
 header h1 { font-size: 22px; margin-bottom: 2px; }
 header h1 span.rabbit { font-size: 26px; }
 header .subtitle { color: #8b949e; font-size: 13px; }
-header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
+header .date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+header .date-nav .nav-btn {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+header .date-nav .nav-btn:hover { background: #30363d; color: #e6edf3; }
+header .date-nav .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
 
 .section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
 
@@ -378,43 +397,6 @@ header .date { color: #58a6ff; font-size: 15px; margin-top: 6px; }
   color: #93c5fd;
   font-size: 11px;
   line-height: 1.4;
-}
-
-.date-navigator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 12px 0;
-  padding: 8px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-}
-.nav-btn {
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #8b949e;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.nav-btn:hover {
-  background: #30363d;
-  color: #e6edf3;
-}
-.nav-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.current-date {
-  color: #58a6ff;
-  font-weight: 600;
-  font-size: 14px;
-  min-width: 80px;
-  text-align: center;
 }
 
 .concept-section { margin-bottom: 20px; }
@@ -552,9 +534,8 @@ footer a { color: #58a6ff; text-decoration: none; }
   td:first-child { max-width: 52px; font-size: 9px; }
   .panel-title { font-size: 11px; padding: 6px; }
   .header-ad { height: 70px; font-size: 10px; }
-  .date-navigator { gap: 8px; }
-  .nav-btn { padding: 4px 8px; font-size: 11px; }
-  .current-date { font-size: 12px; min-width: 70px; }
+  header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
+  header .date-nav .date { font-size: 13px; }
   .cta-banner .title { font-size: 12px; }
   .cta-banner .desc { font-size: 10px; }
 }
@@ -676,7 +657,11 @@ async function generateIndexPage(limitStocks, date) {
   <header>
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
     <div class="subtitle">漲停分點追蹤 — 看誰在買、誰在賣</div>
-    <div class="date">${adDate}</div>
+    <div class="date-nav">
+      <button class="nav-btn" onclick="navigateDate(-1)" disabled>◀</button>
+      <div class="date">${adDate}</div>
+      <button class="nav-btn" onclick="navigateDate(1)" disabled>▶</button>
+    </div>
   </header>
 
   <!-- AdSense 頂部橫幅廣告 -->
@@ -694,13 +679,6 @@ async function generateIndexPage(limitStocks, date) {
 
     <!-- 主要內容 -->
     <div class="content-wrapper">
-      <!-- 日期導航 -->
-      <div class="date-navigator">
-        <button class="nav-btn" onclick="navigateDate(-1)" disabled>← 前一日</button>
-        <div class="current-date">${adDate}</div>
-        <button class="nav-btn" onclick="navigateDate(1)" disabled>後一日 →</button>
-      </div>
-
       <!-- 功能引導 -->
       <div class="cta-banner">
         <div class="title">💡 點擊任一股票查看詳細分析</div>
