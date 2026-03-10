@@ -28,6 +28,17 @@ header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #303
 header h1 { font-size: 22px; margin-bottom: 2px; }
 header h1 span.rabbit { font-size: 26px; }
 header .subtitle { color: #8b949e; font-size: 13px; }
+
+/* Date navigation */
+.date-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.date-nav .date { font-size: 14px; color: #e6edf3; font-weight: 600; min-width: 100px; }
+.date-nav .nav-btn {
+  background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 4px 10px;
+  border-radius: 4px; cursor: pointer; font-size: 12px; transition: all 0.2s;
+}
+.date-nav .nav-btn:hover:not(:disabled) { background: #30363d; color: #e6edf3; }
+.date-nav .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 header .cta-hint {
   position: absolute;
   top: 16px;
@@ -208,9 +219,9 @@ footer a { color: #58a6ff; text-decoration: none; }
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
     <div class="subtitle">AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣</div>
     <div class="date-nav">
-      <button class="nav-btn" onclick="navigateDate(-1)" disabled>◀</button>
+      <button class="nav-btn" onclick="navigateDate('20260310', -1)" >◀ 前一天</button>
       <div class="date">2026/03/10</div>
-      <button class="nav-btn" onclick="navigateDate(1)" disabled>▶</button>
+      <button class="nav-btn" onclick="navigateDate('20260310', 1)" disabled>後一天 ▶</button>
     </div>
   </header>
 
@@ -960,6 +971,31 @@ document.addEventListener('DOMContentLoaded', function() {
       this.style.boxShadow = 'none';
     });
   });
+
+  // Date navigation
+  window.navigateDate = function(currentDate, direction) {
+    const availableDates = ["20260310","20260309"];
+    const currentIndex = availableDates.indexOf(currentDate);
+
+    let targetDate;
+    if (direction === -1 && currentIndex < availableDates.length - 1) {
+      // 前一天：往陣列後面（更舊的日期）
+      targetDate = availableDates[currentIndex + 1];
+    } else if (direction === 1 && currentIndex > 0) {
+      // 後一天：往陣列前面（更新的日期）
+      targetDate = availableDates[currentIndex - 1];
+    }
+
+    if (targetDate) {
+      if (targetDate === availableDates[0]) {
+        // Latest date -> index.html
+        window.location.href = 'index.html';
+      } else {
+        // Historical date -> index-YYYYMMDD.html
+        window.location.href = `index-${targetDate}.html`;
+      }
+    }
+  };
 });
 </script>
 </body>

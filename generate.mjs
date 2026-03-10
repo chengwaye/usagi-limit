@@ -464,6 +464,17 @@ header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #303
 header h1 { font-size: 22px; margin-bottom: 2px; }
 header h1 span.rabbit { font-size: 26px; }
 header .subtitle { color: #8b949e; font-size: 13px; }
+
+/* Date navigation */
+.date-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.date-nav .date { font-size: 14px; color: #e6edf3; font-weight: 600; min-width: 100px; }
+.date-nav .nav-btn {
+  background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 4px 10px;
+  border-radius: 4px; cursor: pointer; font-size: 12px; transition: all 0.2s;
+}
+.date-nav .nav-btn:hover:not(:disabled) { background: #30363d; color: #e6edf3; }
+.date-nav .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 header .cta-hint {
   position: absolute;
   top: 16px;
@@ -654,7 +665,18 @@ function formatVolume(shares) {
   return lots.toLocaleString() + "張";
 }
 
-async function generateIndexPage(limitStocks, date) {
+// Helper functions for date navigation
+function getPrevDate(currentDate, availableDates) {
+  const currentIndex = availableDates.indexOf(currentDate);
+  return currentIndex > 0 ? availableDates[currentIndex - 1] : null;
+}
+
+function getNextDate(currentDate, availableDates) {
+  const currentIndex = availableDates.indexOf(currentDate);
+  return currentIndex < availableDates.length - 1 ? availableDates[currentIndex + 1] : null;
+}
+
+async function generateIndexPage(limitStocks, date, availableDates = []) {
   const adDate = formatDate(date);
   const upStocks = Object.values(limitStocks);
   const classifiedStocks = await classifyStocksIntelligently(limitStocks);
@@ -763,9 +785,9 @@ async function generateIndexPage(limitStocks, date) {
     <h1><span class="rabbit">🐰</span> 烏薩奇漲停版</h1>
     <div class="subtitle">AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣</div>
     <div class="date-nav">
-      <button class="nav-btn" onclick="navigateDate(-1)" disabled>◀</button>
+      <button class="nav-btn" onclick="navigateDate('${date}', -1)" ${!getNextDate(date, availableDates) ? 'disabled' : ''}>◀ 前一天</button>
       <div class="date">${adDate}</div>
-      <button class="nav-btn" onclick="navigateDate(1)" disabled>▶</button>
+      <button class="nav-btn" onclick="navigateDate('${date}', 1)" ${!getPrevDate(date, availableDates) ? 'disabled' : ''}>後一天 ▶</button>
     </div>
   </header>
 
@@ -856,6 +878,31 @@ document.addEventListener('DOMContentLoaded', function() {
       this.style.boxShadow = 'none';
     });
   });
+
+  // Date navigation
+  window.navigateDate = function(currentDate, direction) {
+    const availableDates = ${JSON.stringify(availableDates)};
+    const currentIndex = availableDates.indexOf(currentDate);
+
+    let targetDate;
+    if (direction === -1 && currentIndex < availableDates.length - 1) {
+      // 前一天：往陣列後面（更舊的日期）
+      targetDate = availableDates[currentIndex + 1];
+    } else if (direction === 1 && currentIndex > 0) {
+      // 後一天：往陣列前面（更新的日期）
+      targetDate = availableDates[currentIndex - 1];
+    }
+
+    if (targetDate) {
+      if (targetDate === availableDates[0]) {
+        // Latest date -> index.html
+        window.location.href = 'index.html';
+      } else {
+        // Historical date -> index-YYYYMMDD.html
+        window.location.href = \`index-\${targetDate}.html\`;
+      }
+    }
+  };
 });
 </script>
 </body>
@@ -1340,11 +1387,33 @@ ${generateBubbleChartScript(brokerData, stockInfo)}
 }
 
 // ============================================================
+// Detect available dates from cache
+function getAvailableDates() {
+  const dates = new Set();
+  try {
+    const cacheFiles = fs.readdirSync(CACHE_DIR);
+    cacheFiles.forEach(file => {
+      const match = file.match(/_(\d{8})\.json$/);
+      if (match) {
+        dates.add(match[1]);
+      }
+    });
+    return Array.from(dates).sort().reverse(); // Latest first
+  } catch (e) {
+    return [];
+  }
+}
+
+// ============================================================
 // Main
 // ============================================================
 async function main() {
   console.log("🐰 烏薩奇漲停版 — 靜態網頁生成器");
   console.log("");
+
+  // Detect available dates
+  const availableDates = getAvailableDates();
+  console.log(`Available dates: ${availableDates.join(', ')}`);
 
   // Get limit stocks
   console.log("Fetching market data...");
@@ -1362,7 +1431,7 @@ async function main() {
 
   // Generate index page
   console.log("Generating index.html...");
-  const indexHtml = await generateIndexPage(limitStocks, date);
+  const indexHtml = await generateIndexPage(limitStocks, date, availableDates);
   fs.writeFileSync(path.join(SITE_DIR, "index.html"), indexHtml);
 
   // Generate stock pages
