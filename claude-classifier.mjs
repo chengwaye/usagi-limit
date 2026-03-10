@@ -146,12 +146,12 @@ async function callClaude(prompt) {
     let hasAssistantMessage = false;
     let lastMessageType = "";
 
-    // 增加 timeout 保護
-    const timeout = setTimeout(() => {
-      throw new Error("SDK conversation timeout after 60 seconds");
-    }, 60000);
+    // Timeout 保護：用 Promise.race 避免 setTimeout throw 問題
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("SDK conversation timeout after 90 seconds")), 90000);
+    });
 
-    try {
+    const conversationPromise = (async () => {
       for await (const message of conversation) {
         messageCount++;
         lastMessageType = message.type;
@@ -168,9 +168,9 @@ async function callClaude(prompt) {
           break;
         }
       }
-    } finally {
-      clearTimeout(timeout);
-    }
+    })();
+
+    await Promise.race([conversationPromise, timeoutPromise]);
 
     const elapsed = Date.now() - startTime;
     console.log(`  SDK conversation completed in ${elapsed}ms`);

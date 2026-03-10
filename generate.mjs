@@ -257,24 +257,31 @@ async function getLimitStocks() {
 // Step 2: Load cached broker data
 // ============================================================
 // 回傳 { data, dataDate } — dataDate 是籌碼資料的實際日期
+// 只 fallback 到過去的資料（≤ date），不用未來的
 function loadBrokerData(stockCode, date) {
-  // date format: YYYYMMDD — try exact match first, then nearby dates (±1 day)
+  // date format: YYYYMMDD — try exact match first
   const file = path.join(CACHE_DIR, `${stockCode}_${date}.json`);
   if (fs.existsSync(file)) {
     try { return { data: JSON.parse(fs.readFileSync(file, "utf-8")), dataDate: date }; } catch {}
   }
-  // Fallback: find any cache for this stock with nearby date
+  // Fallback: find the closest cache that is <= date (only past, never future)
   try {
+    const dateInt = parseInt(date);
     const files = fs.readdirSync(CACHE_DIR).filter(f => f.startsWith(stockCode + "_") && f.endsWith(".json"));
-    if (files.length > 0) {
-      files.sort((a, b) => {
+    const pastFiles = files.filter(f => {
+      const d = f.match(/_(\d{8})\.json$/)?.[1] || "";
+      return parseInt(d) <= dateInt;
+    });
+    if (pastFiles.length > 0) {
+      // Pick the most recent past date
+      pastFiles.sort((a, b) => {
         const da = a.match(/_(\d{8})\.json$/)?.[1] || "";
         const db = b.match(/_(\d{8})\.json$/)?.[1] || "";
-        return Math.abs(parseInt(da) - parseInt(date)) - Math.abs(parseInt(db) - parseInt(date));
+        return parseInt(db) - parseInt(da); // descending = most recent first
       });
-      const best = files[0];
+      const best = pastFiles[0];
       const bestDate = best.match(/_(\d{8})\.json$/)?.[1] || "";
-      if (Math.abs(parseInt(bestDate) - parseInt(date)) <= 1) {
+      if (dateInt - parseInt(bestDate) <= 1) {
         return { data: JSON.parse(fs.readFileSync(path.join(CACHE_DIR, best), "utf-8")), dataDate: bestDate };
       }
     }
