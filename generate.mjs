@@ -1107,20 +1107,42 @@ function generateStockPage(stockInfo, brokerData, date) {
     </div>
   </div>
 
-  <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 ${brokerData.total_brokers} 家券商交易</p>
-
-  <div class="dual-panel">
-    <div class="panel">
-      <div class="panel-title buy">買超 Top15</div>
-      <table>${tableHead}<tbody>${buyerRows}</tbody></table>
+  <div class="ads-container">
+    <!-- 左側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- AdSense 側邊廣告位 -->
+      廣告位<br>(160x600)
     </div>
-    <div class="panel">
-      <div class="panel-title sell">賣超 Top15</div>
-      <table>${tableHead}<tbody>${sellerRows}</tbody></table>
+
+    <!-- 主要內容 -->
+    <div class="content-wrapper">
+      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 ${brokerData.total_brokers} 家券商交易</p>
+
+      <div class="dual-panel">
+        <div class="panel">
+          <div class="panel-title buy">買超 Top15</div>
+          <table>${tableHead}<tbody>${buyerRows}</tbody></table>
+        </div>
+        <div class="panel">
+          <div class="panel-title sell">賣超 Top15</div>
+          <table>${tableHead}<tbody>${sellerRows}</tbody></table>
+        </div>
+      </div>
+
+      ${generateBubbleChart(brokerData, stockInfo)}
+
+      <!-- 底部廣告位 -->
+      <div style="margin:32px 0;text-align:center;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;color:#484f58;font-size:12px;">
+        底部廣告位<br>(728x90 或回應式)
+      </div>
+    </div>
+
+    <!-- 右側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- AdSense 側邊廣告位 -->
+      廣告位<br>(160x600)
     </div>
   </div>
-
-  ${generateBubbleChart(brokerData, stockInfo)}
 
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>

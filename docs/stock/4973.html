@@ -124,19 +124,6 @@ header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
   position: sticky;
   top: 20px;
 }
-.header-ad {
-  width: 100%;
-  height: 90px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #484f58;
-  font-size: 12px;
-  margin: 16px 0;
-}
 
 /* Stock detail page */
 .back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
@@ -192,7 +179,6 @@ footer a { color: #58a6ff; text-decoration: none; }
   td { padding: 3px 2px; font-size: 9px; }
   td:first-child { max-width: 52px; font-size: 9px; }
   .panel-title { font-size: 11px; padding: 6px; }
-  .header-ad { height: 70px; font-size: 10px; }
   header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
   header .date-nav .date { font-size: 13px; }
   header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; }
@@ -217,12 +203,21 @@ footer a { color: #58a6ff; text-decoration: none; }
     </div>
   </div>
 
-  <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 625 家券商交易</p>
+  <div class="ads-container">
+    <!-- 左側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- AdSense 側邊廣告位 -->
+      廣告位<br>(160x600)
+    </div>
 
-  <div class="dual-panel">
-    <div class="panel">
-      <div class="panel-title buy">買超 Top15</div>
-      <table><thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead><tbody><tr>
+    <!-- 主要內容 -->
+    <div class="content-wrapper">
+      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">共 625 家券商交易</p>
+
+      <div class="dual-panel">
+        <div class="panel">
+          <div class="panel-title buy">買超 Top15</div>
+          <table><thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead><tbody><tr>
       <td>港商野村</td>
       <td class="up net">390</td>
       <td>45.41</td>
@@ -328,10 +323,10 @@ footer a { color: #58a6ff; text-decoration: none; }
       <td class="down">9</td>
       <td>45.38</td>
     </tr></tbody></table>
-    </div>
-    <div class="panel">
-      <div class="panel-title sell">賣超 Top15</div>
-      <table><thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead><tbody><tr>
+        </div>
+        <div class="panel">
+          <div class="panel-title sell">賣超 Top15</div>
+          <table><thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead><tbody><tr>
       <td>群益嘉義</td>
       <td class="down net">-270</td>
       <td>45.85</td>
@@ -437,10 +432,10 @@ footer a { color: #58a6ff; text-decoration: none; }
       <td class="down">31</td>
       <td>44.76</td>
     </tr></tbody></table>
-    </div>
-  </div>
+        </div>
+      </div>
 
-  
+      
   <div style="margin-top:24px;">
     <div class="panel-title" style="border-bottom-color:#58a6ff;color:#58a6ff;">籌碼泡泡圖</div>
     <div style="position:relative;width:100%;max-width:700px;margin:0 auto;">
@@ -450,6 +445,19 @@ footer a { color: #58a6ff; text-decoration: none; }
       <span style="color:#484f58;font-size:10px;">⬤ 大泡泡＝成交量大</span>
       <span style="color:#484f58;font-size:10px;">── 收盤價 $46.05</span>
       <span style="color:#484f58;font-size:10px;">┆ 買賣分界</span>
+    </div>
+  </div>
+
+      <!-- 底部廣告位 -->
+      <div style="margin:32px 0;text-align:center;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;color:#484f58;font-size:12px;">
+        底部廣告位<br>(728x90 或回應式)
+      </div>
+    </div>
+
+    <!-- 右側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- AdSense 側邊廣告位 -->
+      廣告位<br>(160x600)
     </div>
   </div>
 
