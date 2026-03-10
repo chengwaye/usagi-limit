@@ -256,17 +256,17 @@ async function getLimitStocks() {
 // ============================================================
 // Step 2: Load cached broker data
 // ============================================================
+// 回傳 { data, dataDate } — dataDate 是籌碼資料的實際日期
 function loadBrokerData(stockCode, date) {
   // date format: YYYYMMDD — try exact match first, then nearby dates (±1 day)
   const file = path.join(CACHE_DIR, `${stockCode}_${date}.json`);
   if (fs.existsSync(file)) {
-    try { return JSON.parse(fs.readFileSync(file, "utf-8")); } catch {}
+    try { return { data: JSON.parse(fs.readFileSync(file, "utf-8")), dataDate: date }; } catch {}
   }
   // Fallback: find any cache for this stock with nearby date
   try {
     const files = fs.readdirSync(CACHE_DIR).filter(f => f.startsWith(stockCode + "_") && f.endsWith(".json"));
     if (files.length > 0) {
-      // Pick the one closest to target date
       files.sort((a, b) => {
         const da = a.match(/_(\d{8})\.json$/)?.[1] || "";
         const db = b.match(/_(\d{8})\.json$/)?.[1] || "";
@@ -275,7 +275,7 @@ function loadBrokerData(stockCode, date) {
       const best = files[0];
       const bestDate = best.match(/_(\d{8})\.json$/)?.[1] || "";
       if (Math.abs(parseInt(bestDate) - parseInt(date)) <= 1) {
-        return JSON.parse(fs.readFileSync(path.join(CACHE_DIR, best), "utf-8"));
+        return { data: JSON.parse(fs.readFileSync(path.join(CACHE_DIR, best), "utf-8")), dataDate: bestDate };
       }
     }
   } catch {}
@@ -1247,8 +1247,11 @@ function generateBubbleChartScript(brokerData, stockInfo) {
 `;
 }
 
-function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backLink = "../index.html") {
+function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backLink = "../index.html", brokerDataDate = null) {
   const adDate = formatDate(date);
+  const brokerDateLabel = brokerDataDate && brokerDataDate !== date
+    ? `⚠️ 籌碼資料為 ${formatDate(brokerDataDate)} 的數據`
+    : '';
   const typeClass = stockInfo.type === "漲停" ? "up" : "down";
 
   // 欄位: 券商 | 買超 | 買均 | 買張 | 賣張 | 賣均
@@ -1369,7 +1372,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
 
     <!-- 主要內容 -->
     <div class="content-wrapper">
-      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">${brokerData ? `共 ${brokerData.total_brokers} 家券商交易` : "⏳ 分點資料每日 16:30 後更新"}</p>
+      <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">${brokerData ? `共 ${brokerData.total_brokers} 家券商交易${brokerDateLabel ? ` <span style="color:#d29922;font-size:12px;">${brokerDateLabel}</span>` : ''}` : "⏳ 分點資料每日 16:30 後更新"}</p>
 
       ${generateInstitutionalCard()}
 
@@ -1475,12 +1478,12 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   // Fetch institutional data
   const institutionalData = await fetchAllInstitutionalData(cacheDate);
 
-  // Determine stock page path prefix for this date
-  const stockPageDir = isLatest ? STOCK_DIR : path.join(STOCK_DIR, date);
-  if (!isLatest && !fs.existsSync(stockPageDir)) fs.mkdirSync(stockPageDir, { recursive: true });
+  // 統一用日期目錄 stock/{date}/{code}.html，避免連續漲停衝突
+  const stockPageDir = path.join(STOCK_DIR, date);
+  if (!fs.existsSync(stockPageDir)) fs.mkdirSync(stockPageDir, { recursive: true });
 
   // Stock card link prefix
-  const stockLinkPrefix = isLatest ? "stock/" : `stock/${date}/`;
+  const stockLinkPrefix = `stock/${date}/`;
 
   // Generate index page
   const indexFileName = isLatest ? "index.html" : `index-${date}.html`;
@@ -1491,13 +1494,17 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   // Generate stock pages
   let generated = 0;
   for (const [code, info] of Object.entries(limitStocks)) {
-    const brokerData = loadBrokerData(code, cacheDate);
+    const brokerResult = loadBrokerData(code, cacheDate);
+    const brokerData = brokerResult ? brokerResult.data : null;
+    const brokerDataDate = brokerResult ? brokerResult.dataDate : null;
     if (!brokerData) {
       console.log(`    [INFO] ${code} ${info.name} — no broker data, generating basic page`);
+    } else if (brokerDataDate !== cacheDate) {
+      console.log(`    [INFO] ${code} ${info.name} — using broker data from ${brokerDataDate}`);
     }
     const institutionalInfo = institutionalData[code] || null;
-    const backLink = isLatest ? "../index.html" : `../../index-${date}.html`;
-    const html = generateStockPage(info, brokerData, date, institutionalInfo, backLink);
+    const backLink = isLatest ? "../../index.html" : `../../index-${date}.html`;
+    const html = generateStockPage(info, brokerData, date, institutionalInfo, backLink, brokerDataDate);
     fs.writeFileSync(path.join(stockPageDir, `${code}.html`), html);
     generated++;
   }
