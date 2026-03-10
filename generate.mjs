@@ -945,23 +945,31 @@ function fmtPrice(p) {
   return p.toFixed(2);
 }
 
-function generateBubbleChart(brokerData, stockInfo) {
+function generateBubbleChart(brokerData, stockInfo, brokerDataDate, pageDate) {
+  const isOldData = brokerDataDate && brokerDataDate !== pageDate;
+  const displayClose = isOldData ? (stockInfo.close - stockInfo.change) : stockInfo.close;
+  const dateLabel = isOldData ? `<div style="background:#d29922;color:#0d1117;font-size:12px;font-weight:bold;padding:6px 12px;border-radius:4px;margin-bottom:12px;text-align:center;">⚠️ 以下為上一個交易日 (${formatDate(brokerDataDate)}) 的籌碼資料，非今日數據</div>` : '';
   return `
   <div style="margin-top:24px;">
     <div class="panel-title" style="border-bottom-color:#58a6ff;color:#58a6ff;">籌碼泡泡圖</div>
+    ${dateLabel}
     <div style="position:relative;width:100%;max-width:700px;margin:0 auto;">
       <canvas id="bubbleChart"></canvas>
     </div>
     <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;flex-wrap:wrap;">
       <span style="color:#484f58;font-size:10px;">⬤ 大泡泡＝成交量大</span>
-      <span style="color:#484f58;font-size:10px;">── 收盤價 $${stockInfo.close}</span>
+      <span style="color:#484f58;font-size:10px;">── ${isOldData ? '上一交易日' : ''}收盤價 $${displayClose}</span>
       <span style="color:#484f58;font-size:10px;">┆ 買賣分界</span>
     </div>
   </div>`;
 }
 
-function generateBubbleChartScript(brokerData, stockInfo) {
-  const closePrice = parseFloat(stockInfo.close) || 0;
+function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDate) {
+  const isOldData = brokerDataDate && brokerDataDate !== pageDate;
+  // 舊籌碼：用上一交易日收盤價（= 今日平盤價 = close - change）
+  const closePrice = isOldData
+    ? parseFloat(stockInfo.close - stockInfo.change) || 0
+    : parseFloat(stockInfo.close) || 0;
 
   // Area-proportional: area ∝ volume, so 5000張 area = 2.5x of 2000張
   // r = sqrt(vol/maxVol) * MAX_R → area ratio = vol ratio
@@ -977,8 +985,15 @@ function generateBubbleChartScript(brokerData, stockInfo) {
 
   // Y-axis: 平盤 → 漲停（close - change → close）
   const change = parseFloat(stockInfo.change) || 0;
-  const flatPrice = +(closePrice - change).toFixed(2); // 平盤價 = 昨收
-  const yRange = closePrice - flatPrice || 0.5;
+  let flatPrice, yRange;
+  if (isOldData) {
+    // 舊籌碼：closePrice 是上一交易日收盤，Y 軸用上一交易日的漲幅範圍
+    flatPrice = +(closePrice / 1.10).toFixed(2); // 上一交易日的昨收（近似值）
+    yRange = closePrice - flatPrice || 0.5;
+  } else {
+    flatPrice = +(closePrice - change).toFixed(2); // 平盤價 = 昨收
+    yRange = closePrice - flatPrice || 0.5;
+  }
   const yAxisMin = flatPrice;
   const yAxisMax = +(closePrice + yRange * 0.25).toFixed(2); // 上方留 25% 給標籤
 
@@ -1377,6 +1392,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
       ${generateInstitutionalCard()}
 
       ${brokerData ? `
+      ${brokerDateLabel ? `<div style="background:#d29922;color:#0d1117;font-size:12px;font-weight:bold;padding:6px 12px;border-radius:4px;margin-bottom:12px;text-align:center;">⚠️ 以下為上一個交易日 (${brokerDataDate ? formatDate(brokerDataDate) : ''}) 的籌碼資料，非今日數據</div>` : ''}
       <div class="dual-panel">
         <div class="panel">
           <div class="panel-title buy">買超 Top15</div>
@@ -1388,7 +1404,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
         </div>
       </div>
 
-      ${generateBubbleChart(brokerData, stockInfo)}` : `
+      ${generateBubbleChart(brokerData, stockInfo, brokerDataDate, date)}` : `
       <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:32px;margin:24px 0;text-align:center;">
         <div style="color:#8b949e;font-size:16px;margin-bottom:12px;">🕐</div>
         <div style="color:#e6edf3;font-size:14px;margin-bottom:8px;">分點買賣超資料準備中</div>
@@ -1424,7 +1440,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
 </div>
 ${brokerData ? `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
-${generateBubbleChartScript(brokerData, stockInfo)}
+${generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, date)}
 </script>` : ''}
 </body>
 </html>`;

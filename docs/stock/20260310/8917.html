@@ -265,6 +265,7 @@ footer a { color: #58a6ff; text-decoration: none; }
     </div>
 
       
+      <div style="background:#d29922;color:#0d1117;font-size:12px;font-weight:bold;padding:6px 12px;border-radius:4px;margin-bottom:12px;text-align:center;">⚠️ 以下為上一個交易日 (2026/03/09) 的籌碼資料，非今日數據</div>
       <div class="dual-panel">
         <div class="panel">
           <div class="panel-title buy">買超 Top15</div>
@@ -489,12 +490,13 @@ footer a { color: #58a6ff; text-decoration: none; }
       
   <div style="margin-top:24px;">
     <div class="panel-title" style="border-bottom-color:#58a6ff;color:#58a6ff;">籌碼泡泡圖</div>
+    <div style="background:#d29922;color:#0d1117;font-size:12px;font-weight:bold;padding:6px 12px;border-radius:4px;margin-bottom:12px;text-align:center;">⚠️ 以下為上一個交易日 (2026/03/09) 的籌碼資料，非今日數據</div>
     <div style="position:relative;width:100%;max-width:700px;margin:0 auto;">
       <canvas id="bubbleChart"></canvas>
     </div>
     <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;flex-wrap:wrap;">
       <span style="color:#484f58;font-size:10px;">⬤ 大泡泡＝成交量大</span>
-      <span style="color:#484f58;font-size:10px;">── 收盤價 $69.3</span>
+      <span style="color:#484f58;font-size:10px;">── 上一交易日收盤價 $63</span>
       <span style="color:#484f58;font-size:10px;">┆ 買賣分界</span>
     </div>
   </div>
@@ -524,7 +526,7 @@ footer a { color: #58a6ff; text-decoration: none; }
   const ctx = document.getElementById('bubbleChart').getContext('2d');
   const buyData = [{"x":30,"y":69.3,"r":13.306884336000945,"label":"凱基永康","net":30,"buyVol":30,"sellVol":0,"buyAvg":69.3,"sellAvg":0},{"x":23,"y":69.22,"r":11.651441866180152,"label":"凱基三峽","net":23,"buyVol":23,"sellVol":0,"buyAvg":69.22,"sellAvg":0},{"x":12,"y":69.3,"r":8.416012612436065,"label":"中國信託證","net":12,"buyVol":12,"sellVol":0,"buyAvg":69.3,"sellAvg":0},{"x":11,"y":69.3,"r":8.75966365319315,"label":"台新","net":11,"buyVol":12,"sellVol":1,"buyAvg":69.3,"sellAvg":69.3},{"x":11,"y":69.29,"r":8.057718614365525,"label":"富邦彰化","net":11,"buyVol":11,"sellVol":0,"buyAvg":69.29,"sellAvg":0},{"x":11,"y":69.3,"r":11.651441866180152,"label":"元大台中港","net":11,"buyVol":17,"sellVol":6,"buyAvg":69.3,"sellAvg":69.3},{"x":10,"y":69.3,"r":7.68273325346536,"label":"新光桃園","net":10,"buyVol":10,"sellVol":0,"buyAvg":69.3,"sellAvg":0},{"x":10,"y":69.2,"r":7.68273325346536,"label":"聯邦銀大業","net":10,"buyVol":10,"sellVol":0,"buyAvg":69.2,"sellAvg":0},{"x":10,"y":69.3,"r":8.416012612436065,"label":"玉山嘉義","net":10,"buyVol":11,"sellVol":1,"buyAvg":69.3,"sellAvg":69.3},{"x":10,"y":69.29,"r":7.68273325346536,"label":"元大桃園","net":10,"buyVol":10,"sellVol":0,"buyAvg":69.29,"sellAvg":0},{"x":10,"y":69.3,"r":7.68273325346536,"label":"元富松德","net":10,"buyVol":10,"sellVol":0,"buyAvg":69.3,"sellAvg":0},{"x":9,"y":69.3,"r":9.409388150451317,"label":"元大永春","net":9,"buyVol":12,"sellVol":3,"buyAvg":69.3,"sellAvg":69.3},{"x":9,"y":69.3,"r":7.288480720939871,"label":"元富林園","net":9,"buyVol":9,"sellVol":0,"buyAvg":69.3,"sellAvg":0},{"x":8,"y":69.3,"r":8.416012612436065,"label":"新光台南","net":8,"buyVol":10,"sellVol":2,"buyAvg":69.3,"sellAvg":69.3},{"x":8,"y":69.04,"r":6.8716455230986675,"label":"國泰桃園","net":8,"buyVol":8,"sellVol":0,"buyAvg":69.04,"sellAvg":0}];
   const sellData = [{"x":-48,"y":69.3,"r":16.854803180218465,"label":"元大雙和","net":-48,"buyVol":0,"sellVol":48,"buyAvg":0,"sellAvg":69.3},{"x":-40,"y":69.3,"r":15.36546650693072,"label":"永豐金板盛","net":-40,"buyVol":0,"sellVol":40,"buyAvg":0,"sellAvg":69.3},{"x":-32,"y":69.3,"r":13.743291046197335,"label":"凱基桃園","net":-32,"buyVol":0,"sellVol":32,"buyAvg":0,"sellAvg":69.3},{"x":-31,"y":69.3,"r":13.526847739074228,"label":"統一桃園","net":-31,"buyVol":0,"sellVol":31,"buyAvg":0,"sellAvg":69.3},{"x":-18,"y":69.3,"r":13.75230712351612,"label":"華南永昌","net":-18,"buyVol":7,"sellVol":25,"buyAvg":69.3,"sellAvg":69.3},{"x":-12,"y":69.22,"r":8.416012612436065,"label":"臺銀證券","net":-12,"buyVol":0,"sellVol":12,"buyAvg":0,"sellAvg":69.22},{"x":-10,"y":69.3,"r":7.68273325346536,"label":"福勝","net":-10,"buyVol":0,"sellVol":10,"buyAvg":0,"sellAvg":69.3},{"x":-10,"y":69.3,"r":7.68273325346536,"label":"國票博愛","net":-10,"buyVol":0,"sellVol":10,"buyAvg":0,"sellAvg":69.3},{"x":-10,"y":69.3,"r":17.179113807746667,"label":"玉山數位","net":-10,"buyVol":20,"sellVol":30,"buyAvg":69.29,"sellAvg":69.3},{"x":-10,"y":69.3,"r":7.68273325346536,"label":"元大成功","net":-10,"buyVol":0,"sellVol":10,"buyAvg":0,"sellAvg":69.3},{"x":-8,"y":69.22,"r":22,"label":"凱基站前","net":-8,"buyVol":37,"sellVol":45,"buyAvg":69.3,"sellAvg":69.22},{"x":-7,"y":69.3,"r":6.427835807698553,"label":"統一新台中","net":-7,"buyVol":0,"sellVol":7,"buyAvg":0,"sellAvg":69.3},{"x":-7,"y":69.3,"r":6.427835807698553,"label":"凱基板橋","net":-7,"buyVol":0,"sellVol":7,"buyAvg":0,"sellAvg":69.3},{"x":-7,"y":69.24,"r":6.427835807698553,"label":"元大苗栗","net":-7,"buyVol":0,"sellVol":7,"buyAvg":0,"sellAvg":69.24},{"x":-7,"y":69.13,"r":6.427835807698553,"label":"元大汐止","net":-7,"buyVol":0,"sellVol":7,"buyAvg":0,"sellAvg":69.13}];
-  const closePrice = 69.3;
+  const closePrice = 63;
 
   // Plugin: lines BEHIND bubbles, labels ABOVE bubbles
   const refLinePlugin = {
@@ -732,10 +734,10 @@ footer a { color: #58a6ff; text-decoration: none; }
           ticks: {
             color: '#8b949e',
             font: { size: 10 },
-            callback: function(value) { return value <= 69.3 ? value : ''; }
+            callback: function(value) { return value <= 63 ? value : ''; }
           },
           afterBuildTicks: function(axis) {
-            const cp = 69.3;
+            const cp = 63;
             const ticks = axis.ticks;
             if (!ticks.find(t => t.value === cp)) {
               ticks.push({ value: cp });
@@ -743,8 +745,8 @@ footer a { color: #58a6ff; text-decoration: none; }
             }
           },
           border: { color: '#30363d' },
-          min: 63,
-          max: 70.88
+          min: 57.27,
+          max: 64.43
         }
       }
     },
