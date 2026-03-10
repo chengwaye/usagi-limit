@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 import { classifyWithClaude } from "./claude-classifier.mjs";
+import { loadFinLabBrokerDataForStock } from "./finlab-broker-loader.mjs";
 
 const CACHE_DIR = path.resolve("../twse-broker-mcp/cache");
 const SITE_DIR = path.resolve("./docs");
@@ -262,7 +263,7 @@ async function getLimitStocks() {
 // ============================================================
 // 回傳 { data, dataDate } — dataDate 是籌碼資料的實際日期
 // 只 fallback 到過去的資料（≤ date），不用未來的
-function loadBrokerData(stockCode, date) {
+async function loadBrokerData(stockCode, date) {
   // date format: YYYYMMDD — try exact match first
   const file = path.join(CACHE_DIR, `${stockCode}_${date}.json`);
   if (fs.existsSync(file)) {
@@ -291,6 +292,19 @@ function loadBrokerData(stockCode, date) {
       }
     }
   } catch {}
+
+  // Fallback to FinLab data if cache not found
+  try {
+    console.log(`Trying FinLab data for ${stockCode} ${date}...`);
+    const finlabData = await loadFinLabBrokerDataForStock(stockCode, date);
+    if (finlabData) {
+      console.log(`✅ Found FinLab broker data for ${stockCode} (${finlabData.total_brokers} brokers)`);
+      return { data: finlabData, dataDate: finlabData.date };
+    }
+  } catch (error) {
+    console.log(`Warning: FinLab fallback failed for ${stockCode}: ${error.message}`);
+  }
+
   return null;
 }
 
@@ -809,7 +823,7 @@ async function generateIndexPage(limitStocks, date, availableDates = [], stockLi
 </script>
 
 <!-- AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7922778370889908"
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4394676027529562"
      crossorigin="anonymous"></script>
 
 <style>${css()}</style>
@@ -1352,7 +1366,7 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
 </script>
 
 <!-- AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7922778370889908"
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4394676027529562"
      crossorigin="anonymous"></script>
 
 <style>${css()}</style>
@@ -1514,7 +1528,7 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   // Generate stock pages
   let generated = 0;
   for (const [code, info] of Object.entries(limitStocks)) {
-    let brokerResult = loadBrokerData(code, cacheDate);
+    let brokerResult = await loadBrokerData(code, cacheDate);
     // 最新那天：如果沒有當天的精確匹配，不 fallback（統一顯示「準備中」）
     if (isLatest && brokerResult && brokerResult.dataDate !== cacheDate) {
       console.log(`    [INFO] ${code} ${info.name} — today's broker data not ready, skipping old data`);
