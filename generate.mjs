@@ -983,7 +983,7 @@ function generateBubbleChart(brokerData, stockInfo, brokerDataDate, pageDate) {
       <canvas id="bubbleChart"></canvas>
     </div>
     <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;flex-wrap:wrap;">
-      <span style="color:#484f58;font-size:10px;">⬤ 大泡泡＝成交量大</span>
+      <span style="color:#484f58;font-size:10px;">⬤ 大泡泡＝買賣超大</span>
       <span style="color:#484f58;font-size:10px;">┆ 買賣分界</span>
       <span style="color:#f85149;font-size:10px;">Y軸紅字＝${isOldData ? '上一交易日' : ''}收盤價</span>
     </div>
@@ -997,16 +997,18 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     ? parseFloat(stockInfo.close - stockInfo.change) || 0
     : parseFloat(stockInfo.close) || 0;
 
-  // Area-proportional: area ∝ volume, so 5000張 area = 2.5x of 2000張
-  // r = sqrt(vol/maxVol) * MAX_R → area ratio = vol ratio
+  // Area-proportional: area ∝ single volume, so 10000張買進 area = 4x of 5000張賣出
+  // r = sqrt(vol/maxVol) * MAX_R → area ratio = volume ratio
   const toZhang = (v) => Math.round(v / 1000);
   const allBrokers = [...(brokerData.top_buyers || []), ...(brokerData.top_sellers || [])];
-  const maxVol = Math.max(...allBrokers.map(b => (b.buy_volume + b.sell_volume) / 1000), 1);
+  const maxSingleVol = Math.max(
+    ...allBrokers.map(b => Math.max(b.buy_volume, b.sell_volume) / 1000), 1
+  );
   const MAX_R = 22;
-  const calcR = (buyVol, sellVol) => {
-    const total = (buyVol + sellVol) / 1000;
-    if (total <= 0) return 2;
-    return Math.max(2, Math.sqrt(total / maxVol) * MAX_R);
+  const calcR = (volume) => {
+    const vol = Math.abs(volume) / 1000;
+    if (vol <= 0) return 2;
+    return Math.max(2, Math.sqrt(vol / maxSingleVol) * MAX_R);
   };
 
   // Y-axis: 平盤 → 漲停（close - change → close）
@@ -1023,10 +1025,11 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
   const yAxisMin = flatPrice;
   const yAxisMax = +(closePrice + yRange * 0.25).toFixed(2); // 上方留 25% 給標籤
 
-  const buyers = (brokerData.top_buyers || []).map(b => ({
-    x: toZhang(b.net_volume),
-    y: b.buy_avg_price || 0,
-    r: calcR(b.buy_volume, b.sell_volume),
+  // 買超券商的「買進」泡泡（紅色實心，X=+買進量）
+  const buyerBuyBubbles = (brokerData.top_buyers || []).map(b => ({
+    x: toZhang(b.buy_volume),
+    y: b.buy_avg_price || closePrice,
+    r: calcR(b.buy_volume),
     label: b.broker_name,
     net: toZhang(b.net_volume),
     buyVol: toZhang(b.buy_volume),
@@ -1034,10 +1037,38 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     buyAvg: b.buy_avg_price,
     sellAvg: b.sell_avg_price,
   }));
-  const sellers = (brokerData.top_sellers || []).map(b => ({
-    x: toZhang(b.net_volume),
-    y: b.sell_avg_price || 0,
-    r: calcR(b.buy_volume, b.sell_volume),
+
+  // 買超券商的「賣出」泡泡（紅色淡色，X=-賣出量）
+  const buyerSellBubbles = (brokerData.top_buyers || []).map(b => ({
+    x: -toZhang(b.sell_volume),
+    y: b.sell_avg_price || b.buy_avg_price || closePrice,
+    r: calcR(b.sell_volume),
+    label: b.broker_name,
+    net: toZhang(b.net_volume),
+    buyVol: toZhang(b.buy_volume),
+    sellVol: toZhang(b.sell_volume),
+    buyAvg: b.buy_avg_price,
+    sellAvg: b.sell_avg_price,
+  }));
+
+  // 賣超券商的「賣出」泡泡（綠色實心，X=-賣出量）
+  const sellerSellBubbles = (brokerData.top_sellers || []).map(b => ({
+    x: -toZhang(b.sell_volume),
+    y: b.sell_avg_price || closePrice,
+    r: calcR(b.sell_volume),
+    label: b.broker_name,
+    net: toZhang(b.net_volume),
+    buyVol: toZhang(b.buy_volume),
+    sellVol: toZhang(b.sell_volume),
+    buyAvg: b.buy_avg_price,
+    sellAvg: b.sell_avg_price,
+  }));
+
+  // 賣超券商的「買進」泡泡（綠色淡色，X=+買進量）
+  const sellerBuyBubbles = (brokerData.top_sellers || []).map(b => ({
+    x: toZhang(b.buy_volume),
+    y: b.buy_avg_price || b.sell_avg_price || closePrice,
+    r: calcR(b.buy_volume),
     label: b.broker_name,
     net: toZhang(b.net_volume),
     buyVol: toZhang(b.buy_volume),
@@ -1047,7 +1078,12 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
   }));
 
   // X-axis symmetric: 0 always in center
-  const allX = [...buyers.map(b => b.x), ...sellers.map(s => s.x)];
+  const allX = [
+    ...buyerBuyBubbles.map(b => b.x),
+    ...buyerSellBubbles.map(b => b.x),
+    ...sellerSellBubbles.map(b => b.x),
+    ...sellerBuyBubbles.map(b => b.x)
+  ];
   const xAbsMax = Math.max(...allX.map(v => Math.abs(v)), 1);
   const xPad = Math.ceil(xAbsMax * 1.15); // 15% padding
   const xAxisMin = -xPad;
@@ -1099,11 +1135,13 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     afterDatasetsDraw(chart) {
       const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
 
-      // Top 5 broker labels with collision avoidance
+      // Top 3 broker labels with collision avoidance (only for primary datasets)
       const placed = [];
       chart.data.datasets.forEach((ds, di) => {
+        // Only label primary datasets (0: 買超買進, 2: 賣超賣出), skip secondary ones (1,3)
+        if (di === 1 || di === 3) return;
         const meta = chart.getDatasetMeta(di);
-        const limit = Math.min(5, ds.data.length);
+        const limit = Math.min(3, ds.data.length);
         for (let i = 0; i < limit; i++) {
           const el = meta.data[i];
           const raw = ds.data[i];
