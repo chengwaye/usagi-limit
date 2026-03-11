@@ -1,0 +1,135 @@
+/**
+ * Claude Stock Classifier
+ * 使用 Claude Agent SDK 智能分析漲停股概念分組
+ */
+
+import fs from 'fs';
+import path from 'path';
+
+export async function classifyWithClaude(stocks) {
+  try {
+    // Prepare stock list for Claude analysis
+    const stockList = Object.values(stocks).map(s =>
+      `${s.code} ${s.name} (漲${s.changePct}%, 成交量${Math.round(s.volume/10000)}萬)`
+    ).join('\n');
+
+    console.log('🤖 Calling Claude for intelligent stock classification...');
+
+    const prompt = `你是台股分析專家，請分析今日漲停股票的共同原因並智能分組。
+
+今日漲停股清單（${Object.keys(stocks).length}檔）：
+${stockList}
+
+分析要點：
+1. 找出可能的漲停主因：產業政策、國際情勢、原物料價格、AI科技趨勢、財報利多、技術面突破等
+2. 觀察股票名稱規律：如「欣」字輩（天然氣）、「化」字尾（石化）等
+3. 產業關聯性：半導體、生技、金融、傳產等
+
+分組原則：
+- 優先以「漲停主因」分組（如天然氣漲價 → 欣字輩集體漲停）
+- 每組至少3檔，避免過度分散
+- 單獨個股或2檔以下合併為「個股表現」類別
+
+回傳 JSON 格式：
+{
+  "天然氣概念發威": {
+    "icon": "🔥",
+    "reason": "天然氣價格大漲，欣字輩概念股集體漲停",
+    "stocks": ["8908", "8917", "9918"]
+  },
+  "石化族群反彈": {
+    "icon": "🛢️",
+    "reason": "原油反彈帶動石化上游，塑化股同步走強",
+    "stocks": ["1309", "6505"]
+  }
+}
+
+注意：只回傳JSON，代碼必須完全匹配，概念名稱要具體且吸引人。`;
+
+    // Call Claude via SDK
+    const result = await callClaude(prompt);
+
+    // Parse Claude response - handle various response formats
+    let cleanedResult = result.trim();
+
+    // Remove markdown code blocks if present
+    cleanedResult = cleanedResult.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+    cleanedResult = cleanedResult.replace(/^```\s*/, '').replace(/\s*```$/, '');
+
+    // Find JSON part if mixed with other text
+    const jsonMatch = cleanedResult.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      cleanedResult = jsonMatch[0];
+    }
+
+    // Try to parse JSON with better error handling
+    let classification;
+    try {
+      classification = JSON.parse(cleanedResult);
+    } catch (parseError) {
+      console.log('JSON parse failed, raw response:', result.slice(0, 200));
+      throw new Error(`JSON parse failed: ${parseError.message}`);
+    }
+
+    // Convert to our expected format
+    const processedConcepts = {};
+    for (const [conceptName, conceptData] of Object.entries(classification)) {
+      const stockObjects = conceptData.stocks.map(code =>
+        Object.values(stocks).find(s => s.code === code)
+      ).filter(Boolean);
+
+      if (stockObjects.length > 0) {
+        processedConcepts[conceptName] = {
+          icon: conceptData.icon,
+          reason: conceptData.reason,
+          stocks: stockObjects
+        };
+      }
+    }
+
+    console.log(`✅ Claude classified ${Object.keys(processedConcepts).length} concept groups`);
+    return processedConcepts;
+
+  } catch (error) {
+    console.log(`❌ Claude classification failed: ${error.message}`);
+    throw error;
+  }
+}
+
+async function callClaude(prompt) {
+  try {
+    // 動態載入 Claude Agent SDK（與 worker.js 相同方式）
+    const { query } = await import("@anthropic-ai/claude-agent-sdk");
+
+    // 使用與 worker.js 相同的設定
+    const sdkOptions = {
+      settingSources: ["project", "user"], // 載入 CLAUDE.md + 用戶設定
+      model: "claude-opus-4-20250514", // 與 worker 相同模型
+      maxTurns: 1, // 單輪分析即可
+      workingDirectory: process.cwd()
+    };
+
+    // 移除 CLAUDECODE env 避免嵌套檢測（與 worker.js 相同）
+    const cleanEnv = { ...process.env };
+    delete cleanEnv.CLAUDECODE;
+    sdkOptions.env = cleanEnv;
+
+    let finalResult = "";
+    const conversation = query({ prompt, options: sdkOptions });
+
+    for await (const message of conversation) {
+      if (message.type === "result") {
+        finalResult = (message.result || "").trim();
+        break; // 只需要最終結果
+      }
+    }
+
+    if (!finalResult) {
+      throw new Error("No result from Claude Agent SDK");
+    }
+
+    return finalResult;
+  } catch (error) {
+    throw new Error(`Claude Agent SDK failed: ${error.message}`);
+  }
+}

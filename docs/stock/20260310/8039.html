@@ -524,8 +524,10 @@ footer a { color: #58a6ff; text-decoration: none; }
 
 (function() {
   const ctx = document.getElementById('bubbleChart').getContext('2d');
-  const buyData = [{"x":1086,"y":104.8,"r":22,"label":"港商野村","net":1086,"buyVol":1397,"sellVol":311,"buyAvg":104.8,"sellAvg":99.19},{"x":973,"y":104.63,"r":20.82400159328832,"label":"台灣摩根","net":973,"buyVol":1508,"sellVol":535,"buyAvg":104.63,"sellAvg":101.23},{"x":857,"y":103.8,"r":19.543358228020317,"label":"凱基台北","net":857,"buyVol":2899,"sellVol":2042,"buyAvg":103.8,"sellAvg":101.16},{"x":635,"y":104.34,"r":16.822658577663226,"label":"美林","net":635,"buyVol":865,"sellVol":230,"buyAvg":104.34,"sellAvg":101.33},{"x":457,"y":102.92,"r":14.26623865556483,"label":"元大","net":457,"buyVol":2650,"sellVol":2193,"buyAvg":102.92,"sellAvg":101.19},{"x":448,"y":104.41,"r":14.124692535645487,"label":"摩根大通","net":448,"buyVol":642,"sellVol":194,"buyAvg":104.41,"sellAvg":99.71},{"x":373,"y":103.51,"r":12.89324348021658,"label":"美商高盛","net":373,"buyVol":1569,"sellVol":1196,"buyAvg":103.51,"sellAvg":100.23},{"x":307,"y":105.98,"r":11.697066418519787,"label":"凱基大安","net":307,"buyVol":307,"sellVol":0,"buyAvg":105.98,"sellAvg":0},{"x":283,"y":104.87,"r":11.23354470786043,"label":"台 新","net":283,"buyVol":584,"sellVol":301,"buyAvg":104.87,"sellAvg":103.66},{"x":254,"y":104.94,"r":10.650008516411228,"label":"統 一","net":254,"buyVol":555,"sellVol":300,"buyAvg":104.94,"sellAvg":102.74},{"x":200,"y":102.99,"r":9.44110365930324,"label":"瑞銀","net":200,"buyVol":854,"sellVol":654,"buyAvg":102.99,"sellAvg":101.1},{"x":110,"y":104.8,"r":7.004891739869561,"label":"華南高雄","net":110,"buyVol":220,"sellVol":110,"buyAvg":104.8,"sellAvg":104.54},{"x":99,"y":105.59,"r":6.642405209058385,"label":"凱基大直","net":99,"buyVol":107,"sellVol":8,"buyAvg":105.59,"sellAvg":102.54},{"x":92,"y":100.41,"r":6.403268042228605,"label":"第一桃園","net":92,"buyVol":110,"sellVol":18,"buyAvg":100.41,"sellAvg":104.78},{"x":84,"y":103.78,"r":6.122903294302565,"label":"中國信託","net":84,"buyVol":152,"sellVol":68,"buyAvg":103.78,"sellAvg":103.92}];
-  const sellData = [{"x":-357,"y":104.87,"r":12.616225630959155,"label":"新 光","net":-357,"buyVol":188,"sellVol":545,"buyAvg":102.09,"sellAvg":104.87},{"x":-282,"y":105.97,"r":11.218637479108642,"label":"兆豐","net":-282,"buyVol":0,"sellVol":282,"buyAvg":0,"sellAvg":105.97},{"x":-175,"y":103.87,"r":8.823745587212118,"label":"凱基台中","net":-175,"buyVol":7,"sellVol":182,"buyAvg":101.75,"sellAvg":103.87},{"x":-168,"y":103.31,"r":8.650699414979353,"label":"玉山台南","net":-168,"buyVol":62,"sellVol":230,"buyAvg":98.93,"sellAvg":103.31},{"x":-166,"y":103.34,"r":8.602135586483769,"label":"國泰敦南","net":-166,"buyVol":670,"sellVol":836,"buyAvg":100.96,"sellAvg":103.34},{"x":-118,"y":105.1,"r":7.251849322784384,"label":"元大敦化","net":-118,"buyVol":21,"sellVol":139,"buyAvg":104.09,"sellAvg":105.1},{"x":-90,"y":104.06,"r":6.326243972473979,"label":"元大經國","net":-90,"buyVol":6,"sellVol":96,"buyAvg":104.63,"sellAvg":104.06},{"x":-75,"y":101.16,"r":5.78917514011682,"label":"兆豐嘉義","net":-75,"buyVol":20,"sellVol":95,"buyAvg":100.37,"sellAvg":101.16},{"x":-70,"y":104.02,"r":5.59005826277468,"label":"國泰台中","net":-70,"buyVol":56,"sellVol":127,"buyAvg":101.68,"sellAvg":104.02},{"x":-62,"y":102.88,"r":5.2656904006928125,"label":"合 庫","net":-62,"buyVol":40,"sellVol":102,"buyAvg":100.84,"sellAvg":102.88},{"x":-62,"y":103.47,"r":5.257940412832644,"label":"富邦板橋","net":-62,"buyVol":63,"sellVol":125,"buyAvg":101.35,"sellAvg":103.47},{"x":-59,"y":104.79,"r":5.133695067496755,"label":"富邦高雄","net":-59,"buyVol":37,"sellVol":96,"buyAvg":103.18,"sellAvg":104.79},{"x":-59,"y":104.07,"r":5.126093289486938,"label":"元大台中","net":-59,"buyVol":24,"sellVol":83,"buyAvg":101.19,"sellAvg":104.07},{"x":-57,"y":105.29,"r":5.062227870502408,"label":"臺 銀","net":-57,"buyVol":6,"sellVol":64,"buyAvg":100.6,"sellAvg":105.29},{"x":-56,"y":105.15,"r":5.018015426576805,"label":"元大台南","net":-56,"buyVol":74,"sellVol":131,"buyAvg":103.01,"sellAvg":105.15}];
+  const buyerBuyData = [{"x":-1397,"y":104.8,"r":15.271756340307324,"label":"港商野村","net":1086,"buyVol":1397,"sellVol":311,"buyAvg":104.8,"sellAvg":99.19},{"x":-1508,"y":104.63,"r":15.866876960325229,"label":"台灣摩根","net":973,"buyVol":1508,"sellVol":535,"buyAvg":104.63,"sellAvg":101.23},{"x":-2899,"y":103.8,"r":22,"label":"凱基台北","net":857,"buyVol":2899,"sellVol":2042,"buyAvg":103.8,"sellAvg":101.16},{"x":-865,"y":104.34,"r":12.017076807336817,"label":"美林","net":635,"buyVol":865,"sellVol":230,"buyAvg":104.34,"sellAvg":101.33},{"x":-2650,"y":102.92,"r":21.03393866909347,"label":"元大","net":457,"buyVol":2650,"sellVol":2193,"buyAvg":102.92,"sellAvg":101.19},{"x":-642,"y":104.41,"r":10.352811277509446,"label":"摩根大通","net":448,"buyVol":642,"sellVol":194,"buyAvg":104.41,"sellAvg":99.71},{"x":-1569,"y":103.51,"r":16.18461060957177,"label":"美商高盛","net":373,"buyVol":1569,"sellVol":1196,"buyAvg":103.51,"sellAvg":100.23},{"x":-307,"y":105.98,"r":7.159125422333234,"label":"凱基大安","net":307,"buyVol":307,"sellVol":0,"buyAvg":105.98,"sellAvg":0},{"x":-584,"y":104.87,"r":9.875960974738828,"label":"台 新","net":283,"buyVol":584,"sellVol":301,"buyAvg":104.87,"sellAvg":103.66},{"x":-555,"y":104.94,"r":9.622565935351838,"label":"統 一","net":254,"buyVol":555,"sellVol":300,"buyAvg":104.94,"sellAvg":102.74},{"x":-854,"y":102.99,"r":11.94042317219487,"label":"瑞銀","net":200,"buyVol":854,"sellVol":654,"buyAvg":102.99,"sellAvg":101.1},{"x":-220,"y":104.8,"r":6.063482388902458,"label":"華南高雄","net":110,"buyVol":220,"sellVol":110,"buyAvg":104.8,"sellAvg":104.54},{"x":-107,"y":105.59,"r":4.226517505538232,"label":"凱基大直","net":99,"buyVol":107,"sellVol":8,"buyAvg":105.59,"sellAvg":102.54},{"x":-110,"y":100.41,"r":4.285358167463051,"label":"第一桃園","net":92,"buyVol":110,"sellVol":18,"buyAvg":100.41,"sellAvg":104.78},{"x":-152,"y":103.78,"r":5.038299674849188,"label":"中國信託","net":84,"buyVol":152,"sellVol":68,"buyAvg":103.78,"sellAvg":103.92}];
+  const buyerSellData = [{"x":311,"y":99.19,"r":7.20561373822241,"label":"港商野村","net":1086,"buyVol":1397,"sellVol":311,"buyAvg":104.8,"sellAvg":99.19},{"x":535,"y":101.23,"r":9.450780450476334,"label":"台灣摩根","net":973,"buyVol":1508,"sellVol":535,"buyAvg":104.63,"sellAvg":101.23},{"x":2042,"y":101.16,"r":18.464148566277267,"label":"凱基台北","net":857,"buyVol":2899,"sellVol":2042,"buyAvg":103.8,"sellAvg":101.16},{"x":230,"y":101.33,"r":6.196617672269962,"label":"美林","net":635,"buyVol":865,"sellVol":230,"buyAvg":104.34,"sellAvg":101.33},{"x":2193,"y":101.19,"r":19.135992399590027,"label":"元大","net":457,"buyVol":2650,"sellVol":2193,"buyAvg":102.92,"sellAvg":101.19},{"x":194,"y":99.71,"r":5.696112871461725,"label":"摩根大通","net":448,"buyVol":642,"sellVol":194,"buyAvg":104.41,"sellAvg":99.71},{"x":1196,"y":100.23,"r":14.130462377314469,"label":"美商高盛","net":373,"buyVol":1569,"sellVol":1196,"buyAvg":103.51,"sellAvg":100.23},{"x":0,"y":105.98,"r":2,"label":"凱基大安","net":307,"buyVol":307,"sellVol":0,"buyAvg":105.98,"sellAvg":0},{"x":301,"y":103.66,"r":7.089645575369866,"label":"台 新","net":283,"buyVol":584,"sellVol":301,"buyAvg":104.87,"sellAvg":103.66},{"x":300,"y":102.74,"r":7.07854570114029,"label":"統 一","net":254,"buyVol":555,"sellVol":300,"buyAvg":104.94,"sellAvg":102.74},{"x":654,"y":101.1,"r":10.449118572540526,"label":"瑞銀","net":200,"buyVol":854,"sellVol":654,"buyAvg":102.99,"sellAvg":101.1},{"x":110,"y":104.54,"r":4.287753402866581,"label":"華南高雄","net":110,"buyVol":220,"sellVol":110,"buyAvg":104.8,"sellAvg":104.54},{"x":8,"y":102.54,"r":2,"label":"凱基大直","net":99,"buyVol":107,"sellVol":8,"buyAvg":105.59,"sellAvg":102.54},{"x":18,"y":104.78,"r":2,"label":"第一桃園","net":92,"buyVol":110,"sellVol":18,"buyAvg":100.41,"sellAvg":104.78},{"x":68,"y":103.92,"r":3.3676084497221925,"label":"中國信託","net":84,"buyVol":152,"sellVol":68,"buyAvg":103.78,"sellAvg":103.92}];
+  const sellerSellData = [{"x":545,"y":104.87,"r":9.53973790417375,"label":"新 光","net":-357,"buyVol":188,"sellVol":545,"buyAvg":102.09,"sellAvg":104.87},{"x":282,"y":105.97,"r":6.8663056109063865,"label":"兆豐","net":-282,"buyVol":0,"sellVol":282,"buyAvg":0,"sellAvg":105.97},{"x":182,"y":103.87,"r":5.512219171545155,"label":"凱基台中","net":-175,"buyVol":7,"sellVol":182,"buyAvg":101.75,"sellAvg":103.87},{"x":230,"y":103.31,"r":6.197627908019239,"label":"玉山台南","net":-168,"buyVol":62,"sellVol":230,"buyAvg":98.93,"sellAvg":103.31},{"x":836,"y":103.34,"r":11.811705396451055,"label":"國泰敦南","net":-166,"buyVol":670,"sellVol":836,"buyAvg":100.96,"sellAvg":103.34},{"x":139,"y":105.1,"r":4.8172388853692345,"label":"元大敦化","net":-118,"buyVol":21,"sellVol":139,"buyAvg":104.09,"sellAvg":105.1},{"x":96,"y":104.06,"r":4.003376170468733,"label":"元大經國","net":-90,"buyVol":6,"sellVol":96,"buyAvg":104.63,"sellAvg":104.06},{"x":95,"y":101.16,"r":3.9866605393392334,"label":"兆豐嘉義","net":-75,"buyVol":20,"sellVol":95,"buyAvg":100.37,"sellAvg":101.16},{"x":127,"y":104.02,"r":4.596751498815834,"label":"國泰台中","net":-70,"buyVol":56,"sellVol":127,"buyAvg":101.68,"sellAvg":104.02},{"x":102,"y":102.88,"r":4.130932510765746,"label":"合 庫","net":-62,"buyVol":40,"sellVol":102,"buyAvg":100.84,"sellAvg":102.88},{"x":125,"y":103.47,"r":4.570125399976108,"label":"富邦板橋","net":-62,"buyVol":63,"sellVol":125,"buyAvg":101.35,"sellAvg":103.47},{"x":96,"y":104.79,"r":3.99891158464746,"label":"富邦高雄","net":-59,"buyVol":37,"sellVol":96,"buyAvg":103.18,"sellAvg":104.79},{"x":83,"y":104.07,"r":3.73096975658732,"label":"元大台中","net":-59,"buyVol":24,"sellVol":83,"buyAvg":101.19,"sellAvg":104.07},{"x":64,"y":105.29,"r":3.2574872723758768,"label":"臺 銀","net":-57,"buyVol":6,"sellVol":64,"buyAvg":100.6,"sellAvg":105.29},{"x":131,"y":105.15,"r":4.6676258792581224,"label":"元大台南","net":-56,"buyVol":74,"sellVol":131,"buyAvg":103.01,"sellAvg":105.15}];
+  const sellerBuyData = [{"x":-188,"y":102.09,"r":5.601970661246696,"label":"新 光","net":-357,"buyVol":188,"sellVol":545,"buyAvg":102.09,"sellAvg":104.87},{"x":0,"y":105.97,"r":2,"label":"兆豐","net":-282,"buyVol":0,"sellVol":282,"buyAvg":0,"sellAvg":105.97},{"x":-7,"y":101.75,"r":2,"label":"凱基台中","net":-175,"buyVol":7,"sellVol":182,"buyAvg":101.75,"sellAvg":103.87},{"x":-62,"y":98.93,"r":3.221438016120632,"label":"玉山台南","net":-168,"buyVol":62,"sellVol":230,"buyAvg":98.93,"sellAvg":103.31},{"x":-670,"y":100.96,"r":10.57342508688302,"label":"國泰敦南","net":-166,"buyVol":670,"sellVol":836,"buyAvg":100.96,"sellAvg":103.34},{"x":-21,"y":104.09,"r":2,"label":"元大敦化","net":-118,"buyVol":21,"sellVol":139,"buyAvg":104.09,"sellAvg":105.1},{"x":-6,"y":104.63,"r":2,"label":"元大經國","net":-90,"buyVol":6,"sellVol":96,"buyAvg":104.63,"sellAvg":104.06},{"x":-20,"y":100.37,"r":2,"label":"兆豐嘉義","net":-75,"buyVol":20,"sellVol":95,"buyAvg":100.37,"sellAvg":101.16},{"x":-56,"y":101.68,"r":3.0699167826860774,"label":"國泰台中","net":-70,"buyVol":56,"sellVol":127,"buyAvg":101.68,"sellAvg":104.02},{"x":-40,"y":100.84,"r":2.5841682061381714,"label":"合 庫","net":-62,"buyVol":40,"sellVol":102,"buyAvg":100.84,"sellAvg":102.88},{"x":-63,"y":101.35,"r":3.2449837578867577,"label":"富邦板橋","net":-62,"buyVol":63,"sellVol":125,"buyAvg":101.35,"sellAvg":103.47},{"x":-37,"y":103.18,"r":2.473624066101805,"label":"富邦高雄","net":-59,"buyVol":37,"sellVol":96,"buyAvg":103.18,"sellAvg":104.79},{"x":-24,"y":101.19,"r":2.0191268921006884,"label":"元大台中","net":-59,"buyVol":24,"sellVol":83,"buyAvg":101.19,"sellAvg":104.07},{"x":-6,"y":100.6,"r":2,"label":"臺 銀","net":-57,"buyVol":6,"sellVol":64,"buyAvg":100.6,"sellAvg":105.29},{"x":-74,"y":103.01,"r":3.5148487645400115,"label":"元大台南","net":-56,"buyVol":74,"sellVol":131,"buyAvg":103.01,"sellAvg":105.15}];
   const closePrice = 106;
 
   // Plugin: lines BEHIND bubbles, labels ABOVE bubbles
@@ -567,11 +569,13 @@ footer a { color: #58a6ff; text-decoration: none; }
     afterDatasetsDraw(chart) {
       const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
 
-      // Top 5 broker labels with collision avoidance
+      // Top 3 broker labels with collision avoidance (only for primary datasets)
       const placed = [];
       chart.data.datasets.forEach((ds, di) => {
+        // Only label primary datasets (0: 買超買進, 2: 賣超賣出), skip secondary ones (1,3)
+        if (di === 1 || di === 3) return;
         const meta = chart.getDatasetMeta(di);
-        const limit = Math.min(5, ds.data.length);
+        const limit = Math.min(3, ds.data.length);
         for (let i = 0; i < limit; i++) {
           const el = meta.data[i];
           const raw = ds.data[i];
@@ -636,8 +640,8 @@ footer a { color: #58a6ff; text-decoration: none; }
     data: {
       datasets: [
         {
-          label: '買超券商',
-          data: buyData,
+          label: '買超買進',
+          data: buyerBuyData,
           backgroundColor: function(ctx) {
             const r = ctx.raw ? ctx.raw.r : 5;
             const alpha = Math.min(0.75, 0.3 + r / 30);
@@ -650,8 +654,22 @@ footer a { color: #58a6ff; text-decoration: none; }
           hoverBorderWidth: 2,
         },
         {
-          label: '賣超券商',
-          data: sellData,
+          label: '買超賣出',
+          data: buyerSellData,
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.4, 0.15 + r / 50);
+            return 'rgba(248,81,73,' + alpha + ')';
+          },
+          borderColor: 'rgba(248,81,73,0.5)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(248,81,73,0.6)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 1,
+        },
+        {
+          label: '賣超賣出',
+          data: sellerSellData,
           backgroundColor: function(ctx) {
             const r = ctx.raw ? ctx.raw.r : 5;
             const alpha = Math.min(0.75, 0.3 + r / 30);
@@ -662,6 +680,20 @@ footer a { color: #58a6ff; text-decoration: none; }
           hoverBackgroundColor: 'rgba(63,185,80,0.9)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 2,
+        },
+        {
+          label: '賣超買進',
+          data: sellerBuyData,
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.4, 0.15 + r / 50);
+            return 'rgba(63,185,80,' + alpha + ')';
+          },
+          borderColor: 'rgba(63,185,80,0.5)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(63,185,80,0.6)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 1,
         }
       ]
     },
@@ -706,8 +738,8 @@ footer a { color: #58a6ff; text-decoration: none; }
           grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
           ticks: { color: '#8b949e', font: { size: 10 } },
           border: { color: '#30363d' },
-          min: -1249,
-          max: 1249
+          min: -3334,
+          max: 3334
         },
         y: {
           title: { display: true, text: '成交均價', color: '#8b949e', font: { size: 11 } },

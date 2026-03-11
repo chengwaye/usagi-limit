@@ -7,7 +7,7 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 import { classifyWithClaude } from "./claude-classifier.mjs";
-import { loadFinLabBrokerDataForStock } from "./finlab-broker-loader.mjs";
+// import { loadFinLabBrokerDataForStock } from "./finlab-broker-loader.mjs"; // 已移除 FinLab 資料
 
 const CACHE_DIR = path.resolve("../twse-broker-mcp/cache");
 const SITE_DIR = path.resolve("./docs");
@@ -293,17 +293,7 @@ async function loadBrokerData(stockCode, date) {
     }
   } catch {}
 
-  // Fallback to FinLab data if cache not found
-  try {
-    console.log(`Trying FinLab data for ${stockCode} ${date}...`);
-    const finlabData = await loadFinLabBrokerDataForStock(stockCode, date);
-    if (finlabData) {
-      console.log(`✅ Found FinLab broker data for ${stockCode} (${finlabData.total_brokers} brokers)`);
-      return { data: finlabData, dataDate: finlabData.date };
-    }
-  } catch (error) {
-    console.log(`Warning: FinLab fallback failed for ${stockCode}: ${error.message}`);
-  }
+  // FinLab fallback已移除
 
   return null;
 }
@@ -720,7 +710,13 @@ function formatVolume(shares) {
 // Helper functions for date navigation
 function getPrevDate(currentDate, availableDates) {
   const currentIndex = availableDates.indexOf(currentDate);
-  return currentIndex > 0 ? availableDates[currentIndex - 1] : null;
+  if (currentIndex > 0) {
+    const prevDate = availableDates[currentIndex - 1];
+    // 限制不能早於 2026-03-09
+    if (prevDate < "20260309") return null;
+    return prevDate;
+  }
+  return null;
 }
 
 function getNextDate(currentDate, availableDates) {
@@ -1025,9 +1021,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
   const yAxisMin = flatPrice;
   const yAxisMax = +(closePrice + yRange * 0.25).toFixed(2); // 上方留 25% 給標籤
 
-  // 買超券商的「買進」泡泡（紅色實心，X=+買進量）
+  // 買超券商的「買進」泡泡（紅色實心，X=-買進量，左側配合買超表格）
   const buyerBuyBubbles = (brokerData.top_buyers || []).map(b => ({
-    x: toZhang(b.buy_volume),
+    x: -toZhang(b.buy_volume),
     y: b.buy_avg_price || closePrice,
     r: calcR(b.buy_volume),
     label: b.broker_name,
@@ -1038,9 +1034,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     sellAvg: b.sell_avg_price,
   }));
 
-  // 買超券商的「賣出」泡泡（紅色淡色，X=-賣出量）
+  // 買超券商的「賣出」泡泡（紅色淡色，X=+賣出量，右側配合賣超表格）
   const buyerSellBubbles = (brokerData.top_buyers || []).map(b => ({
-    x: -toZhang(b.sell_volume),
+    x: toZhang(b.sell_volume),
     y: b.sell_avg_price || b.buy_avg_price || closePrice,
     r: calcR(b.sell_volume),
     label: b.broker_name,
@@ -1051,9 +1047,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     sellAvg: b.sell_avg_price,
   }));
 
-  // 賣超券商的「賣出」泡泡（綠色實心，X=-賣出量）
+  // 賣超券商的「賣出」泡泡（綠色實心，X=+賣出量，右側配合賣超表格）
   const sellerSellBubbles = (brokerData.top_sellers || []).map(b => ({
-    x: -toZhang(b.sell_volume),
+    x: toZhang(b.sell_volume),
     y: b.sell_avg_price || closePrice,
     r: calcR(b.sell_volume),
     label: b.broker_name,
@@ -1064,9 +1060,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     sellAvg: b.sell_avg_price,
   }));
 
-  // 賣超券商的「買進」泡泡（綠色淡色，X=+買進量）
+  // 賣超券商的「買進」泡泡（綠色淡色，X=-買進量，左側配合買超表格）
   const sellerBuyBubbles = (brokerData.top_sellers || []).map(b => ({
-    x: toZhang(b.buy_volume),
+    x: -toZhang(b.buy_volume),
     y: b.buy_avg_price || b.sell_avg_price || closePrice,
     r: calcR(b.buy_volume),
     label: b.broker_name,
@@ -1208,8 +1204,8 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     data: {
       datasets: [
         {
-          label: '買超券商',
-          data: buyData,
+          label: '買超買進',
+          data: buyerBuyData,
           backgroundColor: function(ctx) {
             const r = ctx.raw ? ctx.raw.r : 5;
             const alpha = Math.min(0.75, 0.3 + r / 30);
@@ -1222,8 +1218,22 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
           hoverBorderWidth: 2,
         },
         {
-          label: '賣超券商',
-          data: sellData,
+          label: '買超賣出',
+          data: buyerSellData,
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.4, 0.15 + r / 50);
+            return 'rgba(248,81,73,' + alpha + ')';
+          },
+          borderColor: 'rgba(248,81,73,0.5)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(248,81,73,0.6)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 1,
+        },
+        {
+          label: '賣超賣出',
+          data: sellerSellData,
           backgroundColor: function(ctx) {
             const r = ctx.raw ? ctx.raw.r : 5;
             const alpha = Math.min(0.75, 0.3 + r / 30);
@@ -1234,6 +1244,20 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
           hoverBackgroundColor: 'rgba(63,185,80,0.9)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 2,
+        },
+        {
+          label: '賣超買進',
+          data: sellerBuyData,
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.4, 0.15 + r / 50);
+            return 'rgba(63,185,80,' + alpha + ')';
+          },
+          borderColor: 'rgba(63,185,80,0.5)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(63,185,80,0.6)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 1,
         }
       ]
     },

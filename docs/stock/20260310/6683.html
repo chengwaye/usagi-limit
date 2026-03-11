@@ -524,8 +524,10 @@ footer a { color: #58a6ff; text-decoration: none; }
 
 (function() {
   const ctx = document.getElementById('bubbleChart').getContext('2d');
-  const buyData = [{"x":100,"y":986,"r":22,"label":"凱基信義","net":100,"buyVol":100,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":48,"y":984.21,"r":15.262200577860119,"label":"永昌南京","net":48,"buyVol":48,"sellVol":0,"buyAvg":984.21,"sellAvg":986},{"x":23,"y":986,"r":10.564890011568716,"label":"富邦","net":23,"buyVol":23,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":19,"y":985.44,"r":9.710157766785079,"label":"元大","net":19,"buyVol":28,"sellVol":9,"buyAvg":985.44,"sellAvg":984},{"x":16,"y":986,"r":8.81172740135877,"label":"港商野村","net":16,"buyVol":16,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":16,"y":986,"r":8.789946530304661,"label":"凱基站前","net":16,"buyVol":19,"sellVol":3,"buyAvg":986,"sellAvg":986},{"x":10,"y":986,"r":6.965585514149986,"label":"元大蘆洲中","net":10,"buyVol":10,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":9,"y":986,"r":6.60512297749233,"label":"台新建北","net":9,"buyVol":14,"sellVol":5,"buyAvg":986,"sellAvg":986},{"x":7,"y":986,"r":5.828409831222187,"label":"群益內湖","net":7,"buyVol":7,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":6,"y":986,"r":5.396058971457443,"label":"統一南京","net":6,"buyVol":6,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":5,"y":986,"r":4.925905367158946,"label":"第一金桃園","net":5,"buyVol":5,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":5,"y":986,"r":4.9254127519902395,"label":"元富新興","net":5,"buyVol":5,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":2,"y":986,"r":3.115416099734051,"label":"摩根大通","net":2,"buyVol":14,"sellVol":12,"buyAvg":986,"sellAvg":976.33},{"x":2,"y":986,"r":3.115416099734051,"label":"國泰綜合","net":2,"buyVol":2,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":2,"y":986,"r":3.115416099734051,"label":"群益","net":2,"buyVol":2,"sellVol":0,"buyAvg":986,"sellAvg":0}];
-  const sellData = [{"x":-33,"y":985.85,"r":12.6548800203303,"label":"摩根士丹利","net":-33,"buyVol":0,"sellVol":33,"buyAvg":0,"sellAvg":985.85},{"x":-29,"y":986,"r":11.873577882238786,"label":"永昌高雄","net":-29,"buyVol":0,"sellVol":29,"buyAvg":0,"sellAvg":986},{"x":-11,"y":986,"r":7.306298386300116,"label":"凱基台東","net":-11,"buyVol":0,"sellVol":11,"buyAvg":0,"sellAvg":986},{"x":-10,"y":986,"r":6.966282177202602,"label":"第一金台中","net":-10,"buyVol":0,"sellVol":10,"buyAvg":0,"sellAvg":986},{"x":-8,"y":986,"r":6.2773895009308935,"label":"中信託三重","net":-8,"buyVol":0,"sellVol":8,"buyAvg":0,"sellAvg":986},{"x":-6,"y":986,"r":5.502921998391784,"label":"凱基市政","net":-6,"buyVol":1,"sellVol":7,"buyAvg":986,"sellAvg":986},{"x":-6,"y":986,"r":5.400553815195139,"label":"元大嘉義","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":986},{"x":-6,"y":986,"r":5.396058971457443,"label":"統一仁愛","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":986},{"x":-5,"y":986,"r":4.925905367158946,"label":"臺銀證券","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":986},{"x":-5,"y":986,"r":4.925905367158946,"label":"元大土城學","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":986},{"x":-4,"y":986,"r":4.517353344614373,"label":"台新新莊","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":-4,"y":986,"r":4.461140967446063,"label":"玉山證券","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":-4,"y":986,"r":4.4333148304430505,"label":"第一金中山","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":-4,"y":986,"r":4.411367592520108,"label":"富邦板橋","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":-4,"y":986,"r":4.406414399225461,"label":"群益永和","net":-4,"buyVol":1,"sellVol":5,"buyAvg":974,"sellAvg":986}];
+  const buyerBuyData = [{"x":-100,"y":986,"r":22,"label":"凱基信義","net":100,"buyVol":100,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":-48,"y":984.21,"r":15.24204710660612,"label":"永昌南京","net":48,"buyVol":48,"sellVol":0,"buyAvg":984.21,"sellAvg":986},{"x":-23,"y":986,"r":10.550829351287984,"label":"富邦","net":23,"buyVol":23,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":-28,"y":985.44,"r":11.730147484153811,"label":"元大","net":19,"buyVol":28,"sellVol":9,"buyAvg":985.44,"sellAvg":984},{"x":-16,"y":986,"r":8.8,"label":"港商野村","net":16,"buyVol":16,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":-19,"y":986,"r":9.589577675789482,"label":"凱基站前","net":16,"buyVol":19,"sellVol":3,"buyAvg":986,"sellAvg":986},{"x":-10,"y":986,"r":6.957010852370435,"label":"元大蘆洲中","net":10,"buyVol":10,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":-14,"y":986,"r":8.231646250902672,"label":"台新建北","net":9,"buyVol":14,"sellVol":5,"buyAvg":986,"sellAvg":986},{"x":-7,"y":986,"r":5.8206528843421,"label":"群益內湖","net":7,"buyVol":7,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":-6,"y":986,"r":5.388877434122992,"label":"統一南京","net":6,"buyVol":6,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":-5,"y":986,"r":4.919349550499537,"label":"第一金桃園","net":5,"buyVol":5,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":-5,"y":986,"r":4.919349550499537,"label":"元富新興","net":5,"buyVol":5,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":-14,"y":986,"r":8.231646250902672,"label":"摩根大通","net":2,"buyVol":14,"sellVol":12,"buyAvg":986,"sellAvg":976.33},{"x":-2,"y":986,"r":3.111269837220809,"label":"國泰綜合","net":2,"buyVol":2,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":-2,"y":986,"r":3.111269837220809,"label":"群益","net":2,"buyVol":2,"sellVol":0,"buyAvg":986,"sellAvg":0}];
+  const buyerSellData = [{"x":0,"y":986,"r":2,"label":"凱基信義","net":100,"buyVol":100,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"永昌南京","net":48,"buyVol":48,"sellVol":0,"buyAvg":984.21,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"富邦","net":23,"buyVol":23,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":9,"y":984,"r":6.6,"label":"元大","net":19,"buyVol":28,"sellVol":9,"buyAvg":985.44,"sellAvg":984},{"x":0,"y":986,"r":2,"label":"港商野村","net":16,"buyVol":16,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":3,"y":986,"r":3.860357496398488,"label":"凱基站前","net":16,"buyVol":19,"sellVol":3,"buyAvg":986,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"元大蘆洲中","net":10,"buyVol":10,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":5,"y":986,"r":4.924266442831866,"label":"台新建北","net":9,"buyVol":14,"sellVol":5,"buyAvg":986,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"群益內湖","net":7,"buyVol":7,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":0,"y":986,"r":2,"label":"統一南京","net":6,"buyVol":6,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":0,"y":986,"r":2,"label":"第一金桃園","net":5,"buyVol":5,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":0,"y":986,"r":2,"label":"元富新興","net":5,"buyVol":5,"sellVol":0,"buyAvg":986,"sellAvg":986},{"x":12,"y":976.33,"r":7.62102355330306,"label":"摩根大通","net":2,"buyVol":14,"sellVol":12,"buyAvg":986,"sellAvg":976.33},{"x":0,"y":986,"r":2,"label":"國泰綜合","net":2,"buyVol":2,"sellVol":0,"buyAvg":986,"sellAvg":0},{"x":0,"y":986,"r":2,"label":"群益","net":2,"buyVol":2,"sellVol":0,"buyAvg":986,"sellAvg":0}];
+  const sellerSellData = [{"x":33,"y":985.85,"r":12.638037822383662,"label":"摩根士丹利","net":-33,"buyVol":0,"sellVol":33,"buyAvg":0,"sellAvg":985.85},{"x":29,"y":986,"r":11.857775508079076,"label":"永昌高雄","net":-29,"buyVol":0,"sellVol":29,"buyAvg":0,"sellAvg":986},{"x":11,"y":986,"r":7.296574538781879,"label":"凱基台東","net":-11,"buyVol":0,"sellVol":11,"buyAvg":0,"sellAvg":986},{"x":10,"y":986,"r":6.957010852370435,"label":"第一金台中","net":-10,"buyVol":0,"sellVol":10,"buyAvg":0,"sellAvg":986},{"x":8,"y":986,"r":6.269035013461004,"label":"中信託三重","net":-8,"buyVol":0,"sellVol":8,"buyAvg":0,"sellAvg":986},{"x":7,"y":986,"r":5.919594580712433,"label":"凱基市政","net":-6,"buyVol":1,"sellVol":7,"buyAvg":986,"sellAvg":986},{"x":6,"y":986,"r":5.3933662957377555,"label":"元大嘉義","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":986},{"x":6,"y":986,"r":5.388877434122992,"label":"統一仁愛","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":986},{"x":5,"y":986,"r":4.919349550499537,"label":"臺銀證券","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":986},{"x":5,"y":986,"r":4.919349550499537,"label":"元大土城學","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":986},{"x":4,"y":986,"r":4.5113412639701735,"label":"台新新莊","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":4,"y":986,"r":4.455203699046767,"label":"玉山證券","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":4,"y":986,"r":4.427414595449584,"label":"第一金中山","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":4,"y":986,"r":4.405496566790173,"label":"富邦板橋","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":5,"y":986,"r":4.919841460860299,"label":"群益永和","net":-4,"buyVol":1,"sellVol":5,"buyAvg":974,"sellAvg":986}];
+  const sellerBuyData = [{"x":0,"y":985.85,"r":2,"label":"摩根士丹利","net":-33,"buyVol":0,"sellVol":33,"buyAvg":0,"sellAvg":985.85},{"x":0,"y":986,"r":2,"label":"永昌高雄","net":-29,"buyVol":0,"sellVol":29,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"凱基台東","net":-11,"buyVol":0,"sellVol":11,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"第一金台中","net":-10,"buyVol":0,"sellVol":10,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"中信託三重","net":-8,"buyVol":0,"sellVol":8,"buyAvg":0,"sellAvg":986},{"x":-1,"y":986,"r":2.2,"label":"凱基市政","net":-6,"buyVol":1,"sellVol":7,"buyAvg":986,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"元大嘉義","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"統一仁愛","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"臺銀證券","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"元大土城學","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"台新新莊","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"玉山證券","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"第一金中山","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":0,"y":986,"r":2,"label":"富邦板橋","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":986},{"x":-1,"y":974,"r":2.2,"label":"群益永和","net":-4,"buyVol":1,"sellVol":5,"buyAvg":974,"sellAvg":986}];
   const closePrice = 986;
 
   // Plugin: lines BEHIND bubbles, labels ABOVE bubbles
@@ -567,11 +569,13 @@ footer a { color: #58a6ff; text-decoration: none; }
     afterDatasetsDraw(chart) {
       const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
 
-      // Top 5 broker labels with collision avoidance
+      // Top 3 broker labels with collision avoidance (only for primary datasets)
       const placed = [];
       chart.data.datasets.forEach((ds, di) => {
+        // Only label primary datasets (0: 買超買進, 2: 賣超賣出), skip secondary ones (1,3)
+        if (di === 1 || di === 3) return;
         const meta = chart.getDatasetMeta(di);
-        const limit = Math.min(5, ds.data.length);
+        const limit = Math.min(3, ds.data.length);
         for (let i = 0; i < limit; i++) {
           const el = meta.data[i];
           const raw = ds.data[i];
@@ -636,8 +640,8 @@ footer a { color: #58a6ff; text-decoration: none; }
     data: {
       datasets: [
         {
-          label: '買超券商',
-          data: buyData,
+          label: '買超買進',
+          data: buyerBuyData,
           backgroundColor: function(ctx) {
             const r = ctx.raw ? ctx.raw.r : 5;
             const alpha = Math.min(0.75, 0.3 + r / 30);
@@ -650,8 +654,22 @@ footer a { color: #58a6ff; text-decoration: none; }
           hoverBorderWidth: 2,
         },
         {
-          label: '賣超券商',
-          data: sellData,
+          label: '買超賣出',
+          data: buyerSellData,
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.4, 0.15 + r / 50);
+            return 'rgba(248,81,73,' + alpha + ')';
+          },
+          borderColor: 'rgba(248,81,73,0.5)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(248,81,73,0.6)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 1,
+        },
+        {
+          label: '賣超賣出',
+          data: sellerSellData,
           backgroundColor: function(ctx) {
             const r = ctx.raw ? ctx.raw.r : 5;
             const alpha = Math.min(0.75, 0.3 + r / 30);
@@ -662,6 +680,20 @@ footer a { color: #58a6ff; text-decoration: none; }
           hoverBackgroundColor: 'rgba(63,185,80,0.9)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 2,
+        },
+        {
+          label: '賣超買進',
+          data: sellerBuyData,
+          backgroundColor: function(ctx) {
+            const r = ctx.raw ? ctx.raw.r : 5;
+            const alpha = Math.min(0.4, 0.15 + r / 50);
+            return 'rgba(63,185,80,' + alpha + ')';
+          },
+          borderColor: 'rgba(63,185,80,0.5)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(63,185,80,0.6)',
+          hoverBorderColor: '#fff',
+          hoverBorderWidth: 1,
         }
       ]
     },
