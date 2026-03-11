@@ -264,28 +264,6 @@ footer a { color: #58a6ff; text-decoration: none; }
       </div>
     </div>
 
-      <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;">
-      <h3 style="color:#e6edf3;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-        🤖 AI 漲停原因分析
-        <span style="font-size:11px;color:#8b949e;font-weight:normal;">(智能分析)</span>
-      </h3>
-      <div style="background:#0d1117;border-radius:6px;padding:14px;margin-bottom:12px;">
-        <div style="color:#e6edf3;font-size:14px;line-height:1.6;margin-bottom:8px;">
-          💡 市場追捧強勢股
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:11px;">
-          <span style="color:#8b949e;">分類：</span>
-          <span style="color:#58a6ff;">技術面</span>
-          <span style="color:#8b949e;">•</span>
-          <span style="color:#8b949e;">信心度：</span>
-          <span style="color:#8b949e;font-weight:600;">low</span>
-        </div>
-      </div>
-      <div style="text-align:center;font-size:10px;color:#6c7a89;">
-        ⚠️ AI 分析僅供參考，不構成投資建議，請自行判斷風險
-      </div>
-    </div>
-
       
       
       <div class="dual-panel">
@@ -993,30 +971,19 @@ footer a { color: #58a6ff; text-decoration: none; }
       <div>賣出：${brokerData.sellVol} 張${brokerData.sellAvg ? ' @ $' + brokerData.sellAvg.toFixed(2) : ''}</div>
     `;
 
-    // Position tooltip FAR from bubbles to avoid blocking curved lines
+    // Position tooltip to avoid curved lines (prefer upper-left or upper-right)
     const canvasRect = canvas.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
 
-    // Try positioning further away (40px offset instead of 15px)
-    let x = canvasRect.left + mouseX + 40;
-    let y = canvasRect.top + mouseY - tooltipRect.height - 40;
+    let x = canvasRect.left + mouseX + 15;
+    let y = canvasRect.top + mouseY - tooltipRect.height - 15;
 
-    // If too close to right edge, place on left side with larger offset
-    if (x + tooltipRect.width > window.innerWidth - 20) {
-      x = canvasRect.left + mouseX - tooltipRect.width - 40;
+    // Keep within viewport
+    if (x + tooltipRect.width > window.innerWidth) {
+      x = canvasRect.left + mouseX - tooltipRect.width - 15;
     }
-
-    // If too close to top, place below with larger offset
-    if (y < 20) {
-      y = canvasRect.top + mouseY + 40;
-    }
-
-    // For very small screens, use smaller offset as fallback
-    if (x < 10) {
-      x = 10;
-    }
-    if (y + tooltipRect.height > window.innerHeight - 20) {
-      y = window.innerHeight - tooltipRect.height - 20;
+    if (y < 0) {
+      y = canvasRect.top + mouseY + 15;
     }
 
     tooltip.style.left = x + 'px';
