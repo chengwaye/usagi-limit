@@ -630,6 +630,41 @@ footer a { color: #58a6ff; text-decoration: none; }
           ctx.textBaseline = 'bottom';
           ctx.fillText(name, tx, ty);
           ctx.restore();
+
+          // Draw curved connection line to the broker's other bubble (buy-sell pair)
+          const pairedDatasetIndex = (di === 0) ? 1 : 3; // 0→1 (買超買進→買超賣出), 2→3 (賣超賣出→賣超買進)
+          const pairedDataset = chart.data.datasets[pairedDatasetIndex];
+          const pairedMeta = chart.getDatasetMeta(pairedDatasetIndex);
+
+          // Find matching broker in paired dataset
+          const pairedBubble = pairedDataset.data.find(d => d.label === name);
+          if (pairedBubble) {
+            const pairedIndex = pairedDataset.data.indexOf(pairedBubble);
+            const pairedEl = pairedMeta.data[pairedIndex];
+            if (pairedEl) {
+              // Draw curved line between the two bubbles
+              ctx.save();
+              ctx.strokeStyle = di === 0 ? 'rgba(248,81,73,0.3)' : 'rgba(63,185,80,0.3)';
+              ctx.lineWidth = 2;
+              ctx.setLineDash([4, 4]);
+
+              const startX = el.x;
+              const startY = el.y;
+              const endX = pairedEl.x;
+              const endY = pairedEl.y;
+
+              // Create curved path (quadratic bezier)
+              const midX = (startX + endX) / 2;
+              const midY = Math.min(startY, endY) - 20; // curve upward
+
+              ctx.beginPath();
+              ctx.moveTo(startX, startY);
+              ctx.quadraticCurveTo(midX, midY, endX, endY);
+              ctx.stroke();
+              ctx.setLineDash([]);
+              ctx.restore();
+            }
+          }
         }
       });
     }
