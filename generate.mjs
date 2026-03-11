@@ -6,11 +6,15 @@
 import fs from "fs";
 import path from "path";
 import axios from "axios";
-import { classifyWithClaude, analyzeStockReasons, groupByReasonSimilarity } from "./claude-classifier.mjs";
+import { classifyWithClaude } from "./claude-classifier.mjs";
 // import { loadFinLabBrokerDataForStock } from "./finlab-broker-loader.mjs"; // 已移除 FinLab 資料
 
 const CACHE_DIR = path.resolve("../twse-broker-mcp/cache");
-const SITE_DIR = path.resolve("./docs");
+
+// --test flag: output to docs/test/ for preview, default to docs/ for production
+const IS_TEST = process.argv.includes("--test");
+const SITE_DIR = IS_TEST ? path.resolve("./docs/test") : path.resolve("./docs");
+if (IS_TEST) console.log("🧪 TEST MODE: output → docs/test/");
 
 // Load concept mapping
 let conceptMapping = {};
@@ -194,9 +198,9 @@ async function getLimitStocks() {
 
   const stocks = {};
   for (const s of data) {
-    const close = parseFloat(s.ClosingPrice);
-    const high = parseFloat(s.HighestPrice);
-    const change = parseFloat(s.Change);
+    const close = parseFloat(String(s.ClosingPrice).replace(/,/g, ''));
+    const high = parseFloat(String(s.HighestPrice).replace(/,/g, ''));
+    const change = parseFloat(String(s.Change).replace(/,/g, ''));
     if (!close || !high || isNaN(change)) continue;
     const prevClose = close - change;
     if (prevClose <= 0) continue;
@@ -301,104 +305,16 @@ async function loadBrokerData(stockCode, date) {
 // ============================================================
 // Step 2.5: Intelligent concept classification using Claude
 // ============================================================
-async function classifyStocksIntelligently(stocks) {
-  // SKIP_AI=1 to bypass slow AI analysis and use fallback grouping
-  if (process.env.SKIP_AI === "1") {
-    console.log('⏩ Skipping AI analysis (SKIP_AI=1), using fallback...');
-    const fallbackGroups = await simulateClaudeAnalysis(stocks);
-    for (const [groupName, groupData] of Object.entries(fallbackGroups)) {
-      if (!groupData.stocks || !Array.isArray(groupData.stocks)) groupData.stocks = [];
-    }
-    const fallbackReasons = {};
-    for (const stock of Object.values(stocks)) {
-      fallbackReasons[stock.code] = {
-        reason: '市場情緒樂觀，資金追捧強勢股',
-        confidence: 'low',
-        keywords: ['市場情緒'],
-        category: '技術面'
-      };
-    }
-    return { concepts: fallbackGroups, stockReasons: fallbackReasons };
-  }
+// Delegates to claude-classifier.mjs (single SDK call, Sonnet, cached)
+async function classifyStocksIntelligently(stocks, date) {
   try {
-    console.log('🤖 Starting enhanced AI analysis (concepts + individual reasons)...');
-
-    // 1. 個股原因分析
-    console.log('📊 Analyzing individual stock reasons...');
-    const stockAnalysis = await analyzeStockReasons(stocks);
-
-    // 2. 根據原因相似性分組
-    console.log('🔄 Grouping by reason similarity...');
-    const reasonBasedGroups = groupByReasonSimilarity(stockAnalysis, stocks);
-
-    // 3. 嘗試與傳統概念分組合併
-    try {
-      const conceptGroups = await classifyWithClaude(stocks);
-      const mergedGroups = { ...reasonBasedGroups, ...conceptGroups };
-
-      // 移除重複的股票（優先保留原因分組）
-      const usedStocks = new Set();
-      const finalGroups = {};
-
-      for (const [groupName, groupData] of Object.entries(mergedGroups)) {
-        if (!groupData.stocks) {
-          console.log(`⚠️ Warning: Group ${groupName} missing stocks array`);
-          continue;
-        }
-        const uniqueStocks = groupData.stocks.filter(stock => {
-          if (usedStocks.has(stock.code)) return false;
-          usedStocks.add(stock.code);
-          return true;
-        });
-
-        if (uniqueStocks.length > 0) {
-          finalGroups[groupName] = {
-            ...groupData,
-            stocks: uniqueStocks
-          };
-        }
-      }
-
-      return {
-        concepts: finalGroups,
-        stockReasons: stockAnalysis
-      };
-    } catch (conceptError) {
-      console.log('💡 Using reason-based grouping only');
-      return {
-        concepts: reasonBasedGroups,
-        stockReasons: stockAnalysis
-      };
-    }
+    // Try Claude-powered intelligent classification (with cache)
+    const analysisResult = await classifyWithClaude(stocks, date);
+    return analysisResult;
 
   } catch (error) {
-    console.log(`Enhanced AI analysis failed: ${error.message}`);
-    console.log(error.stack);
-    const fallbackGroups = await simulateClaudeAnalysis(stocks);
-
-    // 確保 fallback 結果有正確的結構
-    for (const [groupName, groupData] of Object.entries(fallbackGroups)) {
-      if (!groupData.stocks || !Array.isArray(groupData.stocks)) {
-        console.log(`⚠️ Fixing missing stocks array for group: ${groupName}`);
-        groupData.stocks = [];
-      }
-    }
-
-    // 即使fallback也嘗試簡單的個股分析
-    const fallbackReasons = {};
-    for (const stock of Object.values(stocks)) {
-      fallbackReasons[stock.code] = {
-        reason: '市場情緒樂觀，資金追捧強勢股',
-        confidence: 'low',
-        keywords: ['市場情緒'],
-        category: '技術面'
-      };
-    }
-
-    return {
-      concepts: fallbackGroups,
-      stockReasons: fallbackReasons
-    };
+    console.log('Claude analysis failed, falling back to smart heuristics');
+    return await simulateClaudeAnalysis(stocks);
   }
 }
 
@@ -456,130 +372,21 @@ function classifyStocksStatic(stocks) {
 
 // Smart heuristic analysis based on industry patterns
 async function simulateClaudeAnalysis(stocks) {
-  const concepts = {};
+  // 通用 fallback：全部歸「今日強勢股」，不寫死特定股票
   const stockArray = Object.values(stocks);
-
-  // Analyze stock patterns and group by likely reasons
-  const groups = [];
-
-  // 天然氣族群 (欣字輩 + 新海)
-  const gasStocks = stockArray.filter(s =>
-    s.name.includes('欣') || s.name.includes('新海') || ['8908', '8917', '9918', '9926', '9931'].includes(s.code)
-  );
-  if (gasStocks.length >= 3) {
-    groups.push({
-      name: '天然氣概念股大爆發',
-      icon: '🔥',
-      reason: `天然氣價格走強，${gasStocks.length}檔欣字輩概念股集體漲停`,
-      stocks: gasStocks
-    });
-  }
-
-  // 石化塑化族群
-  const petroStocks = stockArray.filter(s =>
-    s.name.includes('化') || s.name.includes('塑') || ['1309', '1314', '6505'].includes(s.code)
-  );
-  if (petroStocks.length >= 3) {
-    groups.push({
-      name: '石化塑化族群同步走強',
-      icon: '🛢️',
-      reason: `原油價格反彈，石化上游受惠，${petroStocks.length}檔同步漲停`,
-      stocks: petroStocks
-    });
-  }
-
-  // 個別股票分析
-  const remaining = stockArray.filter(s =>
-    !gasStocks.includes(s) && !petroStocks.includes(s)
-  );
-
-  // 根據股票名稱和代碼進行個別分析
-  remaining.forEach(stock => {
-    let conceptName, icon, reason;
-
-    // 精準分析每檔股票
-    switch(stock.code) {
-      case '5386': // 青雲
-        conceptName = '雲端記憶體需求爆發';
-        icon = '☁️';
-        reason = '雲端運算與AI記憶體需求暴增，青雲記憶體模組受惠';
-        break;
-      case '4973': // 廣穎
-        conceptName = '記憶體模組強勢';
-        icon = '🧠';
-        reason = 'AI伺服器記憶體需求強勁，記憶體模組廠商營運看漲';
-        break;
-      case '2426': // 鼎元
-        conceptName = '半導體設備利多';
-        icon = '⚡';
-        reason = '半導體產能擴充需求，設備廠商受惠AI晶片製造潮';
-        break;
-      case '3054': // 立萬利
-        conceptName = 'PCB載板需求';
-        icon = '📱';
-        reason = 'AI晶片高階載板需求增加，PCB廠商技術升級受惠';
-        break;
-      case '1762': // 中化生
-        conceptName = '生技化學雙重利多';
-        icon = '🧪';
-        reason = '既有石化概念又有生技醫療題材，雙重利多加持';
-        break;
-      case '4911': // 德英
-        conceptName = '生技新藥進展';
-        icon = '💊';
-        reason = '新藥研發進度或法規利多，生技股獨立表現';
-        break;
-      case '6715': // 嘉基
-        conceptName = '醫療設備升級';
-        icon = '🏥';
-        reason = '醫療數位化與AI導入，醫療設備廠商受惠';
-        break;
-      case '2616': // 山隆
-        conceptName = '鋼鐵原料回溫';
-        icon = '🔩';
-        reason = '基建需求復甦，鋼鐵原物料價格止跌回升';
-        break;
-      case '3709': // 鑫聯大投控
-        conceptName = '金融投控布局';
-        icon = '🏦';
-        reason = '金融環境改善，投控公司資產重估與獲利回升';
-        break;
-      case '6508': // 惠光
-        conceptName = '光電元件需求';
-        icon = '💡';
-        reason = '光電通訊與顯示需求增加，相關元件廠商受惠';
-        break;
-      default:
-        conceptName = `${stock.name}個股利多`;
-        icon = '📈';
-        reason = '個別基本面利多或技術面突破，股價強勢表現';
+  const concepts = {
+    '今日強勢股': {
+      icon: '⚡',
+      reason: `今日共 ${stockArray.length} 檔漲停，AI 分析暫時無法使用`,
+      stocks: stockArray
     }
-
-    groups.push({
-      name: conceptName,
-      icon: icon,
-      reason: reason,
-      stocks: [stock],
-      isSingle: true
-    });
-  });
-
-  // 現在 groups 包含所有分組（多檔概念 + 單檔概念）
-
-  // 轉換為最終格式
-  groups.forEach(group => {
-    if (group.stocks.length > 0) {
-      concepts[group.name] = {
-        icon: group.icon,
-        reason: group.reason,
-        stocks: group.stocks,
-        isSingle: group.isSingle || false
-      };
-    }
-  });
-
-  console.log(`✅ Smart heuristics classified ${Object.keys(concepts).length} concept groups`);
-  return concepts;
+  };
+  const stockReasons = {};
+  for (const s of stockArray) {
+    stockReasons[s.code] = { reason: '市場資金追捧強勢股', category: '市場', confidence: 'medium' };
+  }
+  console.log(`⚡ Fallback: ${stockArray.length} 檔歸入「今日強勢股」`);
+  return { concepts, stockReasons };
 }
 
 // ============================================================
@@ -677,7 +484,10 @@ header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
 .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
 .singles-container { display: flex; flex-wrap: wrap; gap: 0; }
-.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; transition: all 0.2s ease; }
+.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; transition: all 0.2s ease; position: relative; }
+.stock-card .reason-tip { display: none; position: absolute; left: 0; right: 0; bottom: 100%; background: #1c2129; border: 1px solid #444c56; border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #c9d1d9; line-height: 1.5; z-index: 100; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.stock-card .reason-tip .tip-cta { color: #58a6ff; font-size: 11px; margin-top: 4px; }
+.stock-card:hover .reason-tip { display: block; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; transition: all 0.2s ease; }
 .stock-card a:hover { background: #1c2129; }
 .stock-header { display: flex; justify-content: space-between; align-items: center; }
@@ -814,19 +624,23 @@ function getNextDate(currentDate, availableDates) {
   return currentIndex < availableDates.length - 1 ? availableDates[currentIndex + 1] : null;
 }
 
-async function generateIndexPage(limitStocks, date, availableDates = [], stockLinkPrefix = "stock/", preClassified = null) {
+async function generateIndexPage(limitStocks, date, availableDates = [], stockLinkPrefix = "stock/", preClassified = null, stockReasons = {}) {
   const adDate = formatDate(date);
   const upStocks = Object.values(limitStocks);
   let classifiedStocks;
   if (preClassified) {
     classifiedStocks = preClassified;
   } else {
-    const analysisResult = await classifyStocksIntelligently(limitStocks);
+    const analysisResult = await classifyStocksIntelligently(limitStocks, date);
     classifiedStocks = analysisResult.concepts || analysisResult;
   }
 
-  const stockCard = (s) => `
+  const stockCard = (s) => {
+    const sr = stockReasons[s.code];
+    const reasonTip = sr && sr.reason ? `<div class="reason-tip">${sr.reason}<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>` : '';
+    return `
     <div class="stock-card">
+      ${reasonTip}
       <a href="${stockLinkPrefix}${s.code}.html">
         <div class="stock-header">
           <div><span class="stock-name">${s.name}</span><span class="stock-code">${s.code}</span></div>
@@ -841,6 +655,7 @@ async function generateIndexPage(limitStocks, date, availableDates = [], stockLi
         </div>
       </a>
     </div>`;
+  };
 
   // 分離多檔概念和單檔概念
   const multiStockConcepts = [];
@@ -1177,7 +992,10 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     ...sellerBuyBubbles.map(b => b.x)
   ];
   const xAbsMax = Math.max(...allX.map(v => Math.abs(v)), 1);
-  const xPad = Math.ceil(xAbsMax * 1.15); // 15% padding
+  const xPadRaw = Math.ceil(xAbsMax * 1.15);
+  // Round up to a nice number (e.g. 10957 → 11000, 523 → 550, 48 → 50)
+  const magnitude = Math.pow(10, Math.max(0, Math.floor(Math.log10(xPadRaw)) - 1));
+  const xPad = Math.ceil(xPadRaw / magnitude) * magnitude;
   const xAxisMin = -xPad;
   const xAxisMax = xPad;
 
@@ -1194,9 +1012,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
   let hoveredBroker = null;
   const labelRects = []; // Store label positions for collision detection
 
-  // Extract top 3 brokers for quick reference
-  const top3Buyers = buyerBuyData.slice(0, 3).map(d => d.label);
-  const top3Sellers = sellerSellData.slice(0, 3).map(d => d.label);
+  // Extract top 5 brokers for labels
+  const top5Buyers = buyerBuyData.slice(0, 5).map(d => d.label);
+  const top5Sellers = sellerSellData.slice(0, 5).map(d => d.label);
 
   // Plugin: lines BEHIND bubbles, labels BELOW chart
   const refLinePlugin = {
@@ -1240,24 +1058,17 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
       // Clear previous label rects
       labelRects.length = 0;
 
-      // Label area: 50px below chart bottom to avoid X-axis overlap
-      const labelY = bottom + 40;
-      ctx.font = 'bold 11px sans-serif';
+      // Label area: W-zigzag layout
+      // Row 0 (top): #1, #3, #5  |  Row 1 (bottom): #2, #4
+      const labelRowY = [bottom + 40, bottom + 78];
+      const halfWidth = (right - left) / 2;
 
-      // Draw top 3 buyer labels (left side, #1 is leftmost)
-      const buyerWidth = (right - left) / 2;
-      top3Buyers.forEach((brokerName, i) => {
+      // Helper to draw one label
+      const drawLabel = (brokerName, x, labelY, isHovered, color, brokerData, datasetData, datasetIndex) => {
         if (!brokerName) return;
-
-        const isHovered = hoveredBroker === brokerName;
-        const x = left + (i + 1) * (buyerWidth / 4); // spread across left half
-
-        // Get broker net volume for display
-        const brokerData = buyerBuyData.find(d => d.label === brokerName);
         const netVol = brokerData ? brokerData.net : 0;
         const netText = (netVol > 0 ? '+' : '') + netVol;
 
-        // Label background and styling (買超 = 紅色) - taller for 2 lines
         ctx.font = 'bold 10px sans-serif';
         const tw = Math.max(ctx.measureText(brokerName).width, ctx.measureText(netText).width);
         const bgX = x - tw/2 - 6;
@@ -1265,116 +1076,64 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
         const bgW = tw + 12;
         const bgH = 30;
 
-        // Draw background
-        ctx.fillStyle = isHovered ? 'rgba(248,81,73,0.8)' : 'rgba(248,81,73,0.4)';
+        const hAlpha = color === 'red' ? 'rgba(248,81,73,' : 'rgba(63,185,80,';
+        ctx.fillStyle = isHovered ? hAlpha + '0.8)' : hAlpha + '0.4)';
         ctx.fillRect(bgX, bgY, bgW, bgH);
 
-        // Draw broker name (line 1)
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(brokerName, x, labelY - 6);
-
-        // Draw net volume (line 2)
         ctx.font = 'bold 8px sans-serif';
         ctx.fillText(netText, x, labelY + 6);
 
-        // Store rect for collision detection (updated for 2-line background)
-        labelRects.push({
-          name: brokerName,
-          x: bgX,
-          y: bgY,
-          w: bgW,
-          h: bgH,
-          data: brokerData // Store broker data for tooltip
-        });
+        labelRects.push({ name: brokerName, x: bgX, y: bgY, w: bgW, h: bgH, data: brokerData });
 
-        // Draw connection line to primary bubble (买超买进)
-        const bubble = buyerBuyData.find(d => d.label === brokerName);
+        // Connection line to bubble
+        const bubble = datasetData.find(d => d.label === brokerName);
         if (bubble) {
-          const meta0 = chart.getDatasetMeta(0);
-          const bubbleIndex = buyerBuyData.indexOf(bubble);
-          const bubbleEl = meta0.data[bubbleIndex];
-
+          const meta = chart.getDatasetMeta(datasetIndex);
+          const bubbleEl = meta.data[datasetData.indexOf(bubble)];
           if (bubbleEl) {
             ctx.save();
             ctx.strokeStyle = isHovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.35)';
             ctx.lineWidth = isHovered ? 2 : 1;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
-            ctx.moveTo(x, labelY - 15);  // Adjusted for 2-line label
+            ctx.moveTo(x, labelY - 15);
             ctx.lineTo(bubbleEl.x, bubbleEl.y);
             ctx.stroke();
             ctx.setLineDash([]);
             ctx.restore();
           }
         }
+      };
+
+      // W-zigzag: rank 0,2,4 → row 0 (top), rank 1,3 → row 1 (bottom)
+      // Buyer labels (left half): #1 leftmost
+      top5Buyers.forEach((brokerName, rank) => {
+        if (!brokerName) return;
+        const row = rank % 2 === 0 ? 0 : 1;
+        const rowItems = rank % 2 === 0 ? 3 : 2; // row0 has 3, row1 has 2
+        const col = Math.floor(rank / 2);
+        const x = left + (col + 1) * (halfWidth / (rowItems + 1));
+        const labelY = labelRowY[row];
+        const brokerData = buyerBuyData.find(d => d.label === brokerName);
+        drawLabel(brokerName, x, labelY, hoveredBroker === brokerName, 'red', brokerData, buyerBuyData, 0);
       });
 
-      // Draw top 3 seller labels (right side, #1 is rightmost)
-      top3Sellers.forEach((brokerName, i) => {
+      // Seller labels (right half): #1 rightmost (mirrored)
+      top5Sellers.forEach((brokerName, rank) => {
         if (!brokerName) return;
-
-        const isHovered = hoveredBroker === brokerName;
-        const x = left + buyerWidth + ((3 - i) * (buyerWidth / 4)); // spread across right half, reversed order
-
-        // Get broker net volume for display (negative for sellers)
+        const row = rank % 2 === 0 ? 0 : 1;
+        const rowItems = rank % 2 === 0 ? 3 : 2;
+        const col = Math.floor(rank / 2);
+        // Mirror: col 0 → rightmost, col 2 → leftmost
+        const mirrorCol = (rowItems - 1) - col;
+        const x = left + halfWidth + (mirrorCol + 1) * (halfWidth / (rowItems + 1));
+        const labelY = labelRowY[row];
         const brokerData = sellerSellData.find(d => d.label === brokerName);
-        const netVol = brokerData ? brokerData.net : 0;
-        const netText = (netVol > 0 ? '+' : '') + netVol;
-
-        // Label background and styling (賣超 = 綠色) - taller for 2 lines
-        ctx.font = 'bold 10px sans-serif';
-        const tw = Math.max(ctx.measureText(brokerName).width, ctx.measureText(netText).width);
-        const bgX = x - tw/2 - 6;
-        const bgY = labelY - 15;
-        const bgW = tw + 12;
-        const bgH = 30;
-
-        // Draw background
-        ctx.fillStyle = isHovered ? 'rgba(63,185,80,0.8)' : 'rgba(63,185,80,0.4)';
-        ctx.fillRect(bgX, bgY, bgW, bgH);
-
-        // Draw broker name (line 1)
-        ctx.fillStyle = '#fff';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(brokerName, x, labelY - 6);
-
-        // Draw net volume (line 2)
-        ctx.font = 'bold 8px sans-serif';
-        ctx.fillText(netText, x, labelY + 6);
-
-        // Store rect for collision detection (updated for 2-line background)
-        labelRects.push({
-          name: brokerName,
-          x: bgX,
-          y: bgY,
-          w: bgW,
-          h: bgH,
-          data: brokerData // Store broker data for tooltip
-        });
-
-        // Draw connection line to primary bubble (卖超卖出)
-        const bubble = sellerSellData.find(d => d.label === brokerName);
-        if (bubble) {
-          const meta2 = chart.getDatasetMeta(2);
-          const bubbleIndex = sellerSellData.indexOf(bubble);
-          const bubbleEl = meta2.data[bubbleIndex];
-
-          if (bubbleEl) {
-            ctx.save();
-            ctx.strokeStyle = isHovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.35)';
-            ctx.lineWidth = isHovered ? 2 : 1;
-            ctx.setLineDash([3, 3]);
-            ctx.beginPath();
-            ctx.moveTo(x, labelY - 15);  // Adjusted for 2-line label
-            ctx.lineTo(bubbleEl.x, bubbleEl.y);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            ctx.restore();
-          }
-        }
+        drawLabel(brokerName, x, labelY, hoveredBroker === brokerName, 'green', brokerData, sellerSellData, 2);
       });
 
       // Draw curved connection between buy-sell pairs for hovered broker
@@ -1395,12 +1154,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
               ctx.lineWidth = 3;
               ctx.setLineDash([6, 6]);
 
-              const midX = (buyEl.x + sellEl.x) / 2;
-              const midY = Math.min(buyEl.y, sellEl.y) - 30;
-
               ctx.beginPath();
               ctx.moveTo(buyEl.x, buyEl.y);
-              ctx.quadraticCurveTo(midX, midY, sellEl.x, sellEl.y);
+              ctx.lineTo(sellEl.x, sellEl.y);
               ctx.stroke();
               ctx.setLineDash([]);
               ctx.restore();
@@ -1409,10 +1165,10 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
         };
 
         // Draw connections for hovered broker (both buy-dominant and sell-dominant)
-        if (top3Buyers.includes(hoveredBroker)) {
+        if (top5Buyers.includes(hoveredBroker)) {
           drawBuySellConnection(hoveredBroker, buyerBuyData, buyerSellData, 0, 1);
         }
-        if (top3Sellers.includes(hoveredBroker)) {
+        if (top5Sellers.includes(hoveredBroker)) {
           drawBuySellConnection(hoveredBroker, sellerBuyData, sellerSellData, 3, 2);
         }
       }
@@ -1428,19 +1184,19 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
           data: buyerBuyData,
           backgroundColor: function(ctx) {
             const raw = ctx.raw;
-            if (!raw) return 'rgba(248,81,73,0.3)';
-
-            if (hoveredBroker && raw.label !== hoveredBroker) {
-              return 'rgba(248,81,73,0.08)'; // Very dim when not hovered
-            }
-
-            const r = raw.r || 5;
-            const alpha = hoveredBroker === raw.label ? 0.9 : Math.min(0.75, 0.3 + r / 30);
-            return 'rgba(248,81,73,' + alpha + ')';
+            if (!raw) return 'transparent';
+            if (hoveredBroker === raw.label) return 'rgba(248,81,73,0.85)';
+            if (hoveredBroker) return 'rgba(248,81,73,0.05)';
+            return 'transparent';
           },
-          borderColor: 'rgba(248,81,73,0.8)',
-          borderWidth: 1.5,
-          hoverBackgroundColor: 'rgba(248,81,73,0.9)',
+          borderColor: function(ctx) {
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(248,81,73,0.6)';
+            if (hoveredBroker && raw.label !== hoveredBroker) return 'rgba(248,81,73,0.15)';
+            return 'rgba(248,81,73,0.8)';
+          },
+          borderWidth: 2,
+          hoverBackgroundColor: 'rgba(248,81,73,0.85)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 2,
         },
@@ -1449,19 +1205,19 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
           data: buyerSellData,
           backgroundColor: function(ctx) {
             const raw = ctx.raw;
-            if (!raw) return 'rgba(63,185,80,0.15)';
-
-            if (hoveredBroker && raw.label !== hoveredBroker) {
-              return 'rgba(63,185,80,0.05)'; // Very dim when not hovered
-            }
-
-            const r = raw.r || 5;
-            const alpha = hoveredBroker === raw.label ? 0.6 : Math.min(0.4, 0.15 + r / 50);
-            return 'rgba(63,185,80,' + alpha + ')';
+            if (!raw) return 'transparent';
+            if (hoveredBroker === raw.label) return 'rgba(63,185,80,0.7)';
+            if (hoveredBroker) return 'rgba(63,185,80,0.03)';
+            return 'transparent';
           },
-          borderColor: 'rgba(63,185,80,0.5)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(63,185,80,0.6)',
+          borderColor: function(ctx) {
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(63,185,80,0.4)';
+            if (hoveredBroker && raw.label !== hoveredBroker) return 'rgba(63,185,80,0.1)';
+            return 'rgba(63,185,80,0.5)';
+          },
+          borderWidth: 1.5,
+          hoverBackgroundColor: 'rgba(63,185,80,0.7)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 1,
         },
@@ -1470,19 +1226,19 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
           data: sellerSellData,
           backgroundColor: function(ctx) {
             const raw = ctx.raw;
-            if (!raw) return 'rgba(63,185,80,0.3)';
-
-            if (hoveredBroker && raw.label !== hoveredBroker) {
-              return 'rgba(63,185,80,0.08)'; // Very dim when not hovered
-            }
-
-            const r = raw.r || 5;
-            const alpha = hoveredBroker === raw.label ? 0.9 : Math.min(0.75, 0.3 + r / 30);
-            return 'rgba(63,185,80,' + alpha + ')';
+            if (!raw) return 'transparent';
+            if (hoveredBroker === raw.label) return 'rgba(63,185,80,0.85)';
+            if (hoveredBroker) return 'rgba(63,185,80,0.05)';
+            return 'transparent';
           },
-          borderColor: 'rgba(63,185,80,0.8)',
-          borderWidth: 1.5,
-          hoverBackgroundColor: 'rgba(63,185,80,0.9)',
+          borderColor: function(ctx) {
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(63,185,80,0.6)';
+            if (hoveredBroker && raw.label !== hoveredBroker) return 'rgba(63,185,80,0.15)';
+            return 'rgba(63,185,80,0.8)';
+          },
+          borderWidth: 2,
+          hoverBackgroundColor: 'rgba(63,185,80,0.85)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 2,
         },
@@ -1491,19 +1247,19 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
           data: sellerBuyData,
           backgroundColor: function(ctx) {
             const raw = ctx.raw;
-            if (!raw) return 'rgba(248,81,73,0.15)';
-
-            if (hoveredBroker && raw.label !== hoveredBroker) {
-              return 'rgba(248,81,73,0.05)'; // Very dim when not hovered
-            }
-
-            const r = raw.r || 5;
-            const alpha = hoveredBroker === raw.label ? 0.6 : Math.min(0.4, 0.15 + r / 50);
-            return 'rgba(248,81,73,' + alpha + ')';
+            if (!raw) return 'transparent';
+            if (hoveredBroker === raw.label) return 'rgba(248,81,73,0.7)';
+            if (hoveredBroker) return 'rgba(248,81,73,0.03)';
+            return 'transparent';
           },
-          borderColor: 'rgba(248,81,73,0.5)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(248,81,73,0.6)',
+          borderColor: function(ctx) {
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(248,81,73,0.4)';
+            if (hoveredBroker && raw.label !== hoveredBroker) return 'rgba(248,81,73,0.1)';
+            return 'rgba(248,81,73,0.5)';
+          },
+          borderWidth: 1.5,
+          hoverBackgroundColor: 'rgba(248,81,73,0.7)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 1,
         }
@@ -1515,7 +1271,7 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
       aspectRatio: 1.5,
       animation: false,
       layout: {
-        padding: { bottom: 55 }
+        padding: { bottom: 95 }
       },
       plugins: {
         legend: { display: false },
@@ -1551,7 +1307,7 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
         x: {
           title: { display: true, text: '買賣超（張）', color: '#8b949e', font: { size: 11 } },
           grid: { color: 'rgba(33,38,45,0.6)', lineWidth: 0.5 },
-          ticks: { color: '#8b949e', font: { size: 10 } },
+          ticks: { color: '#8b949e', font: { size: 10 }, callback: function(value) { return value === 0 ? '0' : -value; } },
           border: { color: '#30363d' },
           min: ${xAxisMin},
           max: ${xAxisMax}
@@ -1567,7 +1323,7 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
               return context.tick && context.tick.value === ${closePrice}
                 ? { size: 11, weight: 'bold' } : { size: 10 };
             },
-            callback: function(value) { return value <= ${closePrice} ? value : ''; }
+            callback: function(value) { return value === ${closePrice} ? '漲停收 ' + value : (value <= ${closePrice} ? value : ''); }
           },
           afterBuildTicks: function(axis) {
             const cp = ${closePrice};
@@ -1612,7 +1368,7 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
       display: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     \`;
-    document.body.appendChild(tooltip);
+    canvas.parentElement.appendChild(tooltip);
     customTooltip = tooltip;
     return tooltip;
   };
@@ -1631,31 +1387,28 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
       <div>賣出：\${brokerData.sellVol} 張\${brokerData.sellAvg ? ' @ $' + brokerData.sellAvg.toFixed(2) : ''}</div>
     \`;
 
-    // Position tooltip FAR from bubbles to avoid blocking curved lines
+    // Position tooltip within canvas area
     const canvasRect = canvas.getBoundingClientRect();
+    tooltip.style.display = 'block';
+    tooltip.style.visibility = 'hidden';
     const tooltipRect = tooltip.getBoundingClientRect();
+    tooltip.style.visibility = '';
 
-    // Try positioning further away (40px offset instead of 15px)
-    let x = canvasRect.left + mouseX + 40;
-    let y = canvasRect.top + mouseY - tooltipRect.height - 40;
+    // Convert mouse position to canvas-relative coordinates
+    const relX = mouseX - canvasRect.left;
+    const relY = mouseY - canvasRect.top;
 
-    // If too close to right edge, place on left side with larger offset
-    if (x + tooltipRect.width > window.innerWidth - 20) {
-      x = canvasRect.left + mouseX - tooltipRect.width - 40;
-    }
+    // Try right of cursor first
+    let x = relX + 15;
+    let y = relY - tooltipRect.height / 2;
 
-    // If too close to top, place below with larger offset
-    if (y < 20) {
-      y = canvasRect.top + mouseY + 40;
+    // If overflows right, place left of cursor
+    if (x + tooltipRect.width > canvas.offsetWidth) {
+      x = relX - tooltipRect.width - 15;
     }
-
-    // For very small screens, use smaller offset as fallback
-    if (x < 10) {
-      x = 10;
-    }
-    if (y + tooltipRect.height > window.innerHeight - 20) {
-      y = window.innerHeight - tooltipRect.height - 20;
-    }
+    // Clamp within canvas bounds
+    x = Math.max(0, Math.min(x, canvas.offsetWidth - tooltipRect.width));
+    y = Math.max(0, Math.min(y, canvas.offsetHeight - tooltipRect.height));
 
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
@@ -1757,6 +1510,52 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     // Hide tooltip when leaving canvas
     hideTooltip();
   });
+
+  // Touch events for mobile
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    const chart = getChart();
+    if (!chart) return;
+
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mouseX = (touch.clientX - rect.left) * scaleX;
+    const mouseY = (touch.clientY - rect.top) * scaleY;
+
+    let foundBroker = null;
+    let hoveredLabelData = null;
+
+    // Check labels first
+    for (const label of labelRects) {
+      if (mouseX >= label.x && mouseX <= label.x + label.w &&
+          mouseY >= label.y && mouseY <= label.y + label.h) {
+        foundBroker = label.name;
+        hoveredLabelData = label.data;
+        break;
+      }
+    }
+
+    // Check bubbles
+    if (!foundBroker) {
+      foundBroker = findBubbleAtMouse(chart, mouseX, mouseY);
+    }
+
+    // Toggle: tap same broker to deselect
+    if (foundBroker === hoveredBroker) {
+      hoveredBroker = null;
+      hideTooltip();
+    } else {
+      hoveredBroker = foundBroker;
+      if (hoveredLabelData) {
+        showTooltip(hoveredLabelData, touch.clientX, touch.clientY);
+      } else {
+        hideTooltip();
+      }
+    }
+    chart.update('none');
+  }, { passive: false });
 })();
 `;
 }
@@ -1916,7 +1715,12 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
     <div class="info-left">
       <h2>${stockInfo.name}</h2>
       <div class="code">${stockInfo.code} · ${adDate}</div>
+      <div style="color:#8b949e;font-size:11px;margin-top:2px;">成交量 ${formatVolume(stockInfo.volume)}</div>
+      ${stockReason && stockReason.category ? `<div style="color:#58a6ff;font-size:12px;margin-top:3px;">${stockReason.category}</div>` : ''}
     </div>
+    ${stockReason && stockReason.reason ? `<div style="flex:1;text-align:center;padding:0 12px;min-width:0;">
+      <div style="color:#e6edf3;font-size:13px;line-height:1.6;">${stockReason.reason.replace(/([。，；])/g, '$1<br>')}</div>
+    </div>` : ''}
     <div class="info-right">
       <div class="price ${typeClass}">$${stockInfo.close}</div>
       <div class="change-info ${typeClass}">
@@ -1938,8 +1742,6 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
       <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">${brokerData ? `共 ${brokerData.total_brokers} 家券商交易${brokerDateLabel ? ` <span style="color:#d29922;font-size:12px;">${brokerDateLabel}</span>` : ''}` : "⏳ 分點資料每日 16:30 後更新"}</p>
 
       ${generateInstitutionalCard()}
-
-      ${aiCardHtml}
 
       ${brokerData ? `
       ${brokerDateLabel ? `<div style="background:#d29922;color:#0d1117;font-size:12px;font-weight:bold;padding:6px 12px;border-radius:4px;margin-bottom:12px;text-align:center;">⚠️ 以下為上一個交易日 (${brokerDataDate ? formatDate(brokerDataDate) : ''}) 的籌碼資料，非今日數據</div>` : ''}
@@ -1983,6 +1785,12 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
     </div>
   </div>
 
+  <div style="text-align:center;padding:16px 0 8px;">
+    <div style="color:#58a6ff;font-size:11px;margin-bottom:4px;">🤖 AI 智能分析</div>
+    <div style="color:#484f58;font-size:10px;line-height:1.5;">
+      漲停原因與族群分類由 AI 自動分析產生，僅供參考，不代表投資建議，請自行判斷投資風險
+    </div>
+  </div>
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
     <p><a href="../index.html">烏薩奇漲停版</a> &copy; 2026 | 每日盤後更新</p>
@@ -2058,15 +1866,15 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   // Stock card link prefix
   const stockLinkPrefix = `stock/${date}/`;
 
-  // AI 分析（一次呼叫，index + stock pages 共用）
-  const analysisResult = await classifyStocksIntelligently(limitStocks);
+  // AI 分析（一次呼叫，index + stock pages 共用，結果會快取）
+  const analysisResult = await classifyStocksIntelligently(limitStocks, date);
   const classifiedStocks = analysisResult.concepts || analysisResult;
   const stockReasons = analysisResult.stockReasons || {};
 
   // Generate index page
   const indexFileName = isLatest ? "index.html" : `index-${date}.html`;
   console.log(`  Generating ${indexFileName}...`);
-  const indexHtml = await generateIndexPage(limitStocks, date, availableDates, stockLinkPrefix, classifiedStocks);
+  const indexHtml = await generateIndexPage(limitStocks, date, availableDates, stockLinkPrefix, classifiedStocks, stockReasons);
   fs.writeFileSync(path.join(SITE_DIR, indexFileName), indexHtml);
 
   // Generate stock pages
@@ -2123,20 +1931,31 @@ async function main() {
   console.log("");
 
   // AI Analysis for TODAY (latest)
-  console.log(`📅 Generating TODAY (${adDate}):`);
-  try {
-    const analysisResult = await classifyStocksIntelligently(limitStocks);
-    console.log(`✅ AI 族群分類完成: ${Object.keys(analysisResult.concepts).length} 組`);
-  } catch (error) {
-    console.log(`⚠️ AI analysis failed: ${error.message}`);
+  const SKIP_TODAY = process.argv.includes("--skip-today");
+  if (SKIP_TODAY) {
+    console.log(`⏭️ Skipping TODAY (${adDate}) — --skip-today flag`);
+  } else {
+    console.log(`📅 Generating TODAY (${adDate}):`);
+    try {
+      const analysisResult = await classifyStocksIntelligently(limitStocks, date);
+      console.log(`✅ AI 族群分類完成: ${Object.keys(analysisResult.concepts).length} 組`);
+    } catch (error) {
+      console.log(`⚠️ AI analysis failed: ${error.message}`);
+    }
+
+    const todayCount = await generateDatePages(limitStocks, date, availableDates, true);
+    console.log(`  Generated ${todayCount} stock pages`);
   }
 
-  const todayCount = await generateDatePages(limitStocks, date, availableDates, true);
-  console.log(`  Generated ${todayCount} stock pages`);
-
-  // Generate pages for HISTORICAL dates
+  // Generate pages for HISTORICAL dates (skip if already exists)
   for (const histDate of availableDates) {
     if (histDate === date) continue; // Skip today, already done
+
+    const histIndexFile = path.join(SITE_DIR, `index-${histDate}.html`);
+    if (fs.existsSync(histIndexFile)) {
+      console.log(`📅 Skipping ${formatDate(histDate)} — already generated`);
+      continue;
+    }
 
     const histStocks = loadSnapshot(histDate);
     if (!histStocks) {
