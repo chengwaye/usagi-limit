@@ -1060,9 +1060,24 @@ footer a { color: #58a6ff; text-decoration: none; }
       }
     }
 
-    // Check bubbles
+    // Check bubbles and get broker data for tooltip
     if (!foundBroker) {
-      foundBroker = findBubbleAtMouse(chart, mouseX, mouseY);
+      const allDatasets = [buyerBuyData, buyerSellData, sellerSellData, sellerBuyData];
+      for (let di = 0; di < allDatasets.length; di++) {
+        const meta = chart.getDatasetMeta(di);
+        for (let i = 0; i < allDatasets[di].length; i++) {
+          const el = meta.data[i];
+          if (!el) continue;
+          const bubble = allDatasets[di][i];
+          const dist = Math.sqrt(Math.pow(mouseX - el.x, 2) + Math.pow(mouseY - el.y, 2));
+          if (dist <= bubble.r) {
+            foundBroker = bubble.label;
+            hoveredLabelData = bubble;
+            break;
+          }
+        }
+        if (foundBroker) break;
+      }
     }
 
     // Toggle: tap same broker to deselect
@@ -1077,6 +1092,9 @@ footer a { color: #58a6ff; text-decoration: none; }
         hideTooltip();
       }
     }
+
+    // Always clear Chart.js native tooltip on touch (we use our own)
+    chart.tooltip.setActiveElements([], {x: 0, y: 0});
     chart.update('none');
   }, { passive: false });
 })();
