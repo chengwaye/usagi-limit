@@ -530,7 +530,15 @@ footer a { color: #58a6ff; text-decoration: none; }
   const sellerBuyData = [{"x":0,"y":37.7,"r":2,"label":"富邦建國","net":-64,"buyVol":0,"sellVol":64,"buyAvg":0,"sellAvg":37.7},{"x":0,"y":37.11,"r":2,"label":"元大台南","net":-17,"buyVol":0,"sellVol":17,"buyAvg":0,"sellAvg":37.11},{"x":0,"y":37.69,"r":2,"label":"新光台中","net":-14,"buyVol":0,"sellVol":14,"buyAvg":0,"sellAvg":37.69},{"x":0,"y":37.63,"r":2,"label":"新光","net":-7,"buyVol":0,"sellVol":7,"buyAvg":0,"sellAvg":37.63},{"x":0,"y":37.5,"r":2,"label":"永昌小港","net":-7,"buyVol":0,"sellVol":7,"buyAvg":37.5,"sellAvg":37.12},{"x":0,"y":37.44,"r":2,"label":"永豐金","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":37.44},{"x":0,"y":37.7,"r":2,"label":"元大永康","net":-6,"buyVol":0,"sellVol":6,"buyAvg":0,"sellAvg":37.7},{"x":0,"y":37.62,"r":2,"label":"元大府城","net":-5,"buyVol":0,"sellVol":5,"buyAvg":0,"sellAvg":37.62},{"x":0,"y":37.63,"r":2,"label":"富邦台北","net":-5,"buyVol":0,"sellVol":5,"buyAvg":37.63,"sellAvg":37.58},{"x":0,"y":37.58,"r":2,"label":"富邦中壢","net":-4,"buyVol":0,"sellVol":4,"buyAvg":0,"sellAvg":37.58},{"x":0,"y":37.67,"r":2,"label":"第一金桃園","net":-3,"buyVol":0,"sellVol":3,"buyAvg":0,"sellAvg":37.67},{"x":-1,"y":35.5,"r":2.75,"label":"永昌中正","net":-3,"buyVol":1,"sellVol":4,"buyAvg":35.5,"sellAvg":37.48},{"x":-1,"y":35.45,"r":2.75,"label":"富邦竹北","net":-3,"buyVol":1,"sellVol":4,"buyAvg":35.45,"sellAvg":37.65},{"x":0,"y":37.67,"r":2,"label":"元大龍潭","net":-3,"buyVol":0,"sellVol":3,"buyAvg":0,"sellAvg":37.67},{"x":0,"y":37.7,"r":2,"label":"群益東門","net":-3,"buyVol":0,"sellVol":3,"buyAvg":0,"sellAvg":37.7}];
   const closePrice = 37.7;
 
-  // Plugin: lines BEHIND bubbles, labels ABOVE bubbles
+  // Hover state management
+  let hoveredBroker = null;
+  const labelRects = []; // Store label positions for collision detection
+
+  // Extract top 3 brokers for quick reference
+  const top3Buyers = buyerBuyData.slice(0, 3).map(d => d.label);
+  const top3Sellers = sellerSellData.slice(0, 3).map(d => d.label);
+
+  // Plugin: lines BEHIND bubbles, labels BELOW chart
   const refLinePlugin = {
     id: 'refLines',
     beforeDatasetsDraw(chart) {
@@ -569,104 +577,147 @@ footer a { color: #58a6ff; text-decoration: none; }
     afterDatasetsDraw(chart) {
       const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
 
-      // Top 3 broker labels with collision avoidance (only for primary datasets)
-      const placed = [];
-      chart.data.datasets.forEach((ds, di) => {
-        // Only label primary datasets (0: 買超買進, 2: 賣超賣出), skip secondary ones (1,3)
-        if (di === 1 || di === 3) return;
-        const meta = chart.getDatasetMeta(di);
-        const limit = Math.min(3, ds.data.length);
-        for (let i = 0; i < limit; i++) {
-          const el = meta.data[i];
-          const raw = ds.data[i];
-          if (!el) continue;
-          ctx.save();
-          const name = raw.label; // show full broker name
-          ctx.font = 'bold 9px sans-serif';
-          const tw = ctx.measureText(name).width;
-          let tx = el.x;
-          let ty = el.y - raw.r - 4;
-          const rect = () => ({ x: tx - tw/2 - 3, y: ty - 11, w: tw + 6, h: 13 });
-          const overlaps = (r) => placed.some(p =>
-            r.x < p.x + p.w && r.x + r.w > p.x && r.y < p.y + p.h && r.y + r.h > p.y
-          );
-          let r = rect();
-          // Try pushing up
-          for (let nudge = 0; nudge < 4 && overlaps(r); nudge++) {
-            ty -= 13;
-            r = rect();
-          }
-          // Try sideways
-          if (overlaps(r)) { tx += 45; r = rect(); }
-          if (overlaps(r)) { tx -= 90; r = rect(); }
-          // If still overlapping or clipped above chart, try below bubble
-          if (overlaps(r) || r.y < top) {
-            tx = el.x;
-            ty = el.y + raw.r + 14;
-            r = rect();
-            for (let nudge = 0; nudge < 3 && overlaps(r); nudge++) {
-              ty += 13;
-              r = rect();
-            }
-          }
-          // Final clip guard: ensure within chart area
-          if (r.y < top) { ty += (top - r.y + 2); r = rect(); }
-          if (r.x < left) { tx += (left - r.x + 2); r = rect(); }
-          if (r.x + r.w > right) { tx -= (r.x + r.w - right + 2); r = rect(); }
-          placed.push(r);
-          // Leader line: label → bubble center
-          ctx.strokeStyle = 'rgba(230,237,243,0.35)';
-          ctx.lineWidth = 0.8;
-          ctx.setLineDash([2, 2]);
-          ctx.beginPath();
-          const lineStartY = (r.y + r.h/2 < el.y) ? r.y + r.h : r.y; // connect from closest edge
-          ctx.moveTo(tx, lineStartY);
-          ctx.lineTo(el.x, el.y);
-          ctx.stroke();
-          ctx.setLineDash([]);
-          // Label text (no background)
-          ctx.fillStyle = '#e6edf3';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'bottom';
-          ctx.fillText(name, tx, ty);
-          ctx.restore();
+      // Clear previous label rects
+      labelRects.length = 0;
 
-          // Draw curved connection line to the broker's other bubble (buy-sell pair)
-          const pairedDatasetIndex = (di === 0) ? 1 : 3; // 0→1 (買超買進→買超賣出), 2→3 (賣超賣出→賣超買進)
-          const pairedDataset = chart.data.datasets[pairedDatasetIndex];
-          const pairedMeta = chart.getDatasetMeta(pairedDatasetIndex);
+      // Label area: 40px below chart bottom
+      const labelY = bottom + 25;
+      ctx.font = 'bold 11px sans-serif';
 
-          // Find matching broker in paired dataset
-          const pairedBubble = pairedDataset.data.find(d => d.label === name);
-          if (pairedBubble) {
-            const pairedIndex = pairedDataset.data.indexOf(pairedBubble);
-            const pairedEl = pairedMeta.data[pairedIndex];
-            if (pairedEl) {
-              // Draw curved line between the two bubbles
+      // Draw top 3 buyer labels (left side, #1 is leftmost)
+      const buyerWidth = (right - left) / 2;
+      top3Buyers.forEach((brokerName, i) => {
+        if (!brokerName) return;
+
+        const isHovered = hoveredBroker === brokerName;
+        const x = left + (i + 1) * (buyerWidth / 4); // spread across left half
+
+        // Label styling
+        ctx.fillStyle = isHovered ? '#fff' : '#8b949e';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Draw label
+        ctx.fillText(brokerName, x, labelY);
+
+        // Store rect for collision detection
+        const tw = ctx.measureText(brokerName).width;
+        labelRects.push({
+          name: brokerName,
+          x: x - tw/2,
+          y: labelY - 8,
+          w: tw,
+          h: 16
+        });
+
+        // Draw connection line to primary bubble (买超买进)
+        const bubble = buyerBuyData.find(d => d.label === brokerName);
+        if (bubble) {
+          const meta0 = chart.getDatasetMeta(0);
+          const bubbleIndex = buyerBuyData.indexOf(bubble);
+          const bubbleEl = meta0.data[bubbleIndex];
+
+          if (bubbleEl) {
+            ctx.save();
+            ctx.strokeStyle = isHovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.35)';
+            ctx.lineWidth = isHovered ? 2 : 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(x, labelY - 8);
+            ctx.lineTo(bubbleEl.x, bubbleEl.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+          }
+        }
+      });
+
+      // Draw top 3 seller labels (right side, #1 is rightmost)
+      top3Sellers.forEach((brokerName, i) => {
+        if (!brokerName) return;
+
+        const isHovered = hoveredBroker === brokerName;
+        const x = left + buyerWidth + ((3 - i) * (buyerWidth / 4)); // spread across right half, reversed order
+
+        // Label styling
+        ctx.fillStyle = isHovered ? '#fff' : '#8b949e';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Draw label
+        ctx.fillText(brokerName, x, labelY);
+
+        // Store rect for collision detection
+        const tw = ctx.measureText(brokerName).width;
+        labelRects.push({
+          name: brokerName,
+          x: x - tw/2,
+          y: labelY - 8,
+          w: tw,
+          h: 16
+        });
+
+        // Draw connection line to primary bubble (卖超卖出)
+        const bubble = sellerSellData.find(d => d.label === brokerName);
+        if (bubble) {
+          const meta2 = chart.getDatasetMeta(2);
+          const bubbleIndex = sellerSellData.indexOf(bubble);
+          const bubbleEl = meta2.data[bubbleIndex];
+
+          if (bubbleEl) {
+            ctx.save();
+            ctx.strokeStyle = isHovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.35)';
+            ctx.lineWidth = isHovered ? 2 : 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(x, labelY - 8);
+            ctx.lineTo(bubbleEl.x, bubbleEl.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+          }
+        }
+      });
+
+      // Draw curved connection between buy-sell pairs for hovered broker
+      if (hoveredBroker) {
+        const drawBuySellConnection = (broker, buyData, sellData, buyDatasetIndex, sellDatasetIndex) => {
+          const buyBubble = buyData.find(d => d.label === broker);
+          const sellBubble = sellData.find(d => d.label === broker);
+
+          if (buyBubble && sellBubble) {
+            const buyMeta = chart.getDatasetMeta(buyDatasetIndex);
+            const sellMeta = chart.getDatasetMeta(sellDatasetIndex);
+            const buyEl = buyMeta.data[buyData.indexOf(buyBubble)];
+            const sellEl = sellMeta.data[sellData.indexOf(sellBubble)];
+
+            if (buyEl && sellEl) {
               ctx.save();
-              ctx.strokeStyle = di === 0 ? 'rgba(248,81,73,0.3)' : 'rgba(63,185,80,0.3)';
-              ctx.lineWidth = 2;
-              ctx.setLineDash([4, 4]);
+              ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+              ctx.lineWidth = 3;
+              ctx.setLineDash([6, 6]);
 
-              const startX = el.x;
-              const startY = el.y;
-              const endX = pairedEl.x;
-              const endY = pairedEl.y;
-
-              // Create curved path (quadratic bezier)
-              const midX = (startX + endX) / 2;
-              const midY = Math.min(startY, endY) - 20; // curve upward
+              const midX = (buyEl.x + sellEl.x) / 2;
+              const midY = Math.min(buyEl.y, sellEl.y) - 30;
 
               ctx.beginPath();
-              ctx.moveTo(startX, startY);
-              ctx.quadraticCurveTo(midX, midY, endX, endY);
+              ctx.moveTo(buyEl.x, buyEl.y);
+              ctx.quadraticCurveTo(midX, midY, sellEl.x, sellEl.y);
               ctx.stroke();
               ctx.setLineDash([]);
               ctx.restore();
             }
           }
+        };
+
+        // Draw connections for hovered broker (both buy-dominant and sell-dominant)
+        if (top3Buyers.includes(hoveredBroker)) {
+          drawBuySellConnection(hoveredBroker, buyerBuyData, buyerSellData, 0, 1);
         }
-      });
+        if (top3Sellers.includes(hoveredBroker)) {
+          drawBuySellConnection(hoveredBroker, sellerBuyData, sellerSellData, 3, 2);
+        }
+      }
     }
   };
 
@@ -678,8 +729,15 @@ footer a { color: #58a6ff; text-decoration: none; }
           label: '買超買進',
           data: buyerBuyData,
           backgroundColor: function(ctx) {
-            const r = ctx.raw ? ctx.raw.r : 5;
-            const alpha = Math.min(0.75, 0.3 + r / 30);
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(248,81,73,0.3)';
+
+            if (hoveredBroker && raw.label !== hoveredBroker) {
+              return 'rgba(248,81,73,0.08)'; // Very dim when not hovered
+            }
+
+            const r = raw.r || 5;
+            const alpha = hoveredBroker === raw.label ? 0.9 : Math.min(0.75, 0.3 + r / 30);
             return 'rgba(248,81,73,' + alpha + ')';
           },
           borderColor: 'rgba(248,81,73,0.8)',
@@ -692,8 +750,15 @@ footer a { color: #58a6ff; text-decoration: none; }
           label: '買超賣出',
           data: buyerSellData,
           backgroundColor: function(ctx) {
-            const r = ctx.raw ? ctx.raw.r : 5;
-            const alpha = Math.min(0.4, 0.15 + r / 50);
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(248,81,73,0.15)';
+
+            if (hoveredBroker && raw.label !== hoveredBroker) {
+              return 'rgba(248,81,73,0.05)'; // Very dim when not hovered
+            }
+
+            const r = raw.r || 5;
+            const alpha = hoveredBroker === raw.label ? 0.6 : Math.min(0.4, 0.15 + r / 50);
             return 'rgba(248,81,73,' + alpha + ')';
           },
           borderColor: 'rgba(248,81,73,0.5)',
@@ -706,8 +771,15 @@ footer a { color: #58a6ff; text-decoration: none; }
           label: '賣超賣出',
           data: sellerSellData,
           backgroundColor: function(ctx) {
-            const r = ctx.raw ? ctx.raw.r : 5;
-            const alpha = Math.min(0.75, 0.3 + r / 30);
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(63,185,80,0.3)';
+
+            if (hoveredBroker && raw.label !== hoveredBroker) {
+              return 'rgba(63,185,80,0.08)'; // Very dim when not hovered
+            }
+
+            const r = raw.r || 5;
+            const alpha = hoveredBroker === raw.label ? 0.9 : Math.min(0.75, 0.3 + r / 30);
             return 'rgba(63,185,80,' + alpha + ')';
           },
           borderColor: 'rgba(63,185,80,0.8)',
@@ -720,8 +792,15 @@ footer a { color: #58a6ff; text-decoration: none; }
           label: '賣超買進',
           data: sellerBuyData,
           backgroundColor: function(ctx) {
-            const r = ctx.raw ? ctx.raw.r : 5;
-            const alpha = Math.min(0.4, 0.15 + r / 50);
+            const raw = ctx.raw;
+            if (!raw) return 'rgba(63,185,80,0.15)';
+
+            if (hoveredBroker && raw.label !== hoveredBroker) {
+              return 'rgba(63,185,80,0.05)'; // Very dim when not hovered
+            }
+
+            const r = raw.r || 5;
+            const alpha = hoveredBroker === raw.label ? 0.6 : Math.min(0.4, 0.15 + r / 50);
             return 'rgba(63,185,80,' + alpha + ')';
           },
           borderColor: 'rgba(63,185,80,0.5)',
@@ -737,6 +816,9 @@ footer a { color: #58a6ff; text-decoration: none; }
       maintainAspectRatio: true,
       aspectRatio: 1.5,
       animation: false,
+      layout: {
+        padding: { bottom: 55 }
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -804,6 +886,83 @@ footer a { color: #58a6ff; text-decoration: none; }
       }
     },
     plugins: [refLinePlugin]
+  });
+
+  // Event listeners for hover interaction
+  const canvas = document.getElementById('bubbleChart');
+
+  // Helper function to get Chart.js instance
+  const getChart = () => Chart.getChart(canvas);
+
+  // Helper function to check if mouse is over a bubble
+  const findBubbleAtMouse = (chart, mouseX, mouseY) => {
+    const allDatasets = [buyerBuyData, buyerSellData, sellerSellData, sellerBuyData];
+
+    for (let di = 0; di < allDatasets.length; di++) {
+      const meta = chart.getDatasetMeta(di);
+      const dataset = allDatasets[di];
+
+      for (let i = 0; i < dataset.length; i++) {
+        const el = meta.data[i];
+        if (!el) continue;
+
+        const bubble = dataset[i];
+        const distance = Math.sqrt(
+          Math.pow(mouseX - el.x, 2) + Math.pow(mouseY - el.y, 2)
+        );
+
+        if (distance <= bubble.r) {
+          return bubble.label;
+        }
+      }
+    }
+    return null;
+  };
+
+  // Helper function to check if mouse is over a label
+  const findLabelAtMouse = (mouseX, mouseY) => {
+    for (const label of labelRects) {
+      if (mouseX >= label.x && mouseX <= label.x + label.w &&
+          mouseY >= label.y && mouseY <= label.y + label.h) {
+        return label.name;
+      }
+    }
+    return null;
+  };
+
+  canvas.addEventListener('mousemove', function(e) {
+    const chart = getChart();
+    if (!chart) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const canvasRect = Chart.helpers.getRelativePosition(e, chart);
+    const mouseX = canvasRect.x;
+    const mouseY = canvasRect.y;
+
+    let foundBroker = null;
+
+    // Check labels first (higher priority)
+    foundBroker = findLabelAtMouse(mouseX, mouseY);
+
+    // Check bubbles if no label hit
+    if (!foundBroker) {
+      foundBroker = findBubbleAtMouse(chart, mouseX, mouseY);
+    }
+
+    if (foundBroker !== hoveredBroker) {
+      hoveredBroker = foundBroker;
+      chart.update('none'); // Update without animation
+    }
+  });
+
+  canvas.addEventListener('mouseleave', function() {
+    const chart = getChart();
+    if (!chart) return;
+
+    if (hoveredBroker !== null) {
+      hoveredBroker = null;
+      chart.update('none');
+    }
   });
 })();
 
