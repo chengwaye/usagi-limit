@@ -1055,10 +1055,11 @@ footer a { color: #58a6ff; text-decoration: none; }
 
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const mouseX = (touch.clientX - rect.left) * scaleX;
-    const mouseY = (touch.clientY - rect.top) * scaleY;
+    // Use CSS pixel coordinates (same as mousemove/getRelativePosition)
+    // Do NOT multiply by canvas.width/rect.width — that gives devicePixelRatio-scaled coords
+    // but labelRects and Chart.js meta elements are in CSS pixel space
+    const mouseX = touch.clientX - rect.left;
+    const mouseY = touch.clientY - rect.top;
 
     let foundBroker = null;
     let hoveredLabelData = null;
