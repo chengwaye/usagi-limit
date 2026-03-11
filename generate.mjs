@@ -6,7 +6,7 @@
 import fs from "fs";
 import path from "path";
 import axios from "axios";
-import { classifyWithClaude } from "./claude-classifier.mjs";
+import { classifyWithClaude, analyzeStockReasons, groupByReasonSimilarity } from "./claude-classifier.mjs";
 // import { loadFinLabBrokerDataForStock } from "./finlab-broker-loader.mjs"; // 已移除 FinLab 資料
 
 const CACHE_DIR = path.resolve("../twse-broker-mcp/cache");
@@ -302,14 +302,103 @@ async function loadBrokerData(stockCode, date) {
 // Step 2.5: Intelligent concept classification using Claude
 // ============================================================
 async function classifyStocksIntelligently(stocks) {
+  // SKIP_AI=1 to bypass slow AI analysis and use fallback grouping
+  if (process.env.SKIP_AI === "1") {
+    console.log('⏩ Skipping AI analysis (SKIP_AI=1), using fallback...');
+    const fallbackGroups = await simulateClaudeAnalysis(stocks);
+    for (const [groupName, groupData] of Object.entries(fallbackGroups)) {
+      if (!groupData.stocks || !Array.isArray(groupData.stocks)) groupData.stocks = [];
+    }
+    const fallbackReasons = {};
+    for (const stock of Object.values(stocks)) {
+      fallbackReasons[stock.code] = {
+        reason: '市場情緒樂觀，資金追捧強勢股',
+        confidence: 'low',
+        keywords: ['市場情緒'],
+        category: '技術面'
+      };
+    }
+    return { concepts: fallbackGroups, stockReasons: fallbackReasons };
+  }
   try {
-    // Try Claude-powered intelligent classification
-    const analysisResult = await classifyWithClaude(stocks);
-    return analysisResult;
+    console.log('🤖 Starting enhanced AI analysis (concepts + individual reasons)...');
+
+    // 1. 個股原因分析
+    console.log('📊 Analyzing individual stock reasons...');
+    const stockAnalysis = await analyzeStockReasons(stocks);
+
+    // 2. 根據原因相似性分組
+    console.log('🔄 Grouping by reason similarity...');
+    const reasonBasedGroups = groupByReasonSimilarity(stockAnalysis, stocks);
+
+    // 3. 嘗試與傳統概念分組合併
+    try {
+      const conceptGroups = await classifyWithClaude(stocks);
+      const mergedGroups = { ...reasonBasedGroups, ...conceptGroups };
+
+      // 移除重複的股票（優先保留原因分組）
+      const usedStocks = new Set();
+      const finalGroups = {};
+
+      for (const [groupName, groupData] of Object.entries(mergedGroups)) {
+        if (!groupData.stocks) {
+          console.log(`⚠️ Warning: Group ${groupName} missing stocks array`);
+          continue;
+        }
+        const uniqueStocks = groupData.stocks.filter(stock => {
+          if (usedStocks.has(stock.code)) return false;
+          usedStocks.add(stock.code);
+          return true;
+        });
+
+        if (uniqueStocks.length > 0) {
+          finalGroups[groupName] = {
+            ...groupData,
+            stocks: uniqueStocks
+          };
+        }
+      }
+
+      return {
+        concepts: finalGroups,
+        stockReasons: stockAnalysis
+      };
+    } catch (conceptError) {
+      console.log('💡 Using reason-based grouping only');
+      return {
+        concepts: reasonBasedGroups,
+        stockReasons: stockAnalysis
+      };
+    }
 
   } catch (error) {
-    console.log('Claude analysis failed, falling back to smart heuristics');
-    return await simulateClaudeAnalysis(stocks);
+    console.log(`Enhanced AI analysis failed: ${error.message}`);
+    console.log(error.stack);
+    const fallbackGroups = await simulateClaudeAnalysis(stocks);
+
+    // 確保 fallback 結果有正確的結構
+    for (const [groupName, groupData] of Object.entries(fallbackGroups)) {
+      if (!groupData.stocks || !Array.isArray(groupData.stocks)) {
+        console.log(`⚠️ Fixing missing stocks array for group: ${groupName}`);
+        groupData.stocks = [];
+      }
+    }
+
+    // 即使fallback也嘗試簡單的個股分析
+    const fallbackReasons = {};
+    for (const stock of Object.values(stocks)) {
+      fallbackReasons[stock.code] = {
+        reason: '市場情緒樂觀，資金追捧強勢股',
+        confidence: 'low',
+        keywords: ['市場情緒'],
+        category: '技術面'
+      };
+    }
+
+    return {
+      concepts: fallbackGroups,
+      stockReasons: fallbackReasons
+    };
   }
 }
 
@@ -690,6 +779,7 @@ footer a { color: #58a6ff; text-decoration: none; }
 }
 
 function formatDate(dateStr) {
+  if (!dateStr) return "";
   // 支援兩種格式：YYYYMMDD "20260309" 或 ROC "1150306"
   if (dateStr.length === 8) {
     return `${dateStr.substring(0, 4)}/${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}`;
@@ -724,10 +814,16 @@ function getNextDate(currentDate, availableDates) {
   return currentIndex < availableDates.length - 1 ? availableDates[currentIndex + 1] : null;
 }
 
-async function generateIndexPage(limitStocks, date, availableDates = [], stockLinkPrefix = "stock/") {
+async function generateIndexPage(limitStocks, date, availableDates = [], stockLinkPrefix = "stock/", preClassified = null) {
   const adDate = formatDate(date);
   const upStocks = Object.values(limitStocks);
-  const classifiedStocks = await classifyStocksIntelligently(limitStocks);
+  let classifiedStocks;
+  if (preClassified) {
+    classifiedStocks = preClassified;
+  } else {
+    const analysisResult = await classifyStocksIntelligently(limitStocks);
+    classifiedStocks = analysisResult.concepts || analysisResult;
+  }
 
   const stockCard = (s) => `
     <div class="stock-card">
@@ -1535,19 +1631,30 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
       <div>賣出：\${brokerData.sellVol} 張\${brokerData.sellAvg ? ' @ $' + brokerData.sellAvg.toFixed(2) : ''}</div>
     \`;
 
-    // Position tooltip to avoid curved lines (prefer upper-left or upper-right)
+    // Position tooltip FAR from bubbles to avoid blocking curved lines
     const canvasRect = canvas.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
 
-    let x = canvasRect.left + mouseX + 15;
-    let y = canvasRect.top + mouseY - tooltipRect.height - 15;
+    // Try positioning further away (40px offset instead of 15px)
+    let x = canvasRect.left + mouseX + 40;
+    let y = canvasRect.top + mouseY - tooltipRect.height - 40;
 
-    // Keep within viewport
-    if (x + tooltipRect.width > window.innerWidth) {
-      x = canvasRect.left + mouseX - tooltipRect.width - 15;
+    // If too close to right edge, place on left side with larger offset
+    if (x + tooltipRect.width > window.innerWidth - 20) {
+      x = canvasRect.left + mouseX - tooltipRect.width - 40;
     }
-    if (y < 0) {
-      y = canvasRect.top + mouseY + 15;
+
+    // If too close to top, place below with larger offset
+    if (y < 20) {
+      y = canvasRect.top + mouseY + 40;
+    }
+
+    // For very small screens, use smaller offset as fallback
+    if (x < 10) {
+      x = 10;
+    }
+    if (y + tooltipRect.height > window.innerHeight - 20) {
+      y = window.innerHeight - tooltipRect.height - 20;
     }
 
     tooltip.style.left = x + 'px';
@@ -1654,7 +1761,7 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
 `;
 }
 
-function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backLink = "../index.html", brokerDataDate = null) {
+function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backLink = "../index.html", brokerDataDate = null, stockReason = null) {
   const adDate = formatDate(date);
   const brokerDateLabel = brokerDataDate && brokerDataDate !== date
     ? `⚠️ 籌碼資料為 ${formatDate(brokerDataDate)} 的數據`
@@ -1726,7 +1833,57 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
     </div>`;
   };
 
+
+
+  // AI 漲停原因分析卡片
+  const generateAIAnalysisCard = () => {
+    if (!stockReason || !stockReason.reason) {
+      return `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;">
+        <h3 style="color:#e6edf3;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+          🤖 AI 漲停原因分析
+          <span style="font-size:11px;color:#8b949e;font-weight:normal;">(智能分析)</span>
+        </h3>
+        <p style="color:#8b949e;font-size:13px;">分析資料準備中，請稍後查看...</p>
+      </div>`;
+    }
+
+    const confidenceColor = stockReason.confidence === 'high' ? '#3fb950'
+      : stockReason.confidence === 'medium' ? '#d29922' : '#8b949e';
+    const confidenceIcon = stockReason.confidence === 'high' ? '🚀'
+      : stockReason.confidence === 'medium' ? '⭐' : '💡';
+
+    return `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;">
+      <h3 style="color:#e6edf3;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+        🤖 AI 漲停原因分析
+        <span style="font-size:11px;color:#8b949e;font-weight:normal;">(智能分析)</span>
+      </h3>
+      <div style="background:#0d1117;border-radius:6px;padding:14px;margin-bottom:12px;">
+        <div style="color:#e6edf3;font-size:14px;line-height:1.6;margin-bottom:8px;">
+          ${confidenceIcon} ${stockReason.reason}
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:11px;">
+          <span style="color:#8b949e;">分類：</span>
+          <span style="color:#58a6ff;">${stockReason.category || '技術面'}</span>
+          <span style="color:#8b949e;">•</span>
+          <span style="color:#8b949e;">信心度：</span>
+          <span style="color:${confidenceColor};font-weight:600;">${stockReason.confidence || 'low'}</span>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:10px;color:#6c7a89;">
+        ⚠️ AI 分析僅供參考，不構成投資建議，請自行判斷風險
+      </div>
+    </div>`;
+  };
+
   const tableHead = `<thead><tr><th>券商</th><th>買超</th><th>買均</th><th>買張</th><th>賣張</th><th>賣均</th></tr></thead>`;
+
+  // DEBUG: 檢查 AI 分析卡片輸出
+  const aiCardHtml = generateAIAnalysisCard();
+  if (aiCardHtml && aiCardHtml.length > 0) {
+    console.log(`    [AI] ${stockInfo.code} ${stockInfo.name} — AI card: ${aiCardHtml.length} chars, stockReason: ${stockReason ? 'yes' : 'null'}`);
+  } else {
+    console.log(`    [AI] ${stockInfo.code} ${stockInfo.name} — AI card EMPTY! stockReason: ${JSON.stringify(stockReason)}`);
+  }
 
   return `<!DOCTYPE html>
 <html lang="zh-TW">
@@ -1781,6 +1938,8 @@ function generateStockPage(stockInfo, brokerData, date, institutionalInfo, backL
       <p style="color:#8b949e;font-size:13px;margin-bottom:12px;">${brokerData ? `共 ${brokerData.total_brokers} 家券商交易${brokerDateLabel ? ` <span style="color:#d29922;font-size:12px;">${brokerDateLabel}</span>` : ''}` : "⏳ 分點資料每日 16:30 後更新"}</p>
 
       ${generateInstitutionalCard()}
+
+      ${aiCardHtml}
 
       ${brokerData ? `
       ${brokerDateLabel ? `<div style="background:#d29922;color:#0d1117;font-size:12px;font-weight:bold;padding:6px 12px;border-radius:4px;margin-bottom:12px;text-align:center;">⚠️ 以下為上一個交易日 (${brokerDataDate ? formatDate(brokerDataDate) : ''}) 的籌碼資料，非今日數據</div>` : ''}
@@ -1899,10 +2058,15 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   // Stock card link prefix
   const stockLinkPrefix = `stock/${date}/`;
 
+  // AI 分析（一次呼叫，index + stock pages 共用）
+  const analysisResult = await classifyStocksIntelligently(limitStocks);
+  const classifiedStocks = analysisResult.concepts || analysisResult;
+  const stockReasons = analysisResult.stockReasons || {};
+
   // Generate index page
   const indexFileName = isLatest ? "index.html" : `index-${date}.html`;
   console.log(`  Generating ${indexFileName}...`);
-  const indexHtml = await generateIndexPage(limitStocks, date, availableDates, stockLinkPrefix);
+  const indexHtml = await generateIndexPage(limitStocks, date, availableDates, stockLinkPrefix, classifiedStocks);
   fs.writeFileSync(path.join(SITE_DIR, indexFileName), indexHtml);
 
   // Generate stock pages
@@ -1923,7 +2087,8 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
     }
     const institutionalInfo = institutionalData[code] || null;
     const backLink = isLatest ? "../../index.html" : `../../index-${date}.html`;
-    const html = generateStockPage(info, brokerData, date, institutionalInfo, backLink, brokerDataDate);
+    const stockReason = stockReasons[code] || null;
+    const html = generateStockPage(info, brokerData, date, institutionalInfo, backLink, brokerDataDate, stockReason);
     fs.writeFileSync(path.join(stockPageDir, `${code}.html`), html);
     generated++;
   }
@@ -1957,8 +2122,15 @@ async function main() {
   console.log(`Available dates: ${availableDates.join(', ')}`);
   console.log("");
 
-  // Generate pages for TODAY (latest)
+  // AI Analysis for TODAY (latest)
   console.log(`📅 Generating TODAY (${adDate}):`);
+  try {
+    const analysisResult = await classifyStocksIntelligently(limitStocks);
+    console.log(`✅ AI 族群分類完成: ${Object.keys(analysisResult.concepts).length} 組`);
+  } catch (error) {
+    console.log(`⚠️ AI analysis failed: ${error.message}`);
+  }
+
   const todayCount = await generateDatePages(limitStocks, date, availableDates, true);
   console.log(`  Generated ${todayCount} stock pages`);
 
@@ -1981,5 +2153,8 @@ async function main() {
   console.log(`Output: ${SITE_DIR}`);
   console.log("Done! 🎉");
 }
+
+// Export for testing
+export { classifyStocksIntelligently };
 
 main().catch(console.error);
