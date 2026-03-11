@@ -1156,30 +1156,41 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
         const isHovered = hoveredBroker === brokerName;
         const x = left + (i + 1) * (buyerWidth / 4); // spread across left half
 
-        // Label background and styling (買超 = 紅色)
-        const tw = ctx.measureText(brokerName).width;
+        // Get broker net volume for display
+        const brokerData = buyerBuyData.find(d => d.label === brokerName);
+        const netVol = brokerData ? brokerData.net : 0;
+        const netText = (netVol > 0 ? '+' : '') + netVol;
+
+        // Label background and styling (買超 = 紅色) - taller for 2 lines
+        ctx.font = 'bold 10px sans-serif';
+        const tw = Math.max(ctx.measureText(brokerName).width, ctx.measureText(netText).width);
         const bgX = x - tw/2 - 6;
-        const bgY = labelY - 10;
+        const bgY = labelY - 15;
         const bgW = tw + 12;
-        const bgH = 20;
+        const bgH = 30;
 
         // Draw background
         ctx.fillStyle = isHovered ? 'rgba(248,81,73,0.8)' : 'rgba(248,81,73,0.4)';
         ctx.fillRect(bgX, bgY, bgW, bgH);
 
-        // Draw text
+        // Draw broker name (line 1)
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(brokerName, x, labelY);
+        ctx.fillText(brokerName, x, labelY - 6);
 
-        // Store rect for collision detection (updated for background)
+        // Draw net volume (line 2)
+        ctx.font = 'bold 8px sans-serif';
+        ctx.fillText(netText, x, labelY + 6);
+
+        // Store rect for collision detection (updated for 2-line background)
         labelRects.push({
           name: brokerName,
           x: bgX,
           y: bgY,
           w: bgW,
-          h: bgH
+          h: bgH,
+          data: brokerData // Store broker data for tooltip
         });
 
         // Draw connection line to primary bubble (买超买进)
@@ -1195,7 +1206,7 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
             ctx.lineWidth = isHovered ? 2 : 1;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
-            ctx.moveTo(x, labelY - 8);
+            ctx.moveTo(x, labelY - 15);  // Adjusted for 2-line label
             ctx.lineTo(bubbleEl.x, bubbleEl.y);
             ctx.stroke();
             ctx.setLineDash([]);
@@ -1211,30 +1222,41 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
         const isHovered = hoveredBroker === brokerName;
         const x = left + buyerWidth + ((3 - i) * (buyerWidth / 4)); // spread across right half, reversed order
 
-        // Label background and styling (賣超 = 綠色)
-        const tw = ctx.measureText(brokerName).width;
+        // Get broker net volume for display (negative for sellers)
+        const brokerData = sellerSellData.find(d => d.label === brokerName);
+        const netVol = brokerData ? brokerData.net : 0;
+        const netText = (netVol > 0 ? '+' : '') + netVol;
+
+        // Label background and styling (賣超 = 綠色) - taller for 2 lines
+        ctx.font = 'bold 10px sans-serif';
+        const tw = Math.max(ctx.measureText(brokerName).width, ctx.measureText(netText).width);
         const bgX = x - tw/2 - 6;
-        const bgY = labelY - 10;
+        const bgY = labelY - 15;
         const bgW = tw + 12;
-        const bgH = 20;
+        const bgH = 30;
 
         // Draw background
         ctx.fillStyle = isHovered ? 'rgba(63,185,80,0.8)' : 'rgba(63,185,80,0.4)';
         ctx.fillRect(bgX, bgY, bgW, bgH);
 
-        // Draw text
+        // Draw broker name (line 1)
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(brokerName, x, labelY);
+        ctx.fillText(brokerName, x, labelY - 6);
 
-        // Store rect for collision detection (updated for background)
+        // Draw net volume (line 2)
+        ctx.font = 'bold 8px sans-serif';
+        ctx.fillText(netText, x, labelY + 6);
+
+        // Store rect for collision detection (updated for 2-line background)
         labelRects.push({
           name: brokerName,
           x: bgX,
           y: bgY,
           w: bgW,
-          h: bgH
+          h: bgH,
+          data: brokerData // Store broker data for tooltip
         });
 
         // Draw connection line to primary bubble (卖超卖出)
@@ -1250,7 +1272,7 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
             ctx.lineWidth = isHovered ? 2 : 1;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
-            ctx.moveTo(x, labelY - 8);
+            ctx.moveTo(x, labelY - 15);  // Adjusted for 2-line label
             ctx.lineTo(bubbleEl.x, bubbleEl.y);
             ctx.stroke();
             ctx.setLineDash([]);
@@ -1474,6 +1496,71 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
   // Helper function to get Chart.js instance
   const getChart = () => Chart.getChart(canvas);
 
+  // Create custom tooltip for labels
+  let customTooltip = null;
+  const createTooltip = () => {
+    if (customTooltip) return customTooltip;
+
+    const tooltip = document.createElement('div');
+    tooltip.style.cssText = \`
+      position: absolute;
+      background: rgba(13,17,23,0.95);
+      color: #e6edf3;
+      border: 1px solid #58a6ff;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: sans-serif;
+      font-size: 11px;
+      pointer-events: none;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    \`;
+    document.body.appendChild(tooltip);
+    customTooltip = tooltip;
+    return tooltip;
+  };
+
+  const showTooltip = (brokerData, mouseX, mouseY) => {
+    const tooltip = createTooltip();
+    if (!brokerData) return;
+
+    const arrow = brokerData.net >= 0 ? '🔴' : '🟢';
+    const net = brokerData.net > 0 ? '+' + brokerData.net : '' + brokerData.net;
+
+    tooltip.innerHTML = \`
+      <div style="font-weight: bold; margin-bottom: 4px;">\${arrow} \${brokerData.label}</div>
+      <div>淨買超：\${net} 張</div>
+      <div>買進：\${brokerData.buyVol} 張\${brokerData.buyAvg ? ' @ $' + brokerData.buyAvg.toFixed(2) : ''}</div>
+      <div>賣出：\${brokerData.sellVol} 張\${brokerData.sellAvg ? ' @ $' + brokerData.sellAvg.toFixed(2) : ''}</div>
+    \`;
+
+    // Position tooltip to avoid curved lines (prefer upper-left or upper-right)
+    const canvasRect = canvas.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+
+    let x = canvasRect.left + mouseX + 15;
+    let y = canvasRect.top + mouseY - tooltipRect.height - 15;
+
+    // Keep within viewport
+    if (x + tooltipRect.width > window.innerWidth) {
+      x = canvasRect.left + mouseX - tooltipRect.width - 15;
+    }
+    if (y < 0) {
+      y = canvasRect.top + mouseY + 15;
+    }
+
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+    tooltip.style.display = 'block';
+  };
+
+  const hideTooltip = () => {
+    if (customTooltip) {
+      customTooltip.style.display = 'none';
+    }
+  };
+
   // Helper function to check if mouse is over a bubble
   const findBubbleAtMouse = (chart, mouseX, mouseY) => {
     const allDatasets = [buyerBuyData, buyerSellData, sellerSellData, sellerBuyData];
@@ -1520,18 +1607,34 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
     const mouseY = canvasRect.y;
 
     let foundBroker = null;
+    let hoveredLabelData = null;
 
-    // Check labels first (higher priority)
-    foundBroker = findLabelAtMouse(mouseX, mouseY);
+    // Check labels first (higher priority) and get data for tooltip
+    for (const label of labelRects) {
+      if (mouseX >= label.x && mouseX <= label.x + label.w &&
+          mouseY >= label.y && mouseY <= label.y + label.h) {
+        foundBroker = label.name;
+        hoveredLabelData = label.data;
+        break;
+      }
+    }
 
     // Check bubbles if no label hit
     if (!foundBroker) {
       foundBroker = findBubbleAtMouse(chart, mouseX, mouseY);
     }
 
+    // Update hover state
     if (foundBroker !== hoveredBroker) {
       hoveredBroker = foundBroker;
       chart.update('none'); // Update without animation
+    }
+
+    // Show/hide custom tooltip for labels
+    if (hoveredLabelData) {
+      showTooltip(hoveredLabelData, e.clientX, e.clientY);
+    } else {
+      hideTooltip();
     }
   });
 
@@ -1543,6 +1646,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
       hoveredBroker = null;
       chart.update('none');
     }
+
+    // Hide tooltip when leaving canvas
+    hideTooltip();
   });
 })();
 `;
