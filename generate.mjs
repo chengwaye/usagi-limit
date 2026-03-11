@@ -1092,8 +1092,10 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
   return `
 (function() {
   const ctx = document.getElementById('bubbleChart').getContext('2d');
-  const buyData = ${JSON.stringify(buyers)};
-  const sellData = ${JSON.stringify(sellers)};
+  const buyerBuyData = ${JSON.stringify(buyerBuyBubbles)};
+  const buyerSellData = ${JSON.stringify(buyerSellBubbles)};
+  const sellerSellData = ${JSON.stringify(sellerSellBubbles)};
+  const sellerBuyData = ${JSON.stringify(sellerBuyBubbles)};
   const closePrice = ${closePrice};
 
   // Plugin: lines BEHIND bubbles, labels ABOVE bubbles
