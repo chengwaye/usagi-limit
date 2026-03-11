@@ -566,8 +566,8 @@ footer a { color: #58a6ff; text-decoration: none; }
       // Clear previous label rects
       labelRects.length = 0;
 
-      // Label area: 40px below chart bottom
-      const labelY = bottom + 25;
+      // Label area: 50px below chart bottom to avoid X-axis overlap
+      const labelY = bottom + 40;
       ctx.font = 'bold 11px sans-serif';
 
       // Draw top 3 buyer labels (left side, #1 is leftmost)
@@ -578,22 +578,30 @@ footer a { color: #58a6ff; text-decoration: none; }
         const isHovered = hoveredBroker === brokerName;
         const x = left + (i + 1) * (buyerWidth / 4); // spread across left half
 
-        // Label styling
-        ctx.fillStyle = isHovered ? '#fff' : '#8b949e';
+        // Label background and styling (買超 = 紅色)
+        const tw = ctx.measureText(brokerName).width;
+        const bgX = x - tw/2 - 6;
+        const bgY = labelY - 10;
+        const bgW = tw + 12;
+        const bgH = 20;
+
+        // Draw background
+        ctx.fillStyle = isHovered ? 'rgba(248,81,73,0.8)' : 'rgba(248,81,73,0.4)';
+        ctx.fillRect(bgX, bgY, bgW, bgH);
+
+        // Draw text
+        ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-
-        // Draw label
         ctx.fillText(brokerName, x, labelY);
 
-        // Store rect for collision detection
-        const tw = ctx.measureText(brokerName).width;
+        // Store rect for collision detection (updated for background)
         labelRects.push({
           name: brokerName,
-          x: x - tw/2,
-          y: labelY - 8,
-          w: tw,
-          h: 16
+          x: bgX,
+          y: bgY,
+          w: bgW,
+          h: bgH
         });
 
         // Draw connection line to primary bubble (买超买进)
@@ -625,22 +633,30 @@ footer a { color: #58a6ff; text-decoration: none; }
         const isHovered = hoveredBroker === brokerName;
         const x = left + buyerWidth + ((3 - i) * (buyerWidth / 4)); // spread across right half, reversed order
 
-        // Label styling
-        ctx.fillStyle = isHovered ? '#fff' : '#8b949e';
+        // Label background and styling (賣超 = 綠色)
+        const tw = ctx.measureText(brokerName).width;
+        const bgX = x - tw/2 - 6;
+        const bgY = labelY - 10;
+        const bgW = tw + 12;
+        const bgH = 20;
+
+        // Draw background
+        ctx.fillStyle = isHovered ? 'rgba(63,185,80,0.8)' : 'rgba(63,185,80,0.4)';
+        ctx.fillRect(bgX, bgY, bgW, bgH);
+
+        // Draw text
+        ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-
-        // Draw label
         ctx.fillText(brokerName, x, labelY);
 
-        // Store rect for collision detection
-        const tw = ctx.measureText(brokerName).width;
+        // Store rect for collision detection (updated for background)
         labelRects.push({
           name: brokerName,
-          x: x - tw/2,
-          y: labelY - 8,
-          w: tw,
-          h: 16
+          x: bgX,
+          y: bgY,
+          w: bgW,
+          h: bgH
         });
 
         // Draw connection line to primary bubble (卖超卖出)
@@ -737,19 +753,19 @@ footer a { color: #58a6ff; text-decoration: none; }
           data: buyerSellData,
           backgroundColor: function(ctx) {
             const raw = ctx.raw;
-            if (!raw) return 'rgba(248,81,73,0.15)';
+            if (!raw) return 'rgba(63,185,80,0.15)';
 
             if (hoveredBroker && raw.label !== hoveredBroker) {
-              return 'rgba(248,81,73,0.05)'; // Very dim when not hovered
+              return 'rgba(63,185,80,0.05)'; // Very dim when not hovered
             }
 
             const r = raw.r || 5;
             const alpha = hoveredBroker === raw.label ? 0.6 : Math.min(0.4, 0.15 + r / 50);
-            return 'rgba(248,81,73,' + alpha + ')';
+            return 'rgba(63,185,80,' + alpha + ')';
           },
-          borderColor: 'rgba(248,81,73,0.5)',
+          borderColor: 'rgba(63,185,80,0.5)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(248,81,73,0.6)',
+          hoverBackgroundColor: 'rgba(63,185,80,0.6)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 1,
         },
@@ -779,19 +795,19 @@ footer a { color: #58a6ff; text-decoration: none; }
           data: sellerBuyData,
           backgroundColor: function(ctx) {
             const raw = ctx.raw;
-            if (!raw) return 'rgba(63,185,80,0.15)';
+            if (!raw) return 'rgba(248,81,73,0.15)';
 
             if (hoveredBroker && raw.label !== hoveredBroker) {
-              return 'rgba(63,185,80,0.05)'; // Very dim when not hovered
+              return 'rgba(248,81,73,0.05)'; // Very dim when not hovered
             }
 
             const r = raw.r || 5;
             const alpha = hoveredBroker === raw.label ? 0.6 : Math.min(0.4, 0.15 + r / 50);
-            return 'rgba(63,185,80,' + alpha + ')';
+            return 'rgba(248,81,73,' + alpha + ')';
           },
-          borderColor: 'rgba(63,185,80,0.5)',
+          borderColor: 'rgba(248,81,73,0.5)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(63,185,80,0.6)',
+          hoverBackgroundColor: 'rgba(248,81,73,0.6)',
           hoverBorderColor: '#fff',
           hoverBorderWidth: 1,
         }
