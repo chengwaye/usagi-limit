@@ -1519,10 +1519,11 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
 
     const touch = e.touches[0];
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const mouseX = (touch.clientX - rect.left) * scaleX;
-    const mouseY = (touch.clientY - rect.top) * scaleY;
+    // Use CSS pixel coordinates (same as mousemove/getRelativePosition)
+    // Do NOT multiply by canvas.width/rect.width — that gives devicePixelRatio-scaled coords
+    // but labelRects and Chart.js meta elements are in CSS pixel space
+    const mouseX = touch.clientX - rect.left;
+    const mouseY = touch.clientY - rect.top;
 
     let foundBroker = null;
     let hoveredLabelData = null;
@@ -1537,9 +1538,24 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
       }
     }
 
-    // Check bubbles
+    // Check bubbles and get broker data for tooltip
     if (!foundBroker) {
-      foundBroker = findBubbleAtMouse(chart, mouseX, mouseY);
+      const allDatasets = [buyerBuyData, buyerSellData, sellerSellData, sellerBuyData];
+      for (let di = 0; di < allDatasets.length; di++) {
+        const meta = chart.getDatasetMeta(di);
+        for (let i = 0; i < allDatasets[di].length; i++) {
+          const el = meta.data[i];
+          if (!el) continue;
+          const bubble = allDatasets[di][i];
+          const dist = Math.sqrt(Math.pow(mouseX - el.x, 2) + Math.pow(mouseY - el.y, 2));
+          if (dist <= bubble.r) {
+            foundBroker = bubble.label;
+            hoveredLabelData = bubble;
+            break;
+          }
+        }
+        if (foundBroker) break;
+      }
     }
 
     // Toggle: tap same broker to deselect
@@ -1554,6 +1570,9 @@ function generateBubbleChartScript(brokerData, stockInfo, brokerDataDate, pageDa
         hideTooltip();
       }
     }
+
+    // Always clear Chart.js native tooltip on touch (we use our own)
+    chart.tooltip.setActiveElements([], {x: 0, y: 0});
     chart.update('none');
   }, { passive: false });
 })();
