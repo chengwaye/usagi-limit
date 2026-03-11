@@ -110,7 +110,10 @@ header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
 .stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
 .singles-container { display: flex; flex-wrap: wrap; gap: 0; }
-.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; transition: all 0.2s ease; }
+.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; transition: all 0.2s ease; position: relative; }
+.stock-card .reason-tip { display: none; position: absolute; left: 0; right: 0; bottom: 100%; background: #1c2129; border: 1px solid #444c56; border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #c9d1d9; line-height: 1.5; z-index: 100; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.stock-card .reason-tip .tip-cta { color: #58a6ff; font-size: 11px; margin-top: 4px; }
+.stock-card:hover .reason-tip { display: block; }
 .stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; transition: all 0.2s ease; }
 .stock-card a:hover { background: #1c2129; }
 .stock-header { display: flex; justify-content: space-between; align-items: center; }
@@ -218,6 +221,11 @@ footer a { color: #58a6ff; text-decoration: none; }
     <div class="info-left">
       <h2>台塑化</h2>
       <div class="code">6505 · 2026/03/09</div>
+      <div style="color:#8b949e;font-size:11px;margin-top:2px;">成交量 59,579張</div>
+      <div style="color:#58a6ff;font-size:12px;margin-top:3px;">塑化</div>
+    </div>
+    <div style="flex:1;text-align:center;padding:0 12px;min-width:0;">
+      <div style="color:#e6edf3;font-size:13px;line-height:1.6;">台灣唯一民營煉油廠、亞洲指標石化生產商，<br>中東戰火推升布蘭特油價衝破100美元，<br>煉油利差大幅擴大。<br>公司宣布超額配發股利每股1.2元(配發率115%，<br>2025年EPS僅1.04元)，<br>加上市場預期2026年獲利翻倍成長，<br>股價連續兩日漲停收68.2元，<br>成交量達5,958萬張。<br></div>
     </div>
     <div class="info-right">
       <div class="price up">$68.2</div>
@@ -264,28 +272,6 @@ footer a { color: #58a6ff; text-decoration: none; }
       </div>
     </div>
 
-      <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin:16px 0;">
-      <h3 style="color:#e6edf3;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-        🤖 AI 漲停原因分析
-        <span style="font-size:11px;color:#8b949e;font-weight:normal;">(智能分析)</span>
-      </h3>
-      <div style="background:#0d1117;border-radius:6px;padding:14px;margin-bottom:12px;">
-        <div style="color:#e6edf3;font-size:14px;line-height:1.6;margin-bottom:8px;">
-          💡 市場情緒樂觀，資金追捧強勢股
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:11px;">
-          <span style="color:#8b949e;">分類：</span>
-          <span style="color:#58a6ff;">技術面</span>
-          <span style="color:#8b949e;">•</span>
-          <span style="color:#8b949e;">信心度：</span>
-          <span style="color:#8b949e;font-weight:600;">low</span>
-        </div>
-      </div>
-      <div style="text-align:center;font-size:10px;color:#6c7a89;">
-        ⚠️ AI 分析僅供參考，不構成投資建議，請自行判斷風險
-      </div>
-    </div>
-
       
       <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:32px;margin:24px 0;text-align:center;">
         <div style="color:#8b949e;font-size:16px;margin-bottom:12px;">🕐</div>
@@ -315,6 +301,12 @@ footer a { color: #58a6ff; text-decoration: none; }
     </div>
   </div>
 
+  <div style="text-align:center;padding:16px 0 8px;">
+    <div style="color:#58a6ff;font-size:11px;margin-bottom:4px;">🤖 AI 智能分析</div>
+    <div style="color:#484f58;font-size:10px;line-height:1.5;">
+      漲停原因與族群分類由 AI 自動分析產生，僅供參考，不代表投資建議，請自行判斷投資風險
+    </div>
+  </div>
   <footer>
     <p>資料來源：台灣證券交易所公開資訊</p>
     <p><a href="../index.html">烏薩奇漲停版</a> &copy; 2026 | 每日盤後更新</p>
