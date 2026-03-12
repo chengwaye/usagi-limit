@@ -607,6 +607,30 @@ function formatVolume(shares) {
   return lots.toLocaleString() + "張";
 }
 
+// Update navigation in an existing page (patch availableDates + button disabled state)
+function updatePageNavigation(filePath, pageDate, availableDates) {
+  let html = fs.readFileSync(filePath, 'utf8');
+  const oldDatesMatch = html.match(/const availableDates = \[("[0-9]+",?)+\];/);
+  if (!oldDatesMatch) return;
+  const newDatesJs = `const availableDates = ${JSON.stringify(availableDates)};`;
+  html = html.replace(oldDatesMatch[0], newDatesJs);
+
+  // Update button disabled state
+  const hasNext = getNextDate(pageDate, availableDates);
+  const hasPrev = getPrevDate(pageDate, availableDates);
+  // "前一天" = older = direction -1 = getNextDate
+  html = html.replace(
+    /(<button class="nav-btn" onclick="navigateDate\('[0-9]+', -1\)") *(disabled)?>/,
+    `$1 ${!hasNext ? 'disabled' : ''}>`
+  );
+  // "後一天" = newer = direction 1 = getPrevDate
+  html = html.replace(
+    /(<button class="nav-btn" onclick="navigateDate\('[0-9]+', 1\)") *(disabled)?>/,
+    `$1 ${!hasPrev ? 'disabled' : ''}>`
+  );
+  fs.writeFileSync(filePath, html);
+}
+
 // Helper functions for date navigation
 function getPrevDate(currentDate, availableDates) {
   const currentIndex = availableDates.indexOf(currentDate);
@@ -1895,6 +1919,10 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   console.log(`  Generating ${indexFileName}...`);
   const indexHtml = await generateIndexPage(limitStocks, date, availableDates, stockLinkPrefix, classifiedStocks, stockReasons);
   fs.writeFileSync(path.join(SITE_DIR, indexFileName), indexHtml);
+  // For latest date, also save as index-{date}.html so the dated URL always works
+  if (isLatest) {
+    fs.writeFileSync(path.join(SITE_DIR, `index-${date}.html`), indexHtml);
+  }
 
   // Generate stock pages
   let generated = 0;
@@ -1972,7 +2000,9 @@ async function main() {
 
     const histIndexFile = path.join(SITE_DIR, `index-${histDate}.html`);
     if (fs.existsSync(histIndexFile)) {
-      console.log(`📅 Skipping ${formatDate(histDate)} — already generated`);
+      // Update navigation in existing page (availableDates may have changed)
+      updatePageNavigation(histIndexFile, histDate, availableDates);
+      console.log(`📅 Skipping ${formatDate(histDate)} — already generated (nav updated)`);
       continue;
     }
 
