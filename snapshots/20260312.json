@@ -116,33 +116,13 @@
     "volume": 1103639,
     "type": "漲停"
   },
-  "3071": {
-    "code": "3071",
-    "name": "協禧",
-    "close": 25.65,
-    "change": 2.3,
-    "changePct": "9.85",
-    "volume": 1102000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "3105": {
-    "code": "3105",
-    "name": "穩懋",
-    "close": 299,
-    "change": 27,
-    "changePct": "9.93",
-    "volume": 7020000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "3163": {
-    "code": "3163",
-    "name": "波若威",
-    "close": 770,
-    "change": 70,
-    "changePct": "10.00",
-    "volume": 484000,
+  "3093": {
+    "code": "3093",
+    "name": "港建*",
+    "close": 36.9,
+    "change": 3.35,
+    "changePct": "9.99",
+    "volume": 6490000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -155,43 +135,23 @@
     "volume": 1197889,
     "type": "漲停"
   },
-  "3234": {
-    "code": "3234",
-    "name": "光環",
-    "close": 81.4,
-    "change": 7.4,
-    "changePct": "10.00",
-    "volume": 987000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "3260": {
-    "code": "3260",
-    "name": "威剛",
-    "close": 350.5,
-    "change": 31.5,
-    "changePct": "9.87",
-    "volume": 32514000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "3324": {
-    "code": "3324",
-    "name": "雙鴻",
-    "close": 1030,
-    "change": 92,
-    "changePct": "9.81",
-    "volume": 7034000,
-    "type": "漲停",
-    "market": "OTC"
-  },
   "3339": {
     "code": "3339",
     "name": "泰谷",
-    "close": 28.5,
-    "change": 2.55,
-    "changePct": "9.83",
-    "volume": 1067000,
+    "close": 31.35,
+    "change": 2.85,
+    "changePct": "10.00",
+    "volume": 5637000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3354": {
+    "code": "3354",
+    "name": "律勝",
+    "close": 30.45,
+    "change": 2.75,
+    "changePct": "9.93",
+    "volume": 2446000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -204,73 +164,83 @@
     "volume": 8577087,
     "type": "漲停"
   },
-  "3491": {
-    "code": "3491",
-    "name": "昇達科",
-    "close": 1265,
-    "change": 115,
-    "changePct": "10.00",
-    "volume": 279000,
+  "3489": {
+    "code": "3489",
+    "name": "森寶",
+    "close": 21.6,
+    "change": 1.95,
+    "changePct": "9.92",
+    "volume": 33000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3492": {
+    "code": "3492",
+    "name": "長盛",
+    "close": 26.5,
+    "change": 2.4,
+    "changePct": "9.96",
+    "volume": 927000,
     "type": "漲停",
     "market": "OTC"
   },
   "3498": {
     "code": "3498",
     "name": "陽程",
-    "close": 66.9,
-    "change": 6,
-    "changePct": "9.85",
-    "volume": 1824000,
+    "close": 73.5,
+    "change": 6.6,
+    "changePct": "9.87",
+    "volume": 9936000,
     "type": "漲停",
     "market": "OTC"
   },
-  "3529": {
-    "code": "3529",
-    "name": "力旺",
-    "close": 2485,
-    "change": 225,
-    "changePct": "9.96",
-    "volume": 594000,
+  "3508": {
+    "code": "3508",
+    "name": "位速",
+    "close": 39.7,
+    "change": 3.6,
+    "changePct": "9.97",
+    "volume": 5269000,
     "type": "漲停",
     "market": "OTC"
   },
   "3555": {
     "code": "3555",
     "name": "博士旺",
-    "close": 134.5,
-    "change": 12,
-    "changePct": "9.80",
-    "volume": 218000,
+    "close": 147.5,
+    "change": 13,
+    "changePct": "9.67",
+    "volume": 185000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3615": {
+    "code": "3615",
+    "name": "安可",
+    "close": 35.1,
+    "change": 3.15,
+    "changePct": "9.86",
+    "volume": 6964000,
     "type": "漲停",
     "market": "OTC"
   },
   "3663": {
     "code": "3663",
     "name": "鑫科",
-    "close": 66,
-    "change": 6,
+    "close": 72.6,
+    "change": 6.6,
     "changePct": "10.00",
-    "volume": 1825000,
+    "volume": 13972000,
     "type": "漲停",
     "market": "OTC"
   },
   "3675": {
     "code": "3675",
     "name": "德微",
-    "close": 189,
-    "change": 17,
-    "changePct": "9.88",
-    "volume": 1300000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "3693": {
-    "code": "3693",
-    "name": "營邦",
-    "close": 419,
-    "change": 38,
-    "changePct": "9.97",
-    "volume": 1772000,
+    "close": 207.5,
+    "change": 18.5,
+    "changePct": "9.79",
+    "volume": 4027000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -283,53 +253,23 @@
     "volume": 21369493,
     "type": "漲停"
   },
-  "4130": {
-    "code": "4130",
-    "name": "健亞",
-    "close": 33.95,
-    "change": 3.05,
-    "changePct": "9.87",
-    "volume": 1524000,
-    "type": "漲停",
-    "market": "OTC"
-  },
   "4513": {
     "code": "4513",
     "name": "福裕",
-    "close": 17.6,
-    "change": 1.6,
-    "changePct": "10.00",
-    "volume": 293000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "4534": {
-    "code": "4534",
-    "name": "慶騰",
-    "close": 28.35,
-    "change": 2.55,
-    "changePct": "9.88",
-    "volume": 970000,
+    "close": 19.35,
+    "change": 1.75,
+    "changePct": "9.94",
+    "volume": 568000,
     "type": "漲停",
     "market": "OTC"
   },
   "4542": {
     "code": "4542",
     "name": "科嶠",
-    "close": 162.5,
-    "change": 14.5,
-    "changePct": "9.80",
-    "volume": 1575000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "4577": {
-    "code": "4577",
-    "name": "達航科技",
-    "close": 93.5,
-    "change": 8.5,
-    "changePct": "10.00",
-    "volume": 516000,
+    "close": 178.5,
+    "change": 16,
+    "changePct": "9.85",
+    "volume": 1912000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -341,26 +281,6 @@
     "changePct": "9.73",
     "volume": 6693064,
     "type": "漲停"
-  },
-  "4768": {
-    "code": "4768",
-    "name": "晶呈科技",
-    "close": 440.5,
-    "change": 40,
-    "changePct": "9.99",
-    "volume": 540000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "4806": {
-    "code": "4806",
-    "name": "桂田文創",
-    "close": 13,
-    "change": 1.15,
-    "changePct": "9.70",
-    "volume": 34000,
-    "type": "漲停",
-    "market": "OTC"
   },
   "4938": {
     "code": "4938",
@@ -401,60 +321,20 @@
   "4973": {
     "code": "4973",
     "name": "廣穎",
-    "close": 55.6,
-    "change": 5,
-    "changePct": "9.88",
-    "volume": 3261000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "4979": {
-    "code": "4979",
-    "name": "華星光",
-    "close": 383.5,
-    "change": 34.5,
+    "close": 61.1,
+    "change": 5.5,
     "changePct": "9.89",
-    "volume": 2728000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "4991": {
-    "code": "4991",
-    "name": "環宇-KY",
-    "close": 339.5,
-    "change": 30.5,
-    "changePct": "9.87",
-    "volume": 1211000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "5289": {
-    "code": "5289",
-    "name": "宜鼎",
-    "close": 995,
-    "change": 90,
-    "changePct": "9.94",
-    "volume": 3244000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "5452": {
-    "code": "5452",
-    "name": "佶優",
-    "close": 34.3,
-    "change": 3.1,
-    "changePct": "9.94",
-    "volume": 5697000,
+    "volume": 20364000,
     "type": "漲停",
     "market": "OTC"
   },
   "5475": {
     "code": "5475",
     "name": "德宏",
-    "close": 201,
-    "change": 18,
-    "changePct": "9.84",
-    "volume": 702000,
+    "close": 221,
+    "change": 20,
+    "changePct": "9.95",
+    "volume": 1261000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -470,100 +350,90 @@
   "6103": {
     "code": "6103",
     "name": "合邦",
-    "close": 37.4,
-    "change": 3.4,
-    "changePct": "10.00",
-    "volume": 9000,
+    "close": 41.1,
+    "change": 3.7,
+    "changePct": "9.89",
+    "volume": 13000,
     "type": "漲停",
     "market": "OTC"
   },
-  "6124": {
-    "code": "6124",
-    "name": "業強",
-    "close": 34.95,
-    "change": 3.15,
+  "6147": {
+    "code": "6147",
+    "name": "頎邦",
+    "close": 61,
+    "change": 5.5,
     "changePct": "9.91",
-    "volume": 279000,
+    "volume": 23946000,
     "type": "漲停",
     "market": "OTC"
   },
   "6148": {
     "code": "6148",
     "name": "驊宏資",
-    "close": 33.85,
-    "change": 3.05,
+    "close": 37.2,
+    "change": 3.35,
     "changePct": "9.90",
-    "volume": 389000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "6187": {
-    "code": "6187",
-    "name": "萬潤",
-    "close": 586,
-    "change": 53,
-    "changePct": "9.94",
-    "volume": 530000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "6190": {
-    "code": "6190",
-    "name": "萬泰科",
-    "close": 51.2,
-    "change": 4.65,
-    "changePct": "9.99",
-    "volume": 6545000,
+    "volume": 2143000,
     "type": "漲停",
     "market": "OTC"
   },
   "6217": {
     "code": "6217",
     "name": "中探針",
-    "close": 113,
-    "change": 10,
-    "changePct": "9.71",
-    "volume": 1925000,
+    "close": 124,
+    "change": 11,
+    "changePct": "9.73",
+    "volume": 1069000,
     "type": "漲停",
     "market": "OTC"
   },
   "6223": {
     "code": "6223",
     "name": "旺矽",
-    "close": 3285,
-    "change": 295,
-    "changePct": "9.87",
-    "volume": 909000,
+    "close": 3610,
+    "change": 325,
+    "changePct": "9.89",
+    "volume": 2460000,
     "type": "漲停",
     "market": "OTC"
   },
   "6246": {
     "code": "6246",
     "name": "臺龍",
-    "close": 14.75,
-    "change": 1.3,
-    "changePct": "9.67",
-    "volume": 472000,
+    "close": 16.2,
+    "change": 1.45,
+    "changePct": "9.83",
+    "volume": 456000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6265": {
+    "code": "6265",
+    "name": "方土昶",
+    "close": 41.5,
+    "change": 3.75,
+    "changePct": "9.93",
+    "volume": 22176000,
     "type": "漲停",
     "market": "OTC"
   },
   "6291": {
     "code": "6291",
     "name": "沛亨",
-    "close": 291.5,
-    "change": 26.5,
-    "changePct": "10.00",
-    "volume": 1001000,
+    "close": 320.5,
+    "change": 29,
+    "changePct": "9.95",
+    "volume": 899000,
     "type": "漲停",
     "market": "OTC"
   },
   "6419": {
     "code": "6419",
     "name": "京晨科",
-    "close": 78.3,
-    "change": 7.1,
-    "changePct": "9.97",
-    "volume": 114000,
+    "close": 86.1,
+    "change": 7.8,
+    "changePct": "9.96",
+    "volume": 188000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -576,13 +446,13 @@
     "volume": 11686120,
     "type": "漲停"
   },
-  "6588": {
-    "code": "6588",
-    "name": "東典光電",
-    "close": 79.8,
-    "change": 7.2,
-    "changePct": "9.92",
-    "volume": 566000,
+  "6568": {
+    "code": "6568",
+    "name": "宏觀",
+    "close": 194.5,
+    "change": 17.5,
+    "changePct": "9.89",
+    "volume": 3182000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -598,10 +468,20 @@
   "6683": {
     "code": "6683",
     "name": "雍智科技",
-    "close": 1080,
-    "change": 94,
-    "changePct": "9.53",
-    "volume": 228000,
+    "close": 1185,
+    "change": 105,
+    "changePct": "9.72",
+    "volume": 244000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6693": {
+    "code": "6693",
+    "name": "廣閎科",
+    "close": 101,
+    "change": 8.9,
+    "changePct": "9.66",
+    "volume": 3134000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -614,6 +494,36 @@
     "volume": 8117676,
     "type": "漲停"
   },
+  "6727": {
+    "code": "6727",
+    "name": "亞泰金屬",
+    "close": 237.5,
+    "change": 21.5,
+    "changePct": "9.95",
+    "volume": 3550000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6739": {
+    "code": "6739",
+    "name": "竹陞科技",
+    "close": 1105,
+    "change": 100,
+    "changePct": "9.95",
+    "volume": 1375000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6823": {
+    "code": "6823",
+    "name": "濾能",
+    "close": 68.7,
+    "change": 6.2,
+    "changePct": "9.92",
+    "volume": 611000,
+    "type": "漲停",
+    "market": "OTC"
+  },
   "6924": {
     "code": "6924",
     "name": "榮惠-KY創",
@@ -623,23 +533,23 @@
     "volume": 44000,
     "type": "漲停"
   },
-  "7709": {
-    "code": "7709",
-    "name": "榮田",
-    "close": 56.4,
-    "change": 5.1,
-    "changePct": "9.94",
-    "volume": 206000,
+  "7547": {
+    "code": "7547",
+    "name": "碩網",
+    "close": 57.2,
+    "change": 5.2,
+    "changePct": "10.00",
+    "volume": 90000,
     "type": "漲停",
     "market": "OTC"
   },
-  "7717": {
-    "code": "7717",
-    "name": "萊德光電-KY",
-    "close": 605,
-    "change": 55,
-    "changePct": "10.00",
-    "volume": 134000,
+  "7712": {
+    "code": "7712",
+    "name": "博盛半導體",
+    "close": 117,
+    "change": 10.5,
+    "changePct": "9.86",
+    "volume": 1420000,
     "type": "漲停",
     "market": "OTC"
   },
@@ -652,26 +562,6 @@
     "volume": 279642,
     "type": "漲停"
   },
-  "7734": {
-    "code": "7734",
-    "name": "印能科技",
-    "close": 1735,
-    "change": 155,
-    "changePct": "9.81",
-    "volume": 456000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "7751": {
-    "code": "7751",
-    "name": "竑騰",
-    "close": 1300,
-    "change": 115,
-    "changePct": "9.70",
-    "volume": 191000,
-    "type": "漲停",
-    "market": "OTC"
-  },
   "8039": {
     "code": "8039",
     "name": "台虹",
@@ -680,26 +570,6 @@
     "changePct": "9.87",
     "volume": 36488538,
     "type": "漲停"
-  },
-  "8076": {
-    "code": "8076",
-    "name": "伍豐",
-    "close": 25.2,
-    "change": 2.25,
-    "changePct": "9.80",
-    "volume": 3865000,
-    "type": "漲停",
-    "market": "OTC"
-  },
-  "8088": {
-    "code": "8088",
-    "name": "品安",
-    "close": 52.3,
-    "change": 4.7,
-    "changePct": "9.87",
-    "volume": 2521000,
-    "type": "漲停",
-    "market": "OTC"
   },
   "8271": {
     "code": "8271",
@@ -710,13 +580,33 @@
     "volume": 19277315,
     "type": "漲停"
   },
+  "8291": {
+    "code": "8291",
+    "name": "尚茂",
+    "close": 14.65,
+    "change": 1.3,
+    "changePct": "9.74",
+    "volume": 22000,
+    "type": "漲停",
+    "market": "OTC"
+  },
   "8472": {
     "code": "8472",
     "name": "夠麻吉",
-    "close": 66.3,
-    "change": 6,
+    "close": 72.9,
+    "change": 6.6,
     "changePct": "9.95",
-    "volume": 107000,
+    "volume": 174000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "8489": {
+    "code": "8489",
+    "name": "三貝德",
+    "close": 23.9,
+    "change": 2.15,
+    "changePct": "9.89",
+    "volume": 615000,
     "type": "漲停",
     "market": "OTC"
   },
