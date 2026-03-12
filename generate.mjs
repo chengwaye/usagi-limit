@@ -741,8 +741,8 @@ async function generateIndexPage(limitStocks, date, availableDates = [], stockLi
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>烏薩奇漲停版 — ${adDate} 漲停分點追蹤</title>
-<meta name="description" content="${adDate} 台股漲停股票券商分點買賣超排行，追蹤主力動向">
+<title>烏薩奇漲停版 — ${adDate} AI分類漲停族群</title>
+<meta name="description" content="${adDate} 台股漲停股AI智能族群分類，券商分點買賣超排行，追蹤主力動向">
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-L3W7YJ6N37"></script>
