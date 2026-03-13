@@ -1954,16 +1954,25 @@ async function main() {
   console.log("🐰 烏薩奇漲停版 — 靜態網頁生成器");
   console.log("");
 
-  // Get today's limit stocks from API
+  // Get today's limit stocks from API (also determines current trading date)
   console.log("Fetching market data...");
-  const { stocks: limitStocks, date } = await getLimitStocks();
+  const { stocks: freshStocks, date } = await getLimitStocks();
   const adDate = formatDate(date);
 
-  console.log(`Date: ${adDate}`);
-  console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
-
-  // Save snapshot for today
-  saveSnapshot(date, limitStocks);
+  // If snapshot already exists, use it to maintain consistency with AI cache
+  // (AI cache was built from the snapshot; re-fetching API may return different stocks)
+  const existingSnapshot = loadSnapshot(date);
+  let limitStocks;
+  if (existingSnapshot) {
+    limitStocks = existingSnapshot;
+    console.log(`Date: ${adDate}`);
+    console.log(`Using existing snapshot (${Object.keys(limitStocks).length} stocks)`);
+  } else {
+    limitStocks = freshStocks;
+    console.log(`Date: ${adDate}`);
+    console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
+    saveSnapshot(date, limitStocks);
+  }
 
   // Detect all available dates (from cache + snapshots)
   const availableDates = getAvailableDates();
