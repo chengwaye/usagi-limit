@@ -46,11 +46,13 @@ function hydrateCachedResult(cached, stocks) {
   const processedConcepts = {};
   const coveredCodes = new Set();
 
+  const stockValues = Object.values(stocks);
+  const allCacheCodes = new Set();
+
   for (const [name, data] of Object.entries(cached.concepts || {})) {
-    const stockObjects = (data.stocks || []).map(item => {
-      const code = typeof item === 'string' ? item : item.code;
-      return Object.values(stocks).find(s => s.code === code);
-    }).filter(Boolean);
+    const rawCodes = (data.stocks || []).map(item => typeof item === 'string' ? item : item.code);
+    rawCodes.forEach(c => allCacheCodes.add(c));
+    const stockObjects = rawCodes.map(code => stockValues.find(s => s.code === code)).filter(Boolean);
 
     for (const s of stockObjects) coveredCodes.add(s.code);
 
@@ -61,6 +63,12 @@ function hydrateCachedResult(cached, stocks) {
         stocks: stockObjects
       };
     }
+  }
+
+  // 清除髒資料：報告 AI cache 中不在 snapshot 的股票（已被 filter(Boolean) 自動排除）
+  const stale = [...allCacheCodes].filter(c => !stockValues.find(s => s.code === c));
+  if (stale.length > 0) {
+    console.log(`🧹 ${stale.length} stale codes in AI cache (not in snapshot, ignored): ${stale.join(', ')}`);
   }
 
   // 安全網：未被 AI cache 涵蓋的股票自動歸入「其他強勢」

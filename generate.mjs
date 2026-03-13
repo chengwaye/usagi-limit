@@ -1888,6 +1888,20 @@ function loadSnapshot(date) {
   }
 }
 
+// Get the latest snapshot date (for skipping API call)
+function getLatestSnapshotDate() {
+  if (!fs.existsSync(SNAPSHOT_DIR)) return null;
+  const files = fs.readdirSync(SNAPSHOT_DIR).filter(f => /^\d{8}\.json$/.test(f));
+  if (files.length === 0) return null;
+  files.sort().reverse();
+  // Only return today's date (don't use old snapshots as "latest")
+  const latest = files[0].replace('.json', '');
+  const now = new Date();
+  const tw = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+  const today = tw.toISOString().slice(0, 10).replace(/-/g, '');
+  return latest === today ? latest : null;
+}
+
 // Generate a full date page (index + stock pages)
 async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   const cacheDate = date;
@@ -1913,6 +1927,21 @@ async function generateDatePages(limitStocks, date, availableDates, isLatest) {
   const analysisResult = await classifyStocksIntelligently(limitStocks, date);
   const classifiedStocks = analysisResult.concepts || analysisResult;
   const stockReasons = analysisResult.stockReasons || {};
+
+  // Validate: check all snapshot stocks are covered by concepts
+  const conceptStockCodes = new Set();
+  for (const data of Object.values(classifiedStocks)) {
+    for (const s of (data.stocks || [])) {
+      conceptStockCodes.add(typeof s === 'string' ? s : s.code);
+    }
+  }
+  const snapshotCodes = Object.keys(limitStocks);
+  const missingFromConcepts = snapshotCodes.filter(c => !conceptStockCodes.has(c));
+  if (missingFromConcepts.length === 0) {
+    console.log(`  ✅ ${snapshotCodes.length}/${snapshotCodes.length} stocks covered by concepts`);
+  } else {
+    console.log(`  ⚠️ ${snapshotCodes.length - missingFromConcepts.length}/${snapshotCodes.length} stocks covered — missing: ${missingFromConcepts.join(', ')}`);
+  }
 
   // Generate index page
   const indexFileName = isLatest ? "index.html" : `index-${date}.html`;
@@ -1954,25 +1983,39 @@ async function main() {
   console.log("🐰 烏薩奇漲停版 — 靜態網頁生成器");
   console.log("");
 
-  // Get today's limit stocks from API (also determines current trading date)
-  console.log("Fetching market data...");
-  const { stocks: freshStocks, date } = await getLimitStocks();
-  const adDate = formatDate(date);
+  // Determine today's date and load stocks
+  // --refresh: force re-fetch from API and overwrite snapshot
+  const REFRESH = process.argv.includes("--refresh");
+  const latestSnapshotDate = getLatestSnapshotDate();
+  let limitStocks, date;
 
-  // If snapshot already exists, use it to maintain consistency with AI cache
-  // (AI cache was built from the snapshot; re-fetching API may return different stocks)
-  const existingSnapshot = loadSnapshot(date);
-  let limitStocks;
-  if (existingSnapshot) {
-    limitStocks = existingSnapshot;
+  if (!REFRESH && latestSnapshotDate) {
+    // Use existing snapshot — skip API call entirely
+    limitStocks = loadSnapshot(latestSnapshotDate);
+    date = latestSnapshotDate;
+    const adDate = formatDate(date);
     console.log(`Date: ${adDate}`);
-    console.log(`Using existing snapshot (${Object.keys(limitStocks).length} stocks)`);
+    console.log(`Using existing snapshot (${Object.keys(limitStocks).length} stocks, skipped API)`);
   } else {
-    limitStocks = freshStocks;
-    console.log(`Date: ${adDate}`);
-    console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
-    saveSnapshot(date, limitStocks);
+    // Fetch from API
+    console.log("Fetching market data...");
+    const { stocks: freshStocks, date: apiDate } = await getLimitStocks();
+    date = apiDate;
+    const adDate = formatDate(date);
+    const existingSnapshot = loadSnapshot(date);
+    if (!REFRESH && existingSnapshot) {
+      limitStocks = existingSnapshot;
+      console.log(`Date: ${adDate}`);
+      console.log(`Using existing snapshot (${Object.keys(limitStocks).length} stocks)`);
+    } else {
+      limitStocks = freshStocks;
+      console.log(`Date: ${adDate}`);
+      console.log(`Found ${Object.keys(limitStocks).length} limit stocks`);
+      saveSnapshot(date, limitStocks);
+      if (REFRESH) console.log(`🔄 Snapshot refreshed (--refresh flag)`);
+    }
   }
+  const adDate = formatDate(date);
 
   // Detect all available dates (from cache + snapshots)
   const availableDates = getAvailableDates();
