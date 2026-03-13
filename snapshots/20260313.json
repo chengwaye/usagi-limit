@@ -1,0 +1,546 @@
+{
+  "1471": {
+    "code": "1471",
+    "name": "首利",
+    "close": 13,
+    "change": 1.15,
+    "changePct": "9.70",
+    "volume": 1911919,
+    "type": "漲停"
+  },
+  "1589": {
+    "code": "1589",
+    "name": "永冠-KY",
+    "close": 7.98,
+    "change": 0.72,
+    "changePct": "9.92",
+    "volume": 1158662,
+    "type": "漲停"
+  },
+  "1711": {
+    "code": "1711",
+    "name": "永光",
+    "close": 32.3,
+    "change": 2.9,
+    "changePct": "9.86",
+    "volume": 76690964,
+    "type": "漲停"
+  },
+  "1721": {
+    "code": "1721",
+    "name": "三晃",
+    "close": 18.95,
+    "change": 1.7,
+    "changePct": "9.86",
+    "volume": 5044969,
+    "type": "漲停"
+  },
+  "1725": {
+    "code": "1725",
+    "name": "元禎",
+    "close": 29.5,
+    "change": 2.65,
+    "changePct": "9.87",
+    "volume": 446026,
+    "type": "漲停"
+  },
+  "1727": {
+    "code": "1727",
+    "name": "中華化",
+    "close": 60.8,
+    "change": 5.5,
+    "changePct": "9.95",
+    "volume": 23335254,
+    "type": "漲停"
+  },
+  "1735": {
+    "code": "1735",
+    "name": "日勝化",
+    "close": 23.75,
+    "change": 2.15,
+    "changePct": "9.95",
+    "volume": 3443098,
+    "type": "漲停"
+  },
+  "1799": {
+    "code": "1799",
+    "name": "易威",
+    "close": 32.8,
+    "change": 2.95,
+    "changePct": "9.88",
+    "volume": 109000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "2337": {
+    "code": "2337",
+    "name": "旺宏",
+    "close": 108.5,
+    "change": 9.5,
+    "changePct": "9.60",
+    "volume": 237974791,
+    "type": "漲停"
+  },
+  "2486": {
+    "code": "2486",
+    "name": "一詮",
+    "close": 152,
+    "change": 13.5,
+    "changePct": "9.75",
+    "volume": 20135875,
+    "type": "漲停"
+  },
+  "2489": {
+    "code": "2489",
+    "name": "瑞軒",
+    "close": 41.35,
+    "change": 3.75,
+    "changePct": "9.97",
+    "volume": 8743411,
+    "type": "漲停"
+  },
+  "3013": {
+    "code": "3013",
+    "name": "晟銘電",
+    "close": 100.5,
+    "change": 8.9,
+    "changePct": "9.72",
+    "volume": 5764118,
+    "type": "漲停"
+  },
+  "3032": {
+    "code": "3032",
+    "name": "偉訓",
+    "close": 68,
+    "change": 6.1,
+    "changePct": "9.85",
+    "volume": 2114410,
+    "type": "漲停"
+  },
+  "3054": {
+    "code": "3054",
+    "name": "立萬利",
+    "close": 72.2,
+    "change": 6.5,
+    "changePct": "9.89",
+    "volume": 930306,
+    "type": "漲停"
+  },
+  "3066": {
+    "code": "3066",
+    "name": "李洲",
+    "close": 17.8,
+    "change": 1.6,
+    "changePct": "9.88",
+    "volume": 1121000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3093": {
+    "code": "3093",
+    "name": "港建*",
+    "close": 40.55,
+    "change": 3.65,
+    "changePct": "9.89",
+    "volume": 4592000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3167": {
+    "code": "3167",
+    "name": "大量",
+    "close": 390.5,
+    "change": 35.5,
+    "changePct": "10.00",
+    "volume": 8981729,
+    "type": "漲停"
+  },
+  "3189": {
+    "code": "3189",
+    "name": "景碩",
+    "close": 317.5,
+    "change": 28.5,
+    "changePct": "9.86",
+    "volume": 48278519,
+    "type": "漲停"
+  },
+  "3437": {
+    "code": "3437",
+    "name": "榮創",
+    "close": 19.4,
+    "change": 1.75,
+    "changePct": "9.92",
+    "volume": 5666495,
+    "type": "漲停"
+  },
+  "3523": {
+    "code": "3523",
+    "name": "迎輝",
+    "close": 14.95,
+    "change": 1.35,
+    "changePct": "9.93",
+    "volume": 171000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3550": {
+    "code": "3550",
+    "name": "聯穎",
+    "close": 18.35,
+    "change": 1.65,
+    "changePct": "9.88",
+    "volume": 4933142,
+    "type": "漲停"
+  },
+  "3555": {
+    "code": "3555",
+    "name": "博士旺",
+    "close": 162,
+    "change": 14.5,
+    "changePct": "9.83",
+    "volume": 459000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3591": {
+    "code": "3591",
+    "name": "艾笛森",
+    "close": 20.1,
+    "change": 1.8,
+    "changePct": "9.84",
+    "volume": 2225204,
+    "type": "漲停"
+  },
+  "3693": {
+    "code": "3693",
+    "name": "營邦",
+    "close": 459,
+    "change": 41.5,
+    "changePct": "9.94",
+    "volume": 3070000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "3701": {
+    "code": "3701",
+    "name": "大眾控",
+    "close": 62.7,
+    "change": 5.7,
+    "changePct": "10.00",
+    "volume": 11738368,
+    "type": "漲停"
+  },
+  "4414": {
+    "code": "4414",
+    "name": "如興",
+    "close": 11.4,
+    "change": 1,
+    "changePct": "9.62",
+    "volume": 1284933,
+    "type": "漲停"
+  },
+  "4530": {
+    "code": "4530",
+    "name": "宏易",
+    "close": 31.5,
+    "change": 2.85,
+    "changePct": "9.95",
+    "volume": 16000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "4543": {
+    "code": "4543",
+    "name": "萬在",
+    "close": 33.45,
+    "change": 3,
+    "changePct": "9.85",
+    "volume": 1008000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "4743": {
+    "code": "4743",
+    "name": "合一",
+    "close": 57.3,
+    "change": 5.2,
+    "changePct": "9.98",
+    "volume": 6875000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "4755": {
+    "code": "4755",
+    "name": "三福化",
+    "close": 169.5,
+    "change": 15,
+    "changePct": "9.71",
+    "volume": 4174867,
+    "type": "漲停"
+  },
+  "4908": {
+    "code": "4908",
+    "name": "前鼎",
+    "close": 106,
+    "change": 9.2,
+    "changePct": "9.50",
+    "volume": 7822000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "4931": {
+    "code": "4931",
+    "name": "新盛力",
+    "close": 147,
+    "change": 13,
+    "changePct": "9.70",
+    "volume": 8010000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "4949": {
+    "code": "4949",
+    "name": "有成精密",
+    "close": 68.4,
+    "change": 6.2,
+    "changePct": "9.97",
+    "volume": 8572622,
+    "type": "漲停"
+  },
+  "4956": {
+    "code": "4956",
+    "name": "光鋐",
+    "close": 31.2,
+    "change": 2.8,
+    "changePct": "9.86",
+    "volume": 23444796,
+    "type": "漲停"
+  },
+  "4958": {
+    "code": "4958",
+    "name": "臻鼎-KY",
+    "close": 188.5,
+    "change": 17,
+    "changePct": "9.91",
+    "volume": 24900754,
+    "type": "漲停"
+  },
+  "4960": {
+    "code": "4960",
+    "name": "誠美材",
+    "close": 23.25,
+    "change": 2.1,
+    "changePct": "9.93",
+    "volume": 19728385,
+    "type": "漲停"
+  },
+  "4973": {
+    "code": "4973",
+    "name": "廣穎",
+    "close": 67.2,
+    "change": 6.1,
+    "changePct": "9.98",
+    "volume": 20820000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "4977": {
+    "code": "4977",
+    "name": "眾達-KY",
+    "close": 187,
+    "change": 17,
+    "changePct": "10.00",
+    "volume": 17543561,
+    "type": "漲停"
+  },
+  "6103": {
+    "code": "6103",
+    "name": "合邦",
+    "close": 45.2,
+    "change": 4.1,
+    "changePct": "9.98",
+    "volume": 17000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6141": {
+    "code": "6141",
+    "name": "柏承",
+    "close": 20,
+    "change": 1.8,
+    "changePct": "9.89",
+    "volume": 4067032,
+    "type": "漲停"
+  },
+  "6165": {
+    "code": "6165",
+    "name": "浪凡",
+    "close": 48.5,
+    "change": 4.4,
+    "changePct": "9.98",
+    "volume": 3359757,
+    "type": "漲停"
+  },
+  "6167": {
+    "code": "6167",
+    "name": "久正",
+    "close": 13.2,
+    "change": 1.2,
+    "changePct": "10.00",
+    "volume": 5228000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6205": {
+    "code": "6205",
+    "name": "詮欣",
+    "close": 57,
+    "change": 5.1,
+    "changePct": "9.83",
+    "volume": 1214433,
+    "type": "漲停"
+  },
+  "6217": {
+    "code": "6217",
+    "name": "中探針",
+    "close": 136,
+    "change": 12,
+    "changePct": "9.68",
+    "volume": 2875000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6226": {
+    "code": "6226",
+    "name": "光鼎",
+    "close": 10.05,
+    "change": 0.87,
+    "changePct": "9.48",
+    "volume": 2297159,
+    "type": "漲停"
+  },
+  "6274": {
+    "code": "6274",
+    "name": "台燿",
+    "close": 497.5,
+    "change": 45,
+    "changePct": "9.94",
+    "volume": 17905000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6426": {
+    "code": "6426",
+    "name": "統新",
+    "close": 142,
+    "change": 12.5,
+    "changePct": "9.65",
+    "volume": 688081,
+    "type": "漲停"
+  },
+  "6451": {
+    "code": "6451",
+    "name": "訊芯-KY",
+    "close": 215.5,
+    "change": 19.5,
+    "changePct": "9.95",
+    "volume": 6107165,
+    "type": "漲停"
+  },
+  "6574": {
+    "code": "6574",
+    "name": "霈方",
+    "close": 89.8,
+    "change": 8.1,
+    "changePct": "9.91",
+    "volume": 92000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "6727": {
+    "code": "6727",
+    "name": "亞泰金屬",
+    "close": 261,
+    "change": 23.5,
+    "changePct": "9.89",
+    "volume": 1121000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "7547": {
+    "code": "7547",
+    "name": "碩網",
+    "close": 62.9,
+    "change": 5.7,
+    "changePct": "9.97",
+    "volume": 255000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "7712": {
+    "code": "7712",
+    "name": "博盛半導體",
+    "close": 128.5,
+    "change": 11.5,
+    "changePct": "9.83",
+    "volume": 2668000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "7728": {
+    "code": "7728",
+    "name": "光焱科技",
+    "close": 770,
+    "change": 70,
+    "changePct": "10.00",
+    "volume": 271000,
+    "type": "漲停",
+    "market": "OTC"
+  },
+  "8046": {
+    "code": "8046",
+    "name": "南電",
+    "close": 515,
+    "change": 46.5,
+    "changePct": "9.93",
+    "volume": 3385129,
+    "type": "漲停"
+  },
+  "8215": {
+    "code": "8215",
+    "name": "明基材",
+    "close": 22.55,
+    "change": 2.05,
+    "changePct": "10.00",
+    "volume": 6247398,
+    "type": "漲停"
+  },
+  "8261": {
+    "code": "8261",
+    "name": "富鼎",
+    "close": 111,
+    "change": 10,
+    "changePct": "9.90",
+    "volume": 9304687,
+    "type": "漲停"
+  },
+  "8271": {
+    "code": "8271",
+    "name": "宇瞻",
+    "close": 173.5,
+    "change": 15.5,
+    "changePct": "9.81",
+    "volume": 2444168,
+    "type": "漲停"
+  },
+  "8489": {
+    "code": "8489",
+    "name": "三貝德",
+    "close": 26.25,
+    "change": 2.35,
+    "changePct": "9.83",
+    "volume": 576000,
+    "type": "漲停",
+    "market": "OTC"
+  }
+}
