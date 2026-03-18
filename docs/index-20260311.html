@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chengwaye漲停族群AI分類 — 2026/03/11 AI分類漲停族群</title>
+<meta name="description" content="2026/03/11 台股漲停股AI智能族群分類，券商分點買賣超排行，追蹤主力動向">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L3W7YJ6N37"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L3W7YJ6N37');
+</script>
+
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4394676027529562"
+     crossorigin="anonymous"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; }
+.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.container.wide { max-width: 1200px; }
+header { text-align: center; padding: 16px 0 12px; border-bottom: 1px solid #30363d; margin-bottom: 16px; position: relative; }
+header h1 { font-size: 22px; margin-bottom: 2px; }
+header h1 span.rabbit { font-size: 26px; }
+header .subtitle { color: #8b949e; font-size: 13px; }
+
+/* Date navigation */
+.date-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.date-nav .date { font-size: 14px; color: #e6edf3; font-weight: 600; min-width: 100px; }
+.date-nav .nav-btn {
+  background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 4px 10px;
+  border-radius: 4px; cursor: pointer; font-size: 12px; transition: all 0.2s;
+}
+.date-nav .nav-btn:hover:not(:disabled) { background: #30363d; color: #e6edf3; }
+.date-nav .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+header .cta-hint {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #60a5fa;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  min-width: 180px;
+}
+header .cta-hint:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+header .date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+header .date-nav .nav-btn {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+header .date-nav .nav-btn:hover { background: #30363d; color: #e6edf3; }
+header .date-nav .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+header .date-nav .date { color: #58a6ff; font-size: 15px; font-weight: 600; }
+
+.section-title { font-size: 16px; margin: 16px 0 10px; padding-left: 8px; border-left: 3px solid #f85149; }
+
+.concept-section { margin-bottom: 20px; }
+.concept-title {
+  font-size: 14px;
+  margin: 12px 0 8px;
+  padding: 8px 12px;
+  background: #21262d;
+  border-radius: 6px;
+  border-left: 3px solid #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.concept-title .icon { font-size: 16px; }
+.concept-title .count {
+  color: #8b949e;
+  font-size: 12px;
+  margin-left: auto;
+}
+.concept-reason {
+  color: #8b949e;
+  font-size: 11px;
+  margin: 0 12px 8px 12px;
+  font-style: italic;
+}
+.stock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.stock-grid.single { grid-template-columns: 1fr; gap: 4px; max-width: 280px; display: inline-grid; margin-right: 16px; vertical-align: top; }
+.singles-container { display: flex; flex-wrap: wrap; gap: 0; }
+.stock-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; transition: all 0.2s ease; position: relative; }
+.stock-card .reason-tip { display: none; position: absolute; left: 0; right: 0; bottom: 100%; background: #1c2129; border: 1px solid #444c56; border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #c9d1d9; line-height: 1.5; z-index: 100; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.stock-card .reason-tip .tip-cta { color: #58a6ff; font-size: 11px; margin-top: 4px; }
+.stock-card:hover .reason-tip { display: block; }
+.stock-card a { text-decoration: none; color: inherit; display: block; padding: 10px 12px; transition: all 0.2s ease; }
+.stock-card a:hover { background: #1c2129; }
+.stock-header { display: flex; justify-content: space-between; align-items: center; }
+.stock-name { font-size: 14px; font-weight: 600; }
+.stock-code { color: #8b949e; font-size: 12px; margin-left: 6px; }
+.stock-price { text-align: right; }
+.stock-close { font-size: 14px; font-weight: 600; }
+.stock-change { font-size: 11px; margin-top: 1px; }
+.up { color: #f85149; }
+.down { color: #3fb950; }
+.stock-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: #8b949e; }
+
+/* AdSense 廣告位 */
+.ads-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.content-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+.sidebar-ad {
+  width: 160px;
+  min-height: 600px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #484f58;
+  font-size: 11px;
+  text-align: center;
+  position: sticky;
+  top: 20px;
+}
+
+/* Stock detail page */
+.back { display: inline-block; color: #58a6ff; text-decoration: none; margin-bottom: 16px; font-size: 14px; }
+.back:hover { text-decoration: underline; }
+.info-bar { display: flex; justify-content: space-between; align-items: center; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+.info-left h2 { font-size: 22px; }
+.info-left .code { color: #8b949e; font-size: 14px; }
+.info-right { text-align: right; }
+.info-right .price { font-size: 24px; font-weight: 700; }
+.info-right .change-info { font-size: 14px; margin-top: 4px; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 13px; font-weight: 600; }
+.badge.up { background: rgba(248,81,73,0.2); }
+.badge.down { background: rgba(63,185,80,0.2); }
+
+/* Side-by-side tables */
+.dual-panel { display: flex; gap: 16px; }
+.panel { flex: 1; min-width: 0; }
+.panel-title { text-align: center; padding: 8px; font-size: 13px; font-weight: 600; border-bottom: 2px solid #30363d; margin-bottom: 8px; }
+.panel-title.buy { border-bottom-color: #f85149; color: #f85149; }
+.panel-title.sell { border-bottom-color: #3fb950; color: #3fb950; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: right; padding: 3px 4px; font-size: 10px; color: #8b949e; border-bottom: 1px solid #30363d; white-space: nowrap; }
+th:first-child { text-align: left; }
+td { padding: 4px 4px; font-size: 11px; border-bottom: 1px solid #21262d; text-align: right; font-variant-numeric: tabular-nums; }
+td:first-child { text-align: left; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65px; }
+tr:hover { background: #1c2129; }
+.net { font-weight: 600; }
+
+footer { text-align: center; padding: 32px 0 24px; color: #484f58; font-size: 12px; border-top: 1px solid #30363d; margin-top: 32px; }
+footer a { color: #58a6ff; text-decoration: none; }
+
+@media (max-width: 1000px) {
+  .ads-container { flex-direction: column; }
+  .sidebar-ad { display: none; }
+}
+@media (max-width: 1200px) {
+  .stock-grid { grid-template-columns: repeat(3, 1fr); }
+  .stock-grid.single { max-width: 240px; }
+}
+@media (max-width: 900px) {
+  .stock-grid { grid-template-columns: repeat(2, 1fr); }
+  .stock-grid.single { max-width: 100%; margin-right: 0; margin-bottom: 8px; }
+  .singles-container { flex-direction: column; }
+}
+@media (max-width: 700px) {
+  .container { padding: 4px; }
+  .stock-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; }
+  .info-bar { flex-direction: column; text-align: center; gap: 12px; }
+  .info-right { text-align: center; }
+  .dual-panel { gap: 4px; }
+  th { padding: 2px 2px; font-size: 9px; }
+  td { padding: 3px 2px; font-size: 9px; }
+  td:first-child { max-width: 52px; font-size: 9px; }
+  .panel-title { font-size: 11px; padding: 6px; }
+  header .date-nav .nav-btn { padding: 3px 8px; font-size: 10px; }
+  header .date-nav .date { font-size: 13px; }
+  header .cta-hint { position: static; margin: 8px auto 0; min-width: auto; width: fit-content; font-size: 10px; padding: 6px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="cta-hint" onclick="scrollToStocks()">
+      💡 點股票看分點、主力泡泡圖
+    </div>
+    <h1><span class="rabbit">🐰</span> Chengwaye漲停族群AI分類</h1>
+    <div class="subtitle">AI 分類族群 • 智能解析漲停原因 • 一鍵視覺化主力買賣</div>
+    <div class="date-nav">
+      <button class="nav-btn" onclick="navigateDate('20260311', -1)" >◀ 前一天</button>
+      <div class="date">2026/03/11</div>
+      <button class="nav-btn" onclick="navigateDate('20260311', 1)" >後一天 ▶</button>
+    </div>
+  </header>
+
+  <!-- 首頁頂部廣告已移除，提升使用者體驗 -->
+
+  <div class="ads-container">
+    <!-- 左側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- 將來在這裡放置 AdSense 垂直廣告代碼 -->
+      廣告位<br>(160x600)
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="content-wrapper">
+      <div class="section-title" id="stocks-section">🔴 漲停 (105)</div>
+      
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">💾</span>
+        <span>記憶體族群</span>
+        <span class="count">9檔</span>
+      </div>
+      <div class="concept-reason">DRAM/NAND報價持續上漲、缺貨效應蔓延，帶動模組、代理通路及封測營運受惠</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">NOR Flash報價漲幅達30-100%，車用/工控需求穩健，AI伺服器帶動eMMC/MLC成為2026成長動能，記憶體缺貨漲價題材持續發酵<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2337.html">
+        <div class="stock-header">
+          <div><span class="stock-name">旺宏</span><span class="stock-code">2337</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$99.7</div>
+            <div class="stock-change up">+9 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 131,431張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">開盤不到20分鐘即亮燈漲停，業績連續三個月創高，2025年12月營收120億月增18%年增445%，DRAM Q1報價漲55-60%，缺貨漲價延續至2027下半年<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2408.html">
+        <div class="stock-header">
+          <div><span class="stock-name">南亞科</span><span class="stock-code">2408</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$254</div>
+            <div class="stock-change up">+23 (9.96%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 90,316張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">利基型記憶體IC設計廠，DRAM合約價持續走揚，受惠網通與車用記憶體需求強勁，記憶體族群全面走高<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3006.html">
+        <div class="stock-header">
+          <div><span class="stock-name">晶豪科</span><span class="stock-code">3006</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$159.5</div>
+            <div class="stock-change up">+14.5 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 19,481張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">2025年EPS達23.18元創歷史新高，董事會通過配息17元殖利率約6%。董事長明確表示2026年DRAM「一路缺」、NAND也一路缺，上游產能已全數被預訂。2月營收71.64億元年增114.3%，記憶體報價持續上漲推動股價爆量突破350元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3260.html">
+        <div class="stock-header">
+          <div><span class="stock-name">威剛</span><span class="stock-code">3260</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$350.5</div>
+            <div class="stock-change up">+31.5 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 32,514張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">記憶體模組與固態硬碟受惠DRAM/NAND報價齊揚，記憶體缺貨效應帶動通路庫存利益<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4973.html">
+        <div class="stock-header">
+          <div><span class="stock-name">廣穎</span><span class="stock-code">4973</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$55.6</div>
+            <div class="stock-change up">+5 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,261張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">工控記憶體龍頭，AI邊緣運算模組放量，記憶體供給緊缺價格續創新高，早盤飆上漲停價905元<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/5289.html">
+        <div class="stock-header">
+          <div><span class="stock-name">宜鼎</span><span class="stock-code">5289</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$995</div>
+            <div class="stock-change up">+90 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,244張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">金士頓子公司，主營DRAM模組與Flash記憶體封測代工。2月營收1.13億元年增32.39%，擬配息1.5元。受惠三星罷工危機與記憶體缺貨漲價題材推升股價攻漲停。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/8088.html">
+        <div class="stock-header">
+          <div><span class="stock-name">品安</span><span class="stock-code">8088</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$52.3</div>
+            <div class="stock-change up">+4.7 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,521張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">IC通路龍頭，受惠記憶體報價走揚帶動庫存利益，AI伺服器記憶體拉貨帶動出貨動能<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/8112.html">
+        <div class="stock-header">
+          <div><span class="stock-name">至上</span><span class="stock-code">8112</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$85.4</div>
+            <div class="stock-change up">+7.7 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 67,145張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">工控與消費記憶體模組大廠，擬配息4.5元殖利率3.69%，受惠記憶體報價上漲與庫存回補需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/8271.html">
+        <div class="stock-header">
+          <div><span class="stock-name">宇瞻</span><span class="stock-code">8271</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$144</div>
+            <div class="stock-change up">+13 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 18,573張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">⚡</span>
+        <span>矽光子與光通訊</span>
+        <span class="count">9檔</span>
+      </div>
+      <div class="concept-reason">CPO矽光子2026商轉元年，GTC 2026前夕題材強烈發酵，帶動光模組、磊晶及光學封裝</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">矽光子光收發模組關鍵供應商，NVIDIA Vera Rubin平台確認採用矽光子技術，GTC 2026前夕題材強烈發酵。光纖配線盒規劃於下半年量產，近日獲外資作多青睞，一字漲停來到770元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3163.html">
+        <div class="stock-header">
+          <div><span class="stock-name">波若威</span><span class="stock-code">3163</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$770</div>
+            <div class="stock-change up">+70 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 484張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">受惠於光通訊大廠AAOI財報驚艷及Lumentum大漲鼓舞，帶動矽光子CPO族群強勢反撲。光環隨族群多方買盤回血，於3月11日強攻漲停來到81.4元，上漲7.4元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3234.html">
+        <div class="stock-header">
+          <div><span class="stock-name">光環</span><span class="stock-code">3234</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$81.4</div>
+            <div class="stock-change up">+7.4 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 987張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">原LED磊晶廠轉型切入矽光子領域，已具備MOCVD磊晶與LD晶粒製造能力，首波產品涵蓋100G至1.6T應用並已導入國際雲端大廠測試。2026年半導體營收佔比預計超越光電本業。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3339.html">
+        <div class="stock-header">
+          <div><span class="stock-name">泰谷</span><span class="stock-code">3339</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$28.5</div>
+            <div class="stock-change up">+2.55 (9.83%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,067張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">光通訊模組封裝大廠，受惠CPO共封裝光學2026商轉元年，AI資料中心以光代銅趨勢帶動高速光模組需求爆發<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3450.html">
+        <div class="stock-header">
+          <div><span class="stock-name">聯鈞</span><span class="stock-code">3450</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$272.5</div>
+            <div class="stock-change up">+24.5 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 17,131張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">高階光收發模組廠，受惠CPO矽光子2026商轉與AI資料中心800G/1.6T光模組需求爆發<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4977.html">
+        <div class="stock-header">
+          <div><span class="stock-name">眾達-KY</span><span class="stock-code">4977</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$166</div>
+            <div class="stock-change up">+15 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 9,180張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">矽光子CPO外部光源（ELS）供應鏈核心廠，800G產品2026年1月開始正式出貨，市占率預估逾50%。CW Laser產能滿載，Q4目標從150萬顆倍增至300-400萬顆。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4979.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華星光</span><span class="stock-code">4979</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$383.5</div>
+            <div class="stock-change up">+34.5 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,728張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">光通訊被動元件與濾光片廠，受惠CPO矽光子商轉帶動光通訊元件需求全面升溫<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6426.html">
+        <div class="stock-header">
+          <div><span class="stock-name">統新</span><span class="stock-code">6426</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$133.5</div>
+            <div class="stock-change up">+12 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 948張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">光通訊模組封裝與CPO共封裝技術領先廠，受惠2026 CPO商轉元年帶動高速光模組封測訂單<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6451.html">
+        <div class="stock-header">
+          <div><span class="stock-name">訊芯-KY</span><span class="stock-code">6451</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$189.5</div>
+            <div class="stock-change up">+17 (9.86%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,014張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">光通訊薄膜濾光片供應商，2026年1月營收4,820萬元、年增634.31%營收爆發性成長。受惠800G/1.6T光通訊模組升級帶動濾光片需求大幅提升。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6588.html">
+        <div class="stock-header">
+          <div><span class="stock-name">東典光電</span><span class="stock-code">6588</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$79.8</div>
+            <div class="stock-change up">+7.2 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 566張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔮</span>
+        <span>化合物半導體</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="concept-reason">砷化鎵/磷化銦為CPO矽光子與5G PA關鍵上游，NXP退出轉單效應加持</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">砷化鎵磊晶大廠，受惠CPO矽光子2026商轉元年帶動光通訊磊晶需求，為聯亞等CPO供應鏈關鍵上游<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2455.html">
+        <div class="stock-header">
+          <div><span class="stock-name">全新</span><span class="stock-code">2455</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$221.5</div>
+            <div class="stock-change up">+20 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4,115張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">NXP宣布2027年Q1前關閉亞利桑那氮化鎵晶圓廠退出5G PA市場，穩懋為全球最大砷化鎵代工廠成為最大轉單受惠者。加上NVIDIA GTC 2026前夕矽光子題材發酵，穩懋卡位Lumentum關鍵供應鏈，2026年營收預估年增16%至194億元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3105.html">
+        <div class="stock-header">
+          <div><span class="stock-name">穩懋</span><span class="stock-code">3105</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$299</div>
+            <div class="stock-change up">+27 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 7,020張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">III-V族化合物半導體晶圓代工廠（砷化鎵/磷化銦），2026年1月營收2.21億元、年增155.98%。3月4日法說會揭示GCS 2.0轉型策略，70mW CW Laser目標2026年達百萬顆級出貨，切入矽光子與CPO應用。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4991.html">
+        <div class="stock-header">
+          <div><span class="stock-name">環宇-KY</span><span class="stock-code">4991</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$339.5</div>
+            <div class="stock-change up">+30.5 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,211張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🖥️</span>
+        <span>AI伺服器與零組件</span>
+        <span class="count">12檔</span>
+      </div>
+      <div class="concept-reason">華碩法說揭露AI伺服器年增4-5倍，GB300/MI450平台持續放量帶動供應鏈</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">3/10法說會揭露2025年EPS 60元創新高、配息42元，AI伺服器Q1預估季增50-100%、年增4-5倍，成立基礎方案事業群(IS BG)升格伺服器業務<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2357.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華碩</span><span class="stock-code">2357</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$584</div>
+            <div class="stock-change up">+53 (9.98%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 10,066張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI晶片ASIC設計服務受惠客製化AI加速器需求爆發，x86 CPU與邊緣AI處理器佈局，輝達概念股<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2388.html">
+        <div class="stock-header">
+          <div><span class="stock-name">威盛</span><span class="stock-code">2388</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$49.05</div>
+            <div class="stock-change up">+4.45 (9.98%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4,411張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">主機板與顯示卡出貨受惠AI PC換機潮與輝達新一代GPU需求回溫，板卡族群連動上攻<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2399.html">
+        <div class="stock-header">
+          <div><span class="stock-name">映泰</span><span class="stock-code">2399</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$24.35</div>
+            <div class="stock-change up">+2.2 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 7,693張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI伺服器GPU功耗突破700W帶動高階散熱風扇與液冷升級需求，前3季EPS 5.65元超越去年全年，法人持續加碼<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2421.html">
+        <div class="stock-header">
+          <div><span class="stock-name">建準</span><span class="stock-code">2421</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$140.5</div>
+            <div class="stock-change up">+12.5 (9.77%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4,734張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">受惠板卡市場回溫與AI伺服器代工佈局，板卡族群隨華碩法說利多連動走高<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2425.html">
+        <div class="stock-header">
+          <div><span class="stock-name">承啟</span><span class="stock-code">2425</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$28.25</div>
+            <div class="stock-change up">+2.55 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 526張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">輝達專業繪圖卡與AI運算卡代理，受惠輝達Vera Rubin平台推進與AI運算需求持續爆發<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2465.html">
+        <div class="stock-header">
+          <div><span class="stock-name">麗臺</span><span class="stock-code">2465</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$55</div>
+            <div class="stock-change up">+5 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 684張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI伺服器液冷散熱龍頭，憑藉一站式散熱解決方案卡位GB300機櫃散熱與機殼訂單，大和預估2026年獲利年增54%、目標價1800元，越南廠產能年增逾50%<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3017.html">
+        <div class="stock-header">
+          <div><span class="stock-name">奇鋐</span><span class="stock-code">3017</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$1860</div>
+            <div class="stock-change up">+165 (9.73%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 5,419張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">台灣ASIC設計服務龍頭，HPC占營收97%、美國營收占比87%，亞馬遜為最大客戶，受惠AI ASIC 2.0客製化加速器需求爆發，摩根士丹利點名為AI ASIC最大受惠者<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3661.html">
+        <div class="stock-header">
+          <div><span class="stock-name">世芯-KY</span><span class="stock-code">3661</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$3365</div>
+            <div class="stock-change up">+305 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,204張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">搶下AMD MI450伺服器準系統(L10)第一供應商資格，成為META、OpenAI、Oracle三大北美客戶的Helios雙寬機櫃供應商，預計2026年Q2量產出貨單價倍增。同時打進NVIDIA供應鏈，法人預估2026年EPS約25元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3693.html">
+        <div class="stock-header">
+          <div><span class="stock-name">營邦</span><span class="stock-code">3693</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$419</div>
+            <div class="stock-change up">+38 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,772張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">大眾電腦旗下控股公司，受惠IPC工業電腦與AI邊緣運算伺服器代工訂單成長<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3701.html">
+        <div class="stock-header">
+          <div><span class="stock-name">大眾控</span><span class="stock-code">3701</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$59.1</div>
+            <div class="stock-change up">+5.3 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 9,505張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">安控設備結合AI邊緣視覺辨識，輝達Jetson平台合作夥伴，AI IPC應用題材持續發酵<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/5484.html">
+        <div class="stock-header">
+          <div><span class="stock-name">慧友</span><span class="stock-code">5484</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$40.25</div>
+            <div class="stock-change up">+3.65 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 579張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">高階AI伺服器整機櫃(Rack-scale)與液冷散熱解決方案供應商，受惠GPU功耗攀升帶動液冷需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6933.html">
+        <div class="stock-header">
+          <div><span class="stock-name">AMAX-KY</span><span class="stock-code">6933</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$142</div>
+            <div class="stock-change up">+12.5 (9.65%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 307張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">❄️</span>
+        <span>AI散熱與液冷</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="concept-reason">GPU功耗突破700-1000W，液冷散熱成為AI系統關鍵瓶頸，雙鴻水冷營收佔比突破51%</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">2025年EPS達28.26元創新高，2026年1月營收首破30億元大關達30.42億年增121.5%創歷史新高。GB300平台持續放量，水冷營收佔比達51%、2026年預估55-62%，法人預估2026年EPS可達52-57元，目標價1,250元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3324.html">
+        <div class="stock-header">
+          <div><span class="stock-name">雙鴻</span><span class="stock-code">3324</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$1030</div>
+            <div class="stock-change up">+92 (9.81%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 7,034張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">取得美國Engineered Fluids可分解無毒浸沒式冷卻液亞洲總代理權，切入AI伺服器液冷散熱市場。2026年為液冷伺服器出貨加速元年，佶優規劃以台灣與馬來西亞為亞太雙核心。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/5452.html">
+        <div class="stock-header">
+          <div><span class="stock-name">佶優</span><span class="stock-code">5452</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$34.3</div>
+            <div class="stock-change up">+3.1 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 5,697張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">台灣最大熱導管供應商，受惠AI伺服器散熱需求升溫，供應熱導管與均溫板等關鍵零件。近5日漲幅達20.63%，散熱族群資金輪動效應明顯。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6124.html">
+        <div class="stock-header">
+          <div><span class="stock-name">業強</span><span class="stock-code">6124</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$34.95</div>
+            <div class="stock-change up">+3.15 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 279張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🖨️</span>
+        <span>PCB與載板材料</span>
+        <span class="count">7檔</span>
+      </div>
+      <div class="concept-reason">AI伺服器推升高層數HDI、ABF載板及上游玻纖布、銅箔基板需求</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">電子級高階玻纖布供給缺口持續擴大，Low DK/Low CTE材料受惠AI伺服器PCB需求爆發，玻纖營收占比由23%升至30%，去年11月轉虧為盈<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/1802.html">
+        <div class="stock-header">
+          <div><span class="stock-name">台玻</span><span class="stock-code">1802</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$57.2</div>
+            <div class="stock-change up">+5.2 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 12,799張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI伺服器PCB龍頭供應商，2025前三季營收436億年增50%，毛利率衝上35%歷史新高，伺服器占營收80%，2026年資本支出上調至170億元持續擴產<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2368.html">
+        <div class="stock-header">
+          <div><span class="stock-name">金像電</span><span class="stock-code">2368</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$898</div>
+            <div class="stock-change up">+81 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 9,954張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">ABF高階IC載板龍頭，AI伺服器與800G高速交換器帶動高層數載板需求，2月營收優於預期具漲價題材<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3037.html">
+        <div class="stock-header">
+          <div><span class="stock-name">欣興</span><span class="stock-code">3037</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$466</div>
+            <div class="stock-change up">+42 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 15,140張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">電解銅箔受惠PCB板需求回溫與AI伺服器高階板材拉貨<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4989.html">
+        <div class="stock-header">
+          <div><span class="stock-name">榮科</span><span class="stock-code">4989</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$70.7</div>
+            <div class="stock-change up">+6.4 (9.95%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 36,657張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">台灣前三大玻纖布廠，受惠AI伺服器帶動PCB上游材料需求強勁，玻纖布報價持續看漲。2026年1月營收年增101.73%，連續多月維持高成長，近期為處置股每20分鐘撮合一次。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/5475.html">
+        <div class="stock-header">
+          <div><span class="stock-name">德宏</span><span class="stock-code">5475</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$201</div>
+            <div class="stock-change up">+18 (9.84%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 702張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">軟性銅箔基板(FCCL)大廠，受惠AI伺服器高頻材料需求與手機/摺疊機拉貨<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/8039.html">
+        <div class="stock-header">
+          <div><span class="stock-name">台虹</span><span class="stock-code">8039</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$116.5</div>
+            <div class="stock-change up">+10.5 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 11,477張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">ABF/BT IC載板受惠AI伺服器高階晶片封裝需求與網通升級拉貨<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/8046.html">
+        <div class="stock-header">
+          <div><span class="stock-name">南電</span><span class="stock-code">8046</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$470.5</div>
+            <div class="stock-change up">+42.5 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,732張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🔬</span>
+        <span>半導體設備與封測</span>
+        <span class="count">15檔</span>
+      </div>
+      <div class="concept-reason">台積電CoWoS先進封裝持續擴產，帶動測試、檢測、除泡與真空設備需求爆發</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">受惠記憶體封測需求大增，DRAM缺貨漲價帶動封測產能利用率攀升，AI伺服器相關封測訂單暢旺<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2329.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華泰</span><span class="stock-code">2329</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$54.7</div>
+            <div class="stock-change up">+4.95 (9.95%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 12,445張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">半導體光罩代工需求穩健，受惠IC設計活動熱絡與轉投資收益，隨半導體族群強勢反彈<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2338.html">
+        <div class="stock-header">
+          <div><span class="stock-name">光罩</span><span class="stock-code">2338</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$48.8</div>
+            <div class="stock-change up">+4.4 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4,213張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">輝達御用SLT測試設備廠，2025年EPS 27.7元創歷史新高、營收283億年增31%，2026年EPS預估上修至31.97元，受惠AI晶片CoWoS先進封裝測試需求暴增與半導體族群強勢反彈<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2360.html">
+        <div class="stock-header">
+          <div><span class="stock-name">致茂</span><span class="stock-code">2360</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$1495</div>
+            <div class="stock-change up">+135 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,745張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">PCB鑽孔機與半導體AOI檢測設備出貨暢旺，受惠AI伺服器高層數PCB板製程需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3167.html">
+        <div class="stock-header">
+          <div><span class="stock-name">大量</span><span class="stock-code">3167</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$323</div>
+            <div class="stock-change up">+29 (9.86%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 6,044張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">高階PCB及半導體載板AOI光學檢測設備，受惠AI伺服器高層數板與先進封裝檢測需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3563.html">
+        <div class="stock-header">
+          <div><span class="stock-name">牧德</span><span class="stock-code">3563</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$633</div>
+            <div class="stock-change up">+57 (9.90%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,657張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">半導體真空乾燥設備製造商，2025年12月營收年增111.66%，全年營收7.28億元年增36.36%。受惠台積電先進製程與AI晶片產能擴建帶動設備需求，近期5個交易日曾亮出4根漲停。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4542.html">
+        <div class="stock-header">
+          <div><span class="stock-name">科嶠</span><span class="stock-code">4542</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$162.5</div>
+            <div class="stock-change up">+14.5 (9.80%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,575張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">2026年三大成長引擎：特用氣體營收預增三成、TGV玻璃核心營收預增一倍、去光阻液營收預增五成。CPO光纖束導基座已正式量產導入客戶。2026年1月營收1.64億元年增228.67%。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4768.html">
+        <div class="stock-header">
+          <div><span class="stock-name">晶呈科技</span><span class="stock-code">4768</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$440.5</div>
+            <div class="stock-change up">+40 (9.99%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 540張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">台積電CoWoS先進封裝設備合格供應商，半導體封測設備占營收八至九成。2026年2月營收4.90億元、月增25.28%、年增15.68%創同期新高。2025年每股盈餘15.46元創歷史新高，擬配息約11.78元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6187.html">
+        <div class="stock-header">
+          <div><span class="stock-name">萬潤</span><span class="stock-code">6187</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$586</div>
+            <div class="stock-change up">+53 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 530張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">受惠日本暴風雪衝擊全球最大探針卡廠MJC產線，轉單效應明顯發酵。2026年1月營收4.21億元創單月新高、年增55.74%，連三月創高。AI晶片單顆探針數大幅提升、HBM測試需求升溫。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6217.html">
+        <div class="stock-header">
+          <div><span class="stock-name">中探針</span><span class="stock-code">6217</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$113</div>
+            <div class="stock-change up">+10 (9.71%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,925張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI晶片帶動高階探針卡測試需求暴增，先進製程與CoWoS封裝測試商機持續擴大<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6223.html">
+        <div class="stock-header">
+          <div><span class="stock-name">旺矽</span><span class="stock-code">6223</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$3285</div>
+            <div class="stock-change up">+295 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 909張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI晶片與HPC高效能運算帶動高階IC測試載板與探針卡需求強勁<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6683.html">
+        <div class="stock-header">
+          <div><span class="stock-name">雍智科技</span><span class="stock-code">6683</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$1080</div>
+            <div class="stock-change up">+94 (9.53%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 228張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">台積電子公司，CIS微透鏡與CPO光學封裝技術領先，受惠CPO矽光子商轉帶動光學元件需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6789.html">
+        <div class="stock-header">
+          <div><span class="stock-name">采鈺</span><span class="stock-code">6789</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$350.5</div>
+            <div class="stock-change up">+31.5 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4,134張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">全球先進封裝除泡設備龍頭，市占率高達八成。2026年1月營收3.04億元、月增50.44%、年增142%，受惠AI晶片帶動台積電CoWoS等先進封裝持續擴產，訂單能見度延伸至全年。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/7734.html">
+        <div class="stock-header">
+          <div><span class="stock-name">印能科技</span><span class="stock-code">7734</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$1735</div>
+            <div class="stock-change up">+155 (9.81%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 456張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">半導體先進封裝與面板自動化檢測設備接單暢旺，受惠CoWoS擴產檢測需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/7751.html">
+        <div class="stock-header">
+          <div><span class="stock-name">竑騰</span><span class="stock-code">7751</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$1300</div>
+            <div class="stock-change up">+115 (9.70%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 191張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">2月營收表現亮眼，年增率高達111.74%。強勁的業績基本面吸引買盤給力支持，帶動股價放量衝頂飛越半年線。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/8076.html">
+        <div class="stock-header">
+          <div><span class="stock-name">伍豐</span><span class="stock-code">8076</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$25.2</div>
+            <div class="stock-change up">+2.25 (9.80%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,865張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🛰️</span>
+        <span>低軌衛星</span>
+        <span class="count">2檔</span>
+      </div>
+      <div class="concept-reason">SpaceX 2026年發射量突破5,100顆，Starlink衛星汰換潮啟動，帶動微波與光纖通訊需求</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">SpaceX近期擴大向昇達科下單，低軌衛星在手訂單從10億倍增至18億元。2026年SpaceX預估發射量突破5,100顆衛星年增近60%，衛星營收佔比將從50-60%提升至78%，法人預估2026年營收46億元EPS 19元毛利率60%。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3491.html">
+        <div class="stock-header">
+          <div><span class="stock-name">昇達科</span><span class="stock-code">3491</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$1265</div>
+            <div class="stock-change up">+115 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 279張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">SpaceX/Starlink衛星雷射通訊（ISL）光纖合束器獨家供應商，衛星營收占比已達五至六成。2026年起Starlink首批衛星進入汰換潮，加上SpaceX預計6月IPO估值1.75兆美元，法人預估2026年EPS上看10元。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/7717.html">
+        <div class="stock-header">
+          <div><span class="stock-name">萊德光電-KY</span><span class="stock-code">7717</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$605</div>
+            <div class="stock-change up">+55 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 134張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">☀️</span>
+        <span>太陽能與綠能</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="concept-reason">行政院強制光電設施政策紅利發酵，加上SpaceX太空太陽能題材</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">行政院公告2026年8月起大坪數新建案強制增設光電設施政策紅利發酵，加上SpaceX太空太陽能資料中心題材，太陽能族群全面爆發<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3576.html">
+        <div class="stock-header">
+          <div><span class="stock-name">聯合再生</span><span class="stock-code">3576</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$21.75</div>
+            <div class="stock-change up">+1.95 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 19,188張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">太陽能微電網佈局及半導體精密零組件雙引擎驅動，受惠綠能政策題材<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4949.html">
+        <div class="stock-header">
+          <div><span class="stock-name">有成精密</span><span class="stock-code">4949</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$56.6</div>
+            <div class="stock-change up">+5.1 (9.90%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 7,773張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">台灣太陽能電池片龍頭，受惠行政院強制光電設施政策與SpaceX太空太陽能題材，太陽能族群全面爆發，成交量爆出1.47萬張<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6443.html">
+        <div class="stock-header">
+          <div><span class="stock-name">元晶</span><span class="stock-code">6443</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$52.3</div>
+            <div class="stock-change up">+4.7 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 147,006張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">📺</span>
+        <span>面板與光電</span>
+        <span class="count">6檔</span>
+      </div>
+      <div class="concept-reason">群創奪輝達光通訊Shuffle Box大單，面板報價續漲，族群連動走強</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">LED感測元件需求回溫，矽光子題材帶動光電元件族群連動，受惠CPO商轉元年資金外溢<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2426.html">
+        <div class="stock-header">
+          <div><span class="stock-name">鼎元</span><span class="stock-code">2426</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$28.1</div>
+            <div class="stock-change up">+2.55 (9.98%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 13,036張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">LED封裝受惠車用顯示及Mini LED背光應用，面板族群連動走強<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3437.html">
+        <div class="stock-header">
+          <div><span class="stock-name">榮創</span><span class="stock-code">3437</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$16.05</div>
+            <div class="stock-change up">+1.45 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,012張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">傳奪下輝達與Google光通訊Shuffle Box代工大單，單價6000-8000美元利潤遠高於傳統面板，今年上萬套明年增數十倍，盤中爆出逾11萬張巨量，另配息1元<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3481.html">
+        <div class="stock-header">
+          <div><span class="stock-name">群創</span><span class="stock-code">3481</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$30.3</div>
+            <div class="stock-change up">+2.75 (9.98%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,134,574張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">法說揭露積極轉型搶攻先進封裝與高階材料商機，面板報價3月上旬續漲，雙軌拚轉盈獲多方看好放量衝漲停<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4960.html">
+        <div class="stock-header">
+          <div><span class="stock-name">誠美材</span><span class="stock-code">4960</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$19.25</div>
+            <div class="stock-change up">+1.75 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 34,165張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">觸控面板與指紋辨識模組受惠消費電子復甦，面板族群連動走高<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6456.html">
+        <div class="stock-header">
+          <div><span class="stock-name">GIS-KY</span><span class="stock-code">6456</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$63.2</div>
+            <div class="stock-change up">+5.7 (9.91%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 8,757張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">X光感測器與工業/醫療檢測設備應用成長，隨科技族群反彈走高<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6861.html">
+        <div class="stock-header">
+          <div><span class="stock-name">睿生光電</span><span class="stock-code">6861</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$163.5</div>
+            <div class="stock-change up">+14.5 (9.73%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 662張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">📡</span>
+        <span>網通與高速傳輸</span>
+        <span class="count">7檔</span>
+      </div>
+      <div class="concept-reason">AI資料中心帶動800G/1.6T高速傳輸線材、連接器與網路設備需求</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">2月營收2.52億元年增84%業績亮眼，網通設備受惠北美基建與AI資料中心頻寬升級需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2485.html">
+        <div class="stock-header">
+          <div><span class="stock-name">兆赫</span><span class="stock-code">2485</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$55.3</div>
+            <div class="stock-change up">+5 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 81,000張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">協禧隨大盤強勢反彈逾1200點帶動走高，短線資金追捧低基期個股。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3071.html">
+        <div class="stock-header">
+          <div><span class="stock-name">協禧</span><span class="stock-code">3071</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$25.65</div>
+            <div class="stock-change up">+2.3 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,102張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">天線模組及射頻量測設備受惠5G、WiFi 7升級與AI資料中心高速網路建設<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3138.html">
+        <div class="stock-header">
+          <div><span class="stock-name">耀登</span><span class="stock-code">3138</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$183.5</div>
+            <div class="stock-change up">+16.5 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 2,587張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">博士旺隨大盤強勢反彈逾1200點帶動走高，短線資金追捧低基期個股。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3555.html">
+        <div class="stock-header">
+          <div><span class="stock-name">博士旺</span><span class="stock-code">3555</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$134.5</div>
+            <div class="stock-change up">+12 (9.80%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 218張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">受惠AI高速線材與低軌衛星訂單雙引擎成長，2026年1月營收8.78億元、年增20.97%。泰國AI高速線二期擴產3月底到位，月產能提升至800-1000萬條。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6190.html">
+        <div class="stock-header">
+          <div><span class="stock-name">萬泰科</span><span class="stock-code">6190</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$51.2</div>
+            <div class="stock-change up">+4.65 (9.99%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 6,545張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">受惠AI資料中心Scale-out架構帶動光纖跳線需求爆發性成長，稼動率滿載並擴充產能。2026年1月營收年增77.54%，PMIC打入DDR5應用，母公司振曜科技AI伺服器光纖線材需求爆發。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6291.html">
+        <div class="stock-header">
+          <div><span class="stock-name">沛亨</span><span class="stock-code">6291</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$291.5</div>
+            <div class="stock-change up">+26.5 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,001張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI伺服器與資料中心高速傳輸線材需求放量，受惠800G/1.6T高速網路升級<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6715.html">
+        <div class="stock-header">
+          <div><span class="stock-name">嘉基</span><span class="stock-code">6715</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$282</div>
+            <div class="stock-change up">+25.5 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 325張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🚗</span>
+        <span>車用與機械</span>
+        <span class="count">5檔</span>
+      </div>
+      <div class="concept-reason">車市與AM維修市場回溫，航太軍工及機械設備需求隨製造業回流</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">車用鈑金件大廠，受惠車市需求與AM維修市場回溫，隨大盤反彈逾1200點強勢攻頂<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/1512.html">
+        <div class="stock-header">
+          <div><span class="stock-name">瑞利</span><span class="stock-code">1512</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$7.76</div>
+            <div class="stock-change up">+0.7 (9.92%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 326張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">汽車模具與零組件廠，車用訂單回溫，隨大盤反彈行情帶動<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2243.html">
+        <div class="stock-header">
+          <div><span class="stock-name">宏旭-KY</span><span class="stock-code">2243</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$13.95</div>
+            <div class="stock-change up">+1.25 (9.84%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 610張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">新聞中缺乏具體營收與基本面利多說明。僅盤後數據顯示3月11日收盤上漲1.6元，以17.6元亮燈漲停。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4513.html">
+        <div class="stock-header">
+          <div><span class="stock-name">福裕</span><span class="stock-code">4513</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$17.6</div>
+            <div class="stock-change up">+1.6 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 293張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">新聞中缺乏具體營收與基本面利多說明。僅盤後數據顯示3月11日收盤上漲2.55元，以28.35元亮燈漲停。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4534.html">
+        <div class="stock-header">
+          <div><span class="stock-name">慶騰</span><span class="stock-code">4534</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$28.35</div>
+            <div class="stock-change up">+2.55 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 970張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">憑藉外資連續多日買超逾1936張的籌碼面優勢，資金行情發酵對抗大盤空頭。3月11日再度獲多單點火，股價大漲8.5元，以93.5元強勢攻上漲停。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4577.html">
+        <div class="stock-header">
+          <div><span class="stock-name">達航科技</span><span class="stock-code">4577</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$93.5</div>
+            <div class="stock-change up">+8.5 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 516張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">🧪</span>
+        <span>特用化學品</span>
+        <span class="count">3檔</span>
+      </div>
+      <div class="concept-reason">原物料題材與半導體特化材料應用需求帶動</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">聚氨酯(PU)樹脂廠，受惠原物料與特化題材，隨大盤反彈走勢搭順風車<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/1735.html">
+        <div class="stock-header">
+          <div><span class="stock-name">日勝化</span><span class="stock-code">1735</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$20.9</div>
+            <div class="stock-change up">+1.9 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,715張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">半導體靶材與FOPLP面板級封裝特化材料出貨成長，受惠先進封裝擴產<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3663.html">
+        <div class="stock-header">
+          <div><span class="stock-name">鑫科</span><span class="stock-code">3663</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$66</div>
+            <div class="stock-change up">+6 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,825張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">特用化學品與光固化材料出貨回溫，受惠半導體與電子材料需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4764.html">
+        <div class="stock-header">
+          <div><span class="stock-name">雙鍵</span><span class="stock-code">4764</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$149</div>
+            <div class="stock-change up">+13.5 (9.96%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 4,050張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+
+    <div class="concept-section">
+      <div class="concept-title">
+        <span class="icon">📌</span>
+        <span>其他強勢</span>
+        <span class="count">21檔</span>
+      </div>
+      <div class="concept-reason">個別題材發酵或資金輪動，含IP導入Vera Rubin、併購題材、低基期反彈等</div>
+      <div class="stock-grid">
+        
+    <div class="stock-card">
+      <div class="reason-tip">二極體與整流器產品受惠車用及工控需求回升，隨半導體族群反彈<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2302.html">
+        <div class="stock-header">
+          <div><span class="stock-name">麗正</span><span class="stock-code">2302</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$18.9</div>
+            <div class="stock-change up">+1.7 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,930張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">掃描器與生技醫療檢測設備轉型題材，隨大盤強勢反彈帶動<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2305.html">
+        <div class="stock-header">
+          <div><span class="stock-name">全友</span><span class="stock-code">2305</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$14.6</div>
+            <div class="stock-change up">+1.3 (9.77%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 5,586張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">資訊系統整合服務受惠企業AI數位轉型需求，隨科技族群反彈走高<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2468.html">
+        <div class="stock-header">
+          <div><span class="stock-name">華經</span><span class="stock-code">2468</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$35.75</div>
+            <div class="stock-change up">+3.25 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,161張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">車用及工控二極體庫存去化完成，迎來拉貨潮，被動元件族群連動走強<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2481.html">
+        <div class="stock-header">
+          <div><span class="stock-name">強茂</span><span class="stock-code">2481</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$91.8</div>
+            <div class="stock-change up">+8.3 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 17,795張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">多角化經營與轉型題材，成交量僅7萬張流動性低，隨大盤反彈帶動<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/2939.html">
+        <div class="stock-header">
+          <div><span class="stock-name">永邑-KY</span><span class="stock-code">2939</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$24.75</div>
+            <div class="stock-change up">+2.25 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 72張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">IC設計轉型生技保健食品，個別題材發酵隨大盤反彈<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3054.html">
+        <div class="stock-header">
+          <div><span class="stock-name">立萬利</span><span class="stock-code">3054</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$59.8</div>
+            <div class="stock-change up">+5.4 (9.93%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 598張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">半導體與PCB自動化設備受惠AI伺服器擴產帶動設備投資需求<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3498.html">
+        <div class="stock-header">
+          <div><span class="stock-name">陽程</span><span class="stock-code">3498</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$66.9</div>
+            <div class="stock-change up">+6 (9.85%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,824張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">IP成功導入NVIDIA Vera Rubin架構(HBM4+Vera CPU)，GTC 2026(3/16)發表前夕題材強烈發酵。2025Q4營收10.5億元創新高、營業利益率60.6%，2026下半年為權利金爆發元年。已取得美國DARPA國防十年合約。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3529.html">
+        <div class="stock-header">
+          <div><span class="stock-name">力旺</span><span class="stock-code">3529</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$2485</div>
+            <div class="stock-change up">+225 (9.96%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 594張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">新聞資料缺乏具體的營收數字與基本面原因說明。僅盤後數據顯示3月11日收盤上漲17元，以189元亮燈漲停。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/3675.html">
+        <div class="stock-header">
+          <div><span class="stock-name">德微</span><span class="stock-code">3675</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$189</div>
+            <div class="stock-change up">+17 (9.88%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,300張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">強生生技宣布預計投入新台幣2.5億元以內資金，分次買進並併購健亞股權。受此併購消息激勵，3月11日股價跳空大漲逾7.5%展現強悍多頭攻勢。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4130.html">
+        <div class="stock-header">
+          <div><span class="stock-name">健亞</span><span class="stock-code">4130</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$33.95</div>
+            <div class="stock-change up">+3.05 (9.87%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 1,524張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">桂田文創隨大盤強勢反彈逾1200點帶動走高，短線資金追捧低基期個股。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/4806.html">
+        <div class="stock-header">
+          <div><span class="stock-name">桂田文創</span><span class="stock-code">4806</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$13</div>
+            <div class="stock-change up">+1.15 (9.70%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 34張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">IC設計公司，成交量僅9張，屬於極低流動性個股，漲停可能為少量買盤即推升至漲停價，基本面訊息有限。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6103.html">
+        <div class="stock-header">
+          <div><span class="stock-name">合邦</span><span class="stock-code">6103</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$37.4</div>
+            <div class="stock-change up">+3.4 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 9張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">資訊服務公司，雖2月營收年減64.69%，但在外資連續買超護體加持下，股價止跌並強拉漲停。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6148.html">
+        <div class="stock-header">
+          <div><span class="stock-name">驊宏資</span><span class="stock-code">6148</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$33.85</div>
+            <div class="stock-change up">+3.05 (9.90%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 389張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">實際業務為顯示器零組件、AI應用系統及ASA強化塑膠浪板，近期股價從低檔反彈，可能受AI應用系統題材帶動。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6246.html">
+        <div class="stock-header">
+          <div><span class="stock-name">臺龍</span><span class="stock-code">6246</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$14.75</div>
+            <div class="stock-change up">+1.3 (9.67%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 472張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">主要業務為數位監控系統，屬光電業上櫃公司。可能受安防監控與AI影像辨識題材帶動，但具體漲停催化劑資訊不足。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6419.html">
+        <div class="stock-header">
+          <div><span class="stock-name">京晨科</span><span class="stock-code">6419</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$78.3</div>
+            <div class="stock-change up">+7.1 (9.97%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 114張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">AI伺服器及車用電感等被動元件需求增溫，隨電子零組件族群連動<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6862.html">
+        <div class="stock-header">
+          <div><span class="stock-name">三集瑞-KY</span><span class="stock-code">6862</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$194.5</div>
+            <div class="stock-change up">+17.5 (9.89%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 459張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">半導體廠區環保監測與揮發性有機物感測設備需求，受惠晶圓廠持續擴產<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6909.html">
+        <div class="stock-header">
+          <div><span class="stock-name">創控</span><span class="stock-code">6909</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$44.7</div>
+            <div class="stock-change up">+4.05 (9.96%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 3,118張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">企業設備租賃業務穩健，綠能設備融資佈局，隨大盤強勢反彈帶動<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/6958.html">
+        <div class="stock-header">
+          <div><span class="stock-name">日盛台駿</span><span class="stock-code">6958</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$17.45</div>
+            <div class="stock-change up">+1.55 (9.75%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 232張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">鎢金屬與稀有金屬資源回收，受惠循環經濟與戰略金屬題材<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/7610.html">
+        <div class="stock-header">
+          <div><span class="stock-name">聯友金屬-創</span><span class="stock-code">7610</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$341</div>
+            <div class="stock-change up">+31 (10.00%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 311張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">航太及風電產業帶動大型立式車床需求，隨大盤反彈走高<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/7709.html">
+        <div class="stock-header">
+          <div><span class="stock-name">榮田</span><span class="stock-code">7709</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$56.4</div>
+            <div class="stock-change up">+5.1 (9.94%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 206張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stock-card">
+      <div class="reason-tip">電子商務上櫃公司，成交量僅107張，屬極低流動性個股，漲停可能為少量資金推升，基本面仍處虧損狀態。<div class="tip-cta">點擊查看籌碼分析 ↓</div></div>
+      <a href="stock/20260311/8472.html">
+        <div class="stock-header">
+          <div><span class="stock-name">夠麻吉</span><span class="stock-code">8472</span></div>
+          <div class="stock-price">
+            <div class="stock-close up">$66.3</div>
+            <div class="stock-change up">+6 (9.95%)</div>
+          </div>
+        </div>
+        <div class="stock-meta">
+          <span>成交量 107張</span>
+          <span class="badge up">漲停</span>
+        </div>
+      </a>
+    </div>
+      </div>
+    </div>
+  
+    </div>
+
+    <!-- 右側廣告 (桌面版) -->
+    <div class="sidebar-ad">
+      <!-- 將來在這裡放置 AdSense 垂直廣告代碼 -->
+      廣告位<br>(160x600)
+    </div>
+  </div>
+
+  <!-- AI 分析聲明 -->
+  <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; margin: 20px 0; text-align: center;">
+    <div style="color: #58a6ff; font-size: 11px; margin-bottom: 4px;">🤖 AI 智能分析</div>
+    <div style="color: #8b949e; font-size: 10px; line-height: 1.4;">
+      漲停原因與族群分類由 AI 自動分析產生，僅供參考，不代表投資建議，請自行判斷投資風險
+    </div>
+  </div>
+
+  <footer>
+    <p>資料來源：台灣證券交易所公開資訊</p>
+    <p>Chengwaye漲停族群AI分類 &copy; 2026 | 每個交易日 16:30 自動更新</p>
+  </footer>
+</div>
+
+<script>
+// 滾動到股票區
+function scrollToStocks() {
+  document.getElementById('stocks-section').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+
+// 日期導航功能
+function navigateDate(direction) {
+  const currentDateStr = '20260311'; // YYYYMMDD format
+  const currentDate = new Date(
+    parseInt(currentDateStr.substring(0, 4)),
+    parseInt(currentDateStr.substring(4, 6)) - 1,
+    parseInt(currentDateStr.substring(6, 8))
+  );
+
+  // 計算新日期
+  const newDate = new Date(currentDate);
+  newDate.setDate(newDate.getDate() + direction);
+
+  // 格式化為 YYYYMMDD
+  const year = newDate.getFullYear();
+  const month = String(newDate.getMonth() + 1).padStart(2, '0');
+  const day = String(newDate.getDate()).padStart(2, '0');
+  const newDateStr = year + month + day;
+
+  // 構造新的 URL (假設未來會有其他日期的頁面)
+  const newUrl = window.location.pathname.replace(/\/[^/]*$/, '') + '/' + newDateStr + '.html';
+
+  // 目前先顯示提示，未來有多日數據時可以直接跳轉
+  alert('🚧 歷史數據功能開發中\n將來會支援查看 ' + year + '/' + month + '/' + day + ' 的漲停數據');
+
+  // 未來啟用:
+  // window.location.href = newUrl;
+}
+
+// 股票卡片點擊提示動畫
+document.addEventListener('DOMContentLoaded', function() {
+  const stockCards = document.querySelectorAll('.stock-card a');
+  stockCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-1px)';
+      this.style.boxShadow = '0 4px 12px rgba(88, 166, 255, 0.15)';
+    });
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = 'none';
+    });
+  });
+
+  // Date navigation
+  window.navigateDate = function(currentDate, direction) {
+    const availableDates = ["20260318","20260317","20260316","20260313","20260312","20260311","20260310","20260309"];
+    const currentIndex = availableDates.indexOf(currentDate);
+
+    let targetDate;
+    if (direction === -1 && currentIndex < availableDates.length - 1) {
+      // 前一天：往陣列後面（更舊的日期）
+      targetDate = availableDates[currentIndex + 1];
+    } else if (direction === 1 && currentIndex > 0) {
+      // 後一天：往陣列前面（更新的日期）
+      targetDate = availableDates[currentIndex - 1];
+    }
+
+    if (targetDate) {
+      if (targetDate === availableDates[0]) {
+        // Latest date -> index.html
+        window.location.href = 'index.html';
+      } else {
+        // Historical date -> index-YYYYMMDD.html
+        window.location.href = `index-${targetDate}.html`;
+      }
+    }
+  };
+});
+</script>
+</body>
+</html>
