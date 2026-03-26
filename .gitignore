@@ -1,9 +1,0 @@
-node_modules/
-
-# 計算引擎與原始資料（不公開）
-*.mjs
-*.backup
-data/
-snapshots/
-auto-update.bat
-concept-mapping.json
